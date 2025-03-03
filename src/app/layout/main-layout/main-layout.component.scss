@@ -1,6 +1,3 @@
-// .container {
-//   display: grid;
-//   grid-template-columns: 1fr;
-//   grid-template-rows: 100px 1fr 100px;
-//   gap: 10px 10px;
-// }
+.page.class {
+  @apply grid grid-cols-[1fr] grid-rows-[100px_1fr_100px] gap-y-[10px] gap-x-[10px] ;
+}
