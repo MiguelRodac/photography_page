@@ -24,7 +24,7 @@ export class AboutMeComponent {
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel metus non velit tincidunt semper. Donec vel mauris ac neque convallis lobortis. Donec vel mauris ac neque convallis lobortis. Donec vel mauris ac neque convallis lobortis. Lorem ipsum dolor sit amet, consectetur adip. Lorem et sapien just sed diam non proident sed diam. Lorem ipsum dolor sit amet non proident sed diam non pro.'
     },
     {
-      title: 'MIS MEJORES CLEINTES',
+      title: 'MIS MEJORES CLIENTES',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel metus non velit tincidunt semper. Donec vel mauris ac neque convallis lobortis. Donec vel mauris ac neque convallis lobortis. Donec vel mauris ac neque convallis lobortis.'
     },
   ]

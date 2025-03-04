@@ -1,1 +1,19 @@
-<p>forms works!</p>
+<div class="w-full">
+  <form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 gap-6 sm:grid-cols-2 ms:gap-6 md:grid-cols-3 md:gap-6 xl:grid-cols-4 xl:gap-6">
+
+    <app-inputs
+    [formGroup]="dynamicForm"
+    [inputForm]="formInput.intpus"
+    ></app-inputs>
+
+     <!-- Botón de submit -->
+    <button
+    type="submit"
+    [disabled]="dynamicForm.invalid"
+    class="submit-button"
+    >
+    {{ formInput.submitText || 'Enviar' }}
+    </button>
+
+  </form>
+</div>
