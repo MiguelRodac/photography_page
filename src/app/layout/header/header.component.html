@@ -1,1 +1,16 @@
-<p>header works!</p>
+<header class="grid grid-cols-4 p-4 bg-red-200 rounded-t-none rounded-2xl">
+
+  <div class="items-center col-span-3 sm:col-span-1">
+    <div class="grid grid-cols-2 p-4 sm:grid-cols-1">
+      <img class="w-16 m-auto" [src]="logo" alt="LOGO">
+      <h1 class="m-auto">
+        {{ title }}
+      </h1>
+    </div>
+  </div>
+
+  <div class="col-span-1 m-5 sm:col-span-3 md:col-span-3 lg:col-span-2">
+    <app-nav-bar></app-nav-bar>
+  </div>
+
+</header>

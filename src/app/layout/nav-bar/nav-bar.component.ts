@@ -8,4 +8,12 @@ import { Component } from '@angular/core';
 })
 export class NavBarComponent {
 
+  public classMobile: boolean = true;
+
+  toggleMobileMenu(): void {
+    this.classMobile =!this.classMobile;
+    console.log('toggle', this.classMobile)
+  }
+
+
 }
