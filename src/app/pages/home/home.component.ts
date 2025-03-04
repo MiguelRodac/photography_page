@@ -14,29 +14,29 @@ export class HomeComponent {
 
   public cardsImg: ICards[] = [
     {
-      img: 'https://tailwindui.com/plus-assets/img/ecommerce-images/category-page-04-image-card-01.jpg',
+      img: 'https://secrecyjewels.es/blog/wp-content/uploads/2022/10/esencia-de-una-persona.jpg',
     },
     {
-      img: 'https://tailwindui.com/plus-assets/img/ecommerce-images/category-page-04-image-card-02.jpg',
+      img: 'https://tecnologia-informatica.com/wp-content/uploads/2019/06/word-image-91.jpeg',
     },
     {
-      img: 'https://tailwindui.com/plus-assets/img/ecommerce-images/category-page-04-image-card-03.jpg',
+      img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeLehRP7F6CtBtkyK9fGy6CGA8TPVwhjw3ZQ&s',
     },
   ];
 
   public textContent: IText[] = [
     {
-      title: 'Welcome to Photography_Page',
-      titleSecond: 'Discover Our Collection',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in mi vel ipsum dapibus molestie. Duis auctor, mauris vel lobortis dignissim, velit purus ultricies velit, et consectetur neque velit nec velit. Donec in mi vel ipsum dapibus molestie.'
+      title: '¡HOLA!',
+      titleSecond: 'SOY ACAS PHOTOGRAPHY',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in mi vel ipsum dapibus molestie. Duis auctor, mauris vel lobortis dignissim, velit purus ultricies velit, et consectetur neque velit nec velit. Donec in mi vel ipsum dapibus molestie. Lorem ipsum dolor sit amet, consectetur adip iscing elit. Donec in mi vel ipsum dapibus molestie. Lorem ipsum dolor sit amet, con sect et justo vel met null'
     },
     {
-      title: 'About Our Team',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in mi vel ipsum dapibus molestie. Duis auctor, mauris vel lobortis dignissim, velit purus ultricies velit, et consectetur neque velit nec velit. Donec in mi vel ipsum dapibus molestie.'
+      title: 'MOMENTOS',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in mi vel ipsum dapibus molestie. Duis auctor, mauris vel lobortis dignissim, velit purus ultricies velit, et consectetur neque velit nec velit. Donec in mi vel ipsum dapibus molestie. Lorem ipsum dolor sit amet, consectetur adip iscing elit. Donec in mi vel ipsum dapibus molestie. Lorem ipsum dolor sit amet, con sect et justo vel met null'
     },
     {
-      title: 'Contact Us',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in mi vel ipsum dapibus molestie. Duis auctor, mauris vel lobortis dignissim, velit purus ultricies velit, et consectetur neque velit nec velit. Donec in mi vel ipsum dapibus molestie.'
+      title: 'CREACIÓN DE CONTENIDO',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in mi vel ipsum dapibus molestie. Duis auctor, mauris vel lobortis dignissim, velit purus ultricies velit, et consectetur neque velit nec velit. Donec in mi vel ipsum dapibus molestie. Lorem ipsum dolor sit amet, consectetur adip iscing elit. Donec in mi vel ipsum dapibus molestie. Lorem ipsum dolor sit amet, con sect et justo vel met null'
     },
   ]
 
