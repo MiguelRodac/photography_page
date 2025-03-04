@@ -43,8 +43,12 @@
   </div>
 
   <!-- Mobile menu, show/hide based on menu state. -->
-  <div class="absolute bg-red-200 rounded-2xl" id="mobile-menu" [hidden]="classMobile">
-    <div class="space-y-1 px-2 pt-1 pb-3">
+  <!-- <div class="absolute bg-red-200 rounded-2xl" id="mobile-menu" [hidden]="classMobile"> -->
+  <div class="absolute w-full z-50 top-24 left-0 bg-red-200 rounded-2xl shadow-lg"
+     id="mobile-menu"
+     [hidden]="classMobile"
+     style="max-height: calc(100vh - 4rem); overflow-y: auto;">
+    <div class="space-y-1 px-1 pt-1 pb-1">
       <a href="" class="block rounded-md px-3 py-2 text-base font-medium hover:bg-red-500 hover:text-white" aria-current="page">INICIO</a>
       <a href="about-me" class="block rounded-md px-3 py-2 text-base font-medium hover:bg-red-500 hover:text-white">SOBRE MI</a>
       <a href="portfolio" class="block rounded-md px-3 py-2 text-base font-medium hover:bg-red-500 hover:text-white">PORTAFOLIO</a>

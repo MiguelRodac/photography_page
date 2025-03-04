@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class GlobalResourseService {
-
   constructor() { }
 
   getLogo(): string {
@@ -22,11 +21,11 @@ export class GlobalResourseService {
   getSocialMediaLinks(social: string): string {
     switch (social) {
       case 'facebook':
-        return 'https://www.facebook.com/ACASphotography/';
+        return '';
       case 'instagram':
-        return 'https://www.instagram.com/acasphotography/';
+        return 'https://www.instagram.com/';
       case 'whatsapp':
-        return 'https://wa.me/573178577349';
+        return 'https://wa.me/5491157445478';
       default:
         return '';
     }

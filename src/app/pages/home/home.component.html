@@ -1,1 +1,41 @@
-<p>home works!</p>
+<div class="gird grid-cols-3 m-10 p-5 text-center">
+
+  <div class="col-span-3 sm:col-span-1 bg-blue-400">
+    <app-card-img
+    [cardsImg]="cardsImg"
+    ></app-card-img>
+  </div>
+
+  <div class="col-span-3 sm:col-span-2 bg-red-500">
+    <app-text-description
+    [text]="textContent[0]"
+    ></app-text-description>
+  </div>
+
+  <div class="col-span-3 sm:col-span-2 bg-yellow-400">
+    <app-text-description
+    [text]="textContent[1]"
+    ></app-text-description>
+  </div>
+
+  <div class="col-span-3 sm:col-span-1 bg-purple-500">
+    <app-card-img
+    [cardsImg]="cardsImg"
+    [position]="1"
+    ></app-card-img>
+  </div>
+
+  <div class="col-span-3 sm:col-span-1 bg-green-400">
+    <app-card-img
+    [cardsImg]="cardsImg"
+    [position]="2"
+    ></app-card-img>
+  </div>
+
+  <div class="col-span-3 sm:col-span-2 bg-orange-600">
+    <app-text-description
+    [text]="textContent[2]"
+    ></app-text-description>
+  </div>
+
+</div>
