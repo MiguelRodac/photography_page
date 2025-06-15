@@ -1,0 +1,854 @@
+/* Base styles */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.bg-black {
+  background-color: #000000;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+/* GRADIENT TEXT CLASSES - FIXED */
+.gradient-text-logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #22d3ee, #9333ea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.gradient-text-white {
+  background: linear-gradient(to right, #ffffff, #e5e7eb, #9ca3af);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.gradient-text-primary {
+  background: linear-gradient(to right, #22d3ee, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.gradient-text-cyan {
+  background: linear-gradient(to right, #22d3ee, #9333ea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.gradient-text-purple {
+  background: linear-gradient(to right, #c084fc, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.gradient-text-rainbow {
+  background: linear-gradient(to right, #22d3ee, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+/* BUTTON STYLES */
+.btn-gradient {
+  background: linear-gradient(to right, #06b6d4, #9333ea);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(to right, #0891b2, #7c3aed);
+  }
+}
+
+.btn-gradient-large {
+  background: linear-gradient(to right, #06b6d4, #9333ea);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background: linear-gradient(to right, #0891b2, #7c3aed);
+  }
+}
+
+.btn-outline-large {
+  border: 1px solid #4b5563;
+  color: white;
+  background: transparent;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #1f2937;
+  }
+}
+
+.btn-gradient-submit {
+  background: linear-gradient(to right, #06b6d4, #9333ea);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(to right, #0891b2, #7c3aed);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* INPUT STYLES */
+.input-field {
+  background-color: #1f2937;
+  border: 1px solid #374151;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s ease;
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+
+  &:focus {
+    border-color: #06b6d4;
+  }
+}
+
+.input-error {
+  border-color: #ef4444 !important;
+
+  &:focus {
+    border-color: #ef4444 !important;
+  }
+}
+
+/* Custom gradients */
+.bg-radial-gradient {
+  background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.1), transparent 50%);
+}
+
+/* Background gradients for sections */
+.bg-gradient-to-r {
+  &.from-cyan-400.to-purple-600 {
+    background: linear-gradient(to right, #22d3ee, #9333ea);
+  }
+}
+
+.bg-gradient-to-br {
+  &.from-gray-900 {
+    &.via-black {
+      &.to-gray-900 {
+        background: linear-gradient(to bottom right, #111827, #000000, #111827);
+      }
+    }
+  }
+}
+
+.bg-gradient-to-b {
+  &.from-black {
+    &.to-gray-900 {
+      background: linear-gradient(to bottom, #000000, #111827);
+    }
+  }
+}
+
+.bg-gradient-to-t {
+  &.from-black\/80 {
+    &.via-transparent {
+      &.to-transparent {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent, transparent);
+      }
+    }
+  }
+}
+
+/* Backdrop blur */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+/* Blur effects */
+.blur-3xl {
+  filter: blur(64px);
+}
+
+.blur-2xl {
+  filter: blur(40px);
+}
+
+/* Grid layouts */
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Flexbox utilities */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+/* Spacing */
+.space-x-2 > * + * {
+  margin-left: 0.5rem;
+}
+
+.space-x-4 > * + * {
+  margin-left: 1rem;
+}
+
+.space-x-6 > * + * {
+  margin-left: 1.5rem;
+}
+
+.space-x-8 > * + * {
+  margin-left: 2rem;
+}
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+.gap-16 {
+  gap: 4rem;
+}
+
+/* Padding and margins */
+.p-8 {
+  padding: 2rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.py-12 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.py-24 {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.mb-12 {
+  margin-bottom: 3rem;
+}
+
+.mb-16 {
+  margin-bottom: 4rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
+}
+
+/* Positioning */
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+/* Sizing */
+.w-4 {
+  width: 1rem;
+}
+
+.w-5 {
+  width: 1.25rem;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
+.w-8 {
+  width: 2rem;
+}
+
+.w-16 {
+  width: 4rem;
+}
+
+.w-96 {
+  width: 24rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-4 {
+  height: 1rem;
+}
+
+.h-5 {
+  height: 1.25rem;
+}
+
+.h-6 {
+  height: 1.5rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
+.h-16 {
+  height: 4rem;
+}
+
+.h-64 {
+  height: 16rem;
+}
+
+.h-96 {
+  height: 24rem;
+}
+
+.max-w-md {
+  max-width: 28rem;
+}
+
+.max-w-2xl {
+  max-width: 42rem;
+}
+
+.max-w-3xl {
+  max-width: 48rem;
+}
+
+.max-w-4xl {
+  max-width: 56rem;
+}
+
+.max-w-6xl {
+  max-width: 72rem;
+}
+
+.max-w-7xl {
+  max-width: 80rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Typography */
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.text-5xl {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.text-6xl {
+  font-size: 3.75rem;
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .md\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  .md\:text-8xl {
+    font-size: 6rem;
+    line-height: 1;
+  }
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-black {
+  font-weight: 900;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.leading-tight {
+  line-height: 1.25;
+}
+
+.leading-relaxed {
+  line-height: 1.625;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Colors */
+.text-gray-300 {
+  color: #d1d5db;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.text-cyan-400 {
+  color: #22d3ee;
+}
+
+.text-purple-400 {
+  color: #c084fc;
+}
+
+.text-pink-400 {
+  color: #f472b6;
+}
+
+.text-black {
+  color: #000000;
+}
+
+.bg-gray-800 {
+  background-color: #1f2937;
+}
+
+.bg-gray-900 {
+  background-color: #111827;
+}
+
+.border-gray-600 {
+  border-color: #4b5563;
+}
+
+.border-gray-700 {
+  border-color: #374151;
+}
+
+.border-gray-800 {
+  border-color: #1f2937;
+}
+
+.border-cyan-500 {
+  border-color: #06b6d4;
+}
+
+.border-purple-500 {
+  border-color: #8b5cf6;
+}
+
+.border-pink-500 {
+  border-color: #ec4899;
+}
+
+/* Borders */
+.border {
+  border-width: 1px;
+}
+
+.border-0 {
+  border-width: 0;
+}
+
+.border-b {
+  border-bottom-width: 1px;
+}
+
+.border-t {
+  border-top-width: 1px;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.rounded-2xl {
+  border-radius: 1rem;
+}
+
+.rounded-3xl {
+  border-radius: 1.5rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+/* Transitions */
+.transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+.duration-500 {
+  transition-duration: 500ms;
+}
+
+/* Hover effects */
+.hover\:text-cyan-400:hover {
+  color: #22d3ee;
+}
+
+.hover\:bg-gray-800:hover {
+  background-color: #1f2937;
+}
+
+.hover\:bg-cyan-500:hover {
+  background-color: #06b6d4;
+}
+
+.hover\:bg-purple-500:hover {
+  background-color: #8b5cf6;
+}
+
+.hover\:bg-pink-500:hover {
+  background-color: #ec4899;
+}
+
+.hover\:text-black:hover {
+  color: #000000;
+}
+
+.hover\:text-white:hover {
+  color: #ffffff;
+}
+
+.hover\:scale-110:hover {
+  transform: scale(1.1);
+}
+
+.hover\:border-cyan-500\/50:hover {
+  border-color: rgba(6, 182, 212, 0.5);
+}
+
+.hover\:border-purple-500\/50:hover {
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+.hover\:border-pink-500\/50:hover {
+  border-color: rgba(236, 72, 153, 0.5);
+}
+
+/* Group hover effects */
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.1);
+}
+
+/* Focus effects */
+.focus\:border-cyan-500:focus {
+  border-color: #06b6d4;
+}
+
+.outline-none {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* Object fit */
+.object-cover {
+  object-fit: cover;
+}
+
+/* Opacity */
+.opacity-0 {
+  opacity: 0;
+}
+
+/* Cursor */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Responsive utilities */
+@media (min-width: 640px) {
+  .sm\:flex-row {
+    flex-direction: row;
+  }
+  .sm\:space-y-0 > * + * {
+    margin-top: 0;
+  }
+  .sm\:space-x-4 > * + * {
+    margin-left: 1rem;
+  }
+  .sm\:space-x-6 > * + * {
+    margin-left: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:flex {
+    display: flex;
+  }
+  .md\:mb-0 {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Hidden utility */
+.hidden {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .md\:flex {
+    display: flex;
+  }
+}
+
+/* Flex utilities */
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+/* Custom background opacity */
+.bg-gray-800\/50 {
+  background-color: rgba(31, 41, 55, 0.5);
+}
+
+.bg-gray-900\/50 {
+  background-color: rgba(17, 24, 39, 0.5);
+}
+
+.bg-purple-600\/20 {
+  background-color: rgba(147, 51, 234, 0.2);
+}
+
+.bg-cyan-600\/20 {
+  background-color: rgba(8, 145, 178, 0.2);
+}
+
+/* Position utilities */
+.top-1\/4 {
+  top: 25%;
+}
+
+.left-1\/4 {
+  left: 25%;
+}
+
+.bottom-1\/4 {
+  bottom: 25%;
+}
+
+.right-1\/4 {
+  right: 25%;
+}
+
+.bottom-4 {
+  bottom: 1rem;
+}
+
+.left-4 {
+  left: 1rem;
+}
+
+.right-4 {
+  right: 1rem;
+}
+
+.pt-8 {
+  padding-top: 2rem;
+}
+
+/* Inline flex */
+.inline-flex {
+  display: inline-flex;
+}
+
+.w-fit {
+  width: fit-content;
+}

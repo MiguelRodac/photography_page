@@ -7,6 +7,7 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { PortfolioComponent } from './pages/portfolio/portfolio.component';
 import { AdminLayoutComponent } from './layout/admin/admin-layout/admin-layout.component';
 import { HomeAdminComponent } from './pages/admin/home-admin/home-admin.component';
+import { HomeV0Component } from './pages/home-v0/home-v0.component';
 
 export const routes: Routes = [
   { path: '', component: MainLayoutComponent, children: [
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: 'portfolio', component: PortfolioComponent},
     { path: 'contact', component: ContactComponent },
   ]}, // Ruta raíz - Users view
+  { path: 'home-v0', component: HomeV0Component },
   { path: 'admin-page', component: AdminLayoutComponent, children: [
     {path: '', component: HomeAdminComponent},
     // { path: 'about-me', component: AboutMeComponent },

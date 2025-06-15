@@ -14,7 +14,7 @@ export class HomeComponent {
 
   public cardsImg: ICards[] = [
     {
-      img: 'https://secrecyjewels.es/blog/wp-content/uploads/2022/10/esencia-de-una-persona.jpg',
+      img: 'https://media.istockphoto.com/id/610259354/es/foto/mujer-joven-usando-cámara-réflex-digital.jpg?s=612x612&w=0&k=20&c=M8sk5Mem6PVAEOBONakRf351Bot4N6t013Ehda3Zfd8=',
     },
     {
       img: 'https://tecnologia-informatica.com/wp-content/uploads/2019/06/word-image-91.jpeg',
