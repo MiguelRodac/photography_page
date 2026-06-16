@@ -1,3 +1,4 @@
-export interface IForms {
-  [key: string]: string | number | boolean,
+export interface IFormData {
+  formId: string;
+  formData: Record<string, unknown>;
 }

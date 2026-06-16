@@ -1,32 +1,115 @@
 import { Component } from '@angular/core';
-import { CardImgComponent } from "../../shared/card-img/card-img.component";
-import { TextDescriptionComponent } from "../../shared/text-description/text-description.component";
-import { ICards } from '../../interfaces/cards-img';
-import { IText } from '../../interfaces/text-content';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-about-me',
-  imports: [CardImgComponent, TextDescriptionComponent],
-  templateUrl: './about-me.component.html',
-  styleUrl: './about-me.component.scss'
+  imports: [RouterLink],
+  template: `
+    <main class="page-transition">
+      <!-- Hero -->
+      <section class="relative py-32 px-6 bg-surface-100 dark:bg-surface-900">
+        <div class="max-w-7xl mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <p class="text-primary-500 font-medium mb-4 text-sm tracking-widest uppercase">Sobre mí</p>
+              <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-semibold mb-8">
+                Capturando historias<br/>
+                <span class="text-primary-500">desde hace 10 años</span>
+              </h1>
+              <p class="text-surface-500 dark:text-surface-400 text-lg leading-relaxed mb-6">
+                Soy fotógrafo profesional especializado en retratos, bodas y fotografía comercial. Mi pasión es encontrar la belleza en los momentos cotidianos y transformarlos en recuerdos que duran para siempre.
+              </p>
+              <p class="text-surface-500 dark:text-surface-400 text-lg leading-relaxed mb-8">
+                Cada sesión es una colaboración. Trabajo codo a codo con mis clientes para entender su visión y crear imágenes que cuenten su historia de manera auténtica y emotiva.
+              </p>
+
+              <div class="grid grid-cols-3 gap-8">
+                @for (stat of stats; track stat.label) {
+                  <div>
+                    <p class="text-3xl font-display font-bold text-primary-500">{{ stat.value }}</p>
+                    <p class="text-sm text-surface-500 dark:text-surface-400 mt-1">{{ stat.label }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="relative">
+              <div class="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=800&q=80"
+                     alt="Fotógrafo en acción"
+                     class="w-full h-full object-cover" />
+              </div>
+              <div class="absolute -bottom-6 -left-6 w-32 h-32 rounded-2xl overflow-hidden shadow-xl border-4 border-surface-50 dark:border-surface-950">
+                <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=300&q=80"
+                     alt="Cámara profesional"
+                     class="w-full h-full object-cover" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Philosophy -->
+      <section class="py-24 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+          <p class="text-primary-500 font-medium mb-4 text-sm tracking-widest uppercase">Mi filosofía</p>
+          <blockquote class="text-3xl md:text-4xl font-display font-semibold italic leading-relaxed mb-8">
+            "No solo tomo fotos, creo<br/>
+            <span class="text-primary-500">recuerdos visuales</span> que trascienden el tiempo."
+          </blockquote>
+          <p class="text-surface-500 dark:text-surface-400 text-lg leading-relaxed max-w-2xl mx-auto">
+            Creo en la fotografía como una forma de arte que combina técnica, creatividad y emoción. Cada imagen que entrego es el resultado de una cuidadosa planificación, una ejecución precisa y un proceso de edición meticuloso.
+          </p>
+        </div>
+      </section>
+
+      <!-- Services Grid -->
+      <section class="py-24 px-6 bg-surface-100 dark:bg-surface-900">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-16">
+            <p class="text-primary-500 font-medium mb-4 text-sm tracking-widest uppercase">Servicios</p>
+            <h2 class="text-4xl md:text-5xl font-display font-semibold">Lo que ofrezco</h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            @for (service of services; track service.title) {
+              <div class="p-8 rounded-2xl bg-surface-50 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 hover:border-primary-500/50 transition-colors duration-300">
+                <div class="text-3xl mb-4">{{ service.icon }}</div>
+                <h3 class="text-xl font-display font-semibold mb-3">{{ service.title }}</h3>
+                <p class="text-surface-500 dark:text-surface-400 text-sm leading-relaxed">{{ service.description }}</p>
+              </div>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="py-24 px-6">
+        <div class="max-w-3xl mx-auto text-center">
+          <h2 class="text-4xl md:text-5xl font-display mb-6">Trabajemos juntos</h2>
+          <p class="text-surface-500 dark:text-surface-400 text-lg mb-10 max-w-xl mx-auto">
+            Estoy siempre abierto a nuevos proyectos y colaboraciones. Cuéntame tu idea.
+          </p>
+          <a routerLink="/contact"
+             class="inline-block px-10 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105">
+            Contáctame
+          </a>
+        </div>
+      </section>
+    </main>
+  `,
 })
 export class AboutMeComponent {
-
-  public img: ICards[] = [
-    {
-      img: 'https://www.clarin.com/img/2023/12/28/k8gOUmfp5_720x0__1.jpg',
-    }
+  stats = [
+    { value: '500+', label: 'Sesiones' },
+    { value: '150+', label: 'Clientes' },
+    { value: '10', label: 'Años exp.' },
   ];
 
-  public textContent: IText[] = [
-    {
-    title: '¿QUIÉN SOY?',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel metus non velit tincidunt semper. Donec vel mauris ac neque convallis lobortis. Donec vel mauris ac neque convallis lobortis. Donec vel mauris ac neque convallis lobortis. Lorem ipsum dolor sit amet, consectetur adip. Lorem et sapien just sed diam non proident sed diam. Lorem ipsum dolor sit amet non proident sed diam non pro.'
-    },
-    {
-      title: 'MIS MEJORES CLIENTES',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel metus non velit tincidunt semper. Donec vel mauris ac neque convallis lobortis. Donec vel mauris ac neque convallis lobortis. Donec vel mauris ac neque convallis lobortis.'
-    },
-  ]
-
+  services = [
+    { icon: '📷', title: 'Bodas y eventos', description: 'Cobertura completa de tu día especial con un enfoque documental que captura cada emoción genuina.' },
+    { icon: '👤', title: 'Retratos', description: 'Sesiones personalizadas que reflejan tu personalidad, desde retratos profesionales hasta familiares.' },
+    { icon: '🏢', title: 'Comercial', description: 'Fotografía de producto, arquitectura y contenido visual para impulsar tu marca o negocio.' },
+    { icon: '🎓', title: 'Edición profesional', description: 'Procesamiento digital avanzado con atención al color, iluminación y detalle en cada imagen.' },
+  ];
 }

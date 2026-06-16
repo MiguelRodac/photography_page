@@ -1,6 +1,3 @@
-// export interface CardsImg {
-// }
-
 export interface ICards {
   all?: boolean;
   link?: string;

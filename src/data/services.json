@@ -1,0 +1,26 @@
+[
+  {
+    "id": "wedding",
+    "title": "Bodas",
+    "description": "Capturamos cada momento especial de tu día más importante con un estilo documental y artístico.",
+    "icon": "camera"
+  },
+  {
+    "id": "portrait",
+    "title": "Retratos",
+    "description": "Sesiones individuales, familiares o profesionales que reflejan tu esencia.",
+    "icon": "user"
+  },
+  {
+    "id": "event",
+    "title": "Eventos",
+    "description": "Cobertura completa de eventos corporativos, sociales y culturales.",
+    "icon": "calendar"
+  },
+  {
+    "id": "commercial",
+    "title": "Comercial",
+    "description": "Fotografía de producto, arquitectura y contenido para marcas.",
+    "icon": "briefcase"
+  }
+]

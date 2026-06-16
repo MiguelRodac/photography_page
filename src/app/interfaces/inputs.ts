@@ -1,15 +1,15 @@
 export interface IValidator {
   type: string;
-  value?: any;
+  value?: string | number | RegExp;
   message: string;
 }
 
-export interface Iinputs {
+export interface IInput {
   formControl: string;
   label: string;
   name: string;
   type: string;
-  vale?: string;
+  value?: string;
   placeholder?: string;
   minlength?: number;
   maxlength?: number;
@@ -18,8 +18,8 @@ export interface Iinputs {
   validators?: IValidator[];
 }
 
-export interface IFormGruop {
+export interface IFormGroup {
   formId: string;
   submitText: string;
-  intpus: Iinputs[];
+  inputs: IInput[];
 }

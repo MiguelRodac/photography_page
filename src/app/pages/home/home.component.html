@@ -1,41 +1,141 @@
-<div class="grid grid-cols-3 m-10 p-1 items-center">
+<main class="page-transition">
+  <!-- Hero Section -->
+  <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-surface-950">
+      <div class="absolute inset-0 bg-gradient-to-b from-surface-950/80 via-surface-950/60 to-surface-950/90 z-10"></div>
+      <div class="absolute inset-0 animate-parallax z-0"
+           style="background-image: url('https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
+      </div>
+    </div>
+    <div class="relative z-20 text-center px-6 max-w-4xl mx-auto">
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-display text-white mb-6 opacity-0 animate-fade-in">
+        {{ content.hero.title }}
+      </h1>
+      <p class="text-xl md:text-2xl text-surface-300 mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.3s;">
+        {{ content.hero.subtitle }}
+      </p>
+      <a routerLink="/portfolio"
+         class="inline-block px-8 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 opacity-0 animate-fade-up"
+         style="animation-delay: 0.6s;">
+        {{ content.hero.cta }}
+      </a>
+    </div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+      <svg class="w-6 h-6 text-white/60" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+      </svg>
+    </div>
+  </section>
 
-  <div class="col-span-3 sm:col-span-1">
-    <app-card-img
-    [cardsImg]="cardsImg"
-    ></app-card-img>
-  </div>
+  <!-- Services Section -->
+  <section class="py-24 px-6 max-w-7xl mx-auto">
+    <div appReveal class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-display mb-4">Servicios</h2>
+      <p class="text-surface-500 dark:text-surface-400 text-lg max-w-2xl mx-auto">
+        Cada proyecto es único. Ofrezco servicios adaptados a tus necesidades.
+      </p>
+    </div>
 
-  <div class="col-span-3 sm:col-span-2">
-    <app-text-description
-    [text]="textContent[0]"
-    ></app-text-description>
-  </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      @for (service of services; track service.id; let i = $index) {
+        <div appReveal class="reveal-delay-{{ i + 1 }} group p-8 rounded-2xl bg-surface-100 dark:bg-surface-900 hover:bg-surface-200 dark:hover:bg-surface-800 transition-all duration-300 cursor-default">
+          <div class="w-14 h-14 bg-primary-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500/20 transition-colors">
+            <span class="text-2xl">{{ i === 0 ? '📷' : i === 1 ? '👤' : i === 2 ? '📅' : '💼' }}</span>
+          </div>
+          <h3 class="text-xl font-display font-semibold mb-3">{{ service.title }}</h3>
+          <p class="text-surface-500 dark:text-surface-400 leading-relaxed">{{ service.description }}</p>
+        </div>
+      }
+    </div>
+  </section>
 
-  <div class="mt-10 col-span-3 sm:col-span-2 sm:mt-0">
-    <app-text-description
-    [text]="textContent[1]"
-    ></app-text-description>
-  </div>
+  <!-- Portfolio Preview -->
+  <section class="py-24 px-6 bg-surface-100 dark:bg-surface-900">
+    <div class="max-w-7xl mx-auto">
+      <div appReveal class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-display mb-4">Trabajo reciente</h2>
+        <p class="text-surface-500 dark:text-surface-400 text-lg max-w-2xl mx-auto">
+          Una selección de mis proyectos más recientes.
+        </p>
+      </div>
 
-  <div class="col-span-3 sm:col-span-1">
-    <app-card-img
-    [cardsImg]="cardsImg"
-    [position]="1"
-    ></app-card-img>
-  </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        @for (item of portfolio; track item.id; let i = $index) {
+          <a routerLink="/portfolio" appReveal class="group relative overflow-hidden rounded-2xl reveal-delay-{{ i + 1 }}">
+            <img
+              [src]="item.img"
+              [alt]="item.title"
+              class="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-surface-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div class="absolute bottom-0 left-0 right-0 p-6">
+                <h3 class="text-white text-lg font-semibold">{{ item.title }}</h3>
+                <p class="text-surface-300 text-sm mt-1">{{ item.description }}</p>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
 
-  <div class="col-span-3 sm:col-span-1">
-    <app-card-img
-    [cardsImg]="cardsImg"
-    [position]="2"
-    ></app-card-img>
-  </div>
+      <div appReveal class="text-center mt-12">
+        <a routerLink="/portfolio"
+           class="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-500 hover:text-white rounded-lg font-medium transition-all duration-300">
+          Ver portafolio completo
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
 
-  <div class="col-span-3 sm:col-span-2">
-    <app-text-description
-    [text]="textContent[2]"
-    ></app-text-description>
-  </div>
+  <!-- Testimonials Section -->
+  <section class="py-24 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div appReveal class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-display mb-4">Lo que dicen mis clientes</h2>
+        <p class="text-surface-500 dark:text-surface-400 text-lg max-w-2xl mx-auto">
+          La satisfacción de mis clientes es mi mayor logro.
+        </p>
+      </div>
 
-</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        @for (testimonial of testimonials; track testimonial.name; let i = $index) {
+          <div appReveal class="p-8 rounded-2xl bg-surface-100 dark:bg-surface-900 border border-surface-200 dark:border-surface-800 reveal-delay-{{ i + 1 }}">
+            <div class="flex gap-1 mb-4">
+              @for (star of [1,2,3,4,5]; track star) {
+                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+                </svg>
+              }
+            </div>
+            <p class="text-surface-600 dark:text-surface-300 mb-6 leading-relaxed">"{{ testimonial.text }}"</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-500 font-semibold text-sm">
+                {{ testimonial.name.charAt(0) }}
+              </div>
+              <div>
+                <p class="font-medium text-sm">{{ testimonial.name }}</p>
+                <p class="text-xs text-surface-400">{{ testimonial.role }}</p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-24 px-6">
+    <div appReveal class="max-w-3xl mx-auto text-center">
+      <h2 class="text-4xl md:text-5xl font-display mb-6">¿Listo para crear algo increíble?</h2>
+      <p class="text-surface-500 dark:text-surface-400 text-lg mb-10 max-w-xl mx-auto">
+        Cuéntame sobre tu proyecto y hagamos realidad tus ideas.
+      </p>
+      <a routerLink="/contact"
+         class="inline-block px-10 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary-500/25">
+        Contáctame
+      </a>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,14 @@
+[
+  { "id": 1, "title": "Boda en la playa", "category": "wedding", "img": "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80", "description": "Sesión fotográfica de boda al atardecer." },
+  { "id": 2, "title": "Ceremonia íntima", "category": "wedding", "img": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80", "description": "Boda íntima en jardín privado." },
+  { "id": 3, "title": "Retrato urbano", "category": "portrait", "img": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80", "description": "Retratos urbanos con estilo editorial." },
+  { "id": 4, "title": "Sesión familiar", "category": "portrait", "img": "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80", "description": "Sesión fotográfica familiar en exteriores." },
+  { "id": 5, "title": "Retrato profesional", "category": "portrait", "img": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80", "description": "Headshots profesionales para perfiles." },
+  { "id": 6, "title": "Paisaje natural", "category": "landscape", "img": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80", "description": "Fotografía de paisajes naturales en montaña." },
+  { "id": 7, "title": "Atardecer dorado", "category": "landscape", "img": "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=800&q=80", "description": "Captura de atardecer con luz dorada." },
+  { "id": 8, "title": "Evento corporativo", "category": "event", "img": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80", "description": "Cobertura fotográfica de evento corporativo." },
+  { "id": 9, "title": "Conferencia anual", "category": "event", "img": "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80", "description": "Documentación de conferencia empresarial." },
+  { "id": 10, "title": "Producto editorial", "category": "commercial", "img": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80", "description": "Fotografía de producto para catálogo editorial." },
+  { "id": 11, "title": "Comida gourmet", "category": "commercial", "img": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80", "description": "Fotografía culinaria para restaurante." },
+  { "id": 12, "title": "Arquitectura moderna", "category": "commercial", "img": "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=800&q=80", "description": "Fotografía arquitectónica comercial." }
+]

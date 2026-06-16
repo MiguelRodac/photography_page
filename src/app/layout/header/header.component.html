@@ -1,16 +1,15 @@
-<header class="grid grid-cols-4 p-4 bg-red-200 rounded-t-none rounded-2xl">
+<header class="sticky top-0 z-50 bg-surface-50/80 dark:bg-surface-950/80 backdrop-blur-md border-b border-surface-200 dark:border-surface-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <a routerLink="/" class="flex items-center gap-3 group">
+        <img [src]="logo" class="h-10 w-10 rounded-full object-cover" alt="Photography ACAS Logo" />
+        <span class="text-xl font-display font-semibold text-surface-900 dark:text-white group-hover:text-primary-500 transition-colors">{{ title }}</span>
+      </a>
 
-  <div class="items-center col-span-3 sm:col-span-1">
-    <div class="grid grid-cols-2 p-4 sm:grid-cols-1">
-      <img class="w-16 m-auto" [src]="logo" alt="LOGO">
-      <h1 class="m-auto">
-        {{ title }}
-      </h1>
+      <div class="flex items-center gap-4">
+        <app-nav-bar />
+        <app-theme-toggle />
+      </div>
     </div>
   </div>
-
-  <div class="col-span-1 m-5 sm:col-span-3 md:col-span-3 lg:col-span-2">
-    <app-nav-bar></app-nav-bar>
-  </div>
-
 </header>

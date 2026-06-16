@@ -1,32 +1,31 @@
 import { Component } from '@angular/core';
-import { GlobalResourseService } from '../../services/global-resourse.service';
+import { RouterLink } from '@angular/router';
+import { GlobalResourceService } from '../../services/global-resource.service';
 
 @Component({
   selector: 'app-footer',
-  imports: [],
-  templateUrl: './footer.component.html',
-  styleUrl: './footer.component.scss'
-})
+  imports: [RouterLink],
+  templateUrl: './footer.component.html' })
 export class FooterComponent {
 
   constructor(
-    private resourse: GlobalResourseService
+    private resource: GlobalResourceService
   ) { }
 
   get title() {
-    return this.resourse.getTitle();
+    return this.resource.getSiteName();
   }
 
   get logo() {
-    return this.resourse.getLogo();
+    return this.resource.getLogo();
   }
 
   get footerText() {
-    return this.resourse.getFooterText();
+    return this.resource.getFooterText();
   }
 
   public getSocialMediaLinks(social: string): string {
-    return this.resourse.getSocialMediaLinks(social);
+    return this.resource.getSocialMediaLinks(social);
   }
 
 }
