@@ -14,8 +14,4 @@ export class HeaderComponent {
   get title() {
     return this.resource.getSiteName();
   }
-
-  get logo() {
-    return this.resource.getLogo();
-  }
 }

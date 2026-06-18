@@ -64,7 +64,33 @@ import { GlobalResourceService } from '../../services/global-resource.service';
                                 'border-primary-500 bg-primary-500/5 text-primary-600 dark:text-primary-400 shadow-sm shadow-primary-500/10': selectedService === service.value,
                                 'border-surface-200 dark:border-surface-700 text-surface-500 dark:text-surface-400 hover:border-primary-500/40': selectedService !== service.value
                               }">
-                        <div class="text-xl mb-1">{{ service.icon }}</div>
+                        <div class="flex justify-center mb-1">
+                          @switch (service.value) {
+                            @case ('wedding') {
+                              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 7.232a3.75 3.75 0 0 0-2.122.893 2.1 2.1 0 0 0-.89 2.122 3.75 3.75 0 0 0 2.122-.893 2.1 2.1 0 0 0 .89-2.122Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.768 16.768a3.75 3.75 0 0 1 2.122-.893 2.1 2.1 0 0 1 .89 2.122 3.75 3.75 0 0 1-2.122.893 2.1 2.1 0 0 1-.89-2.122Z" />
+                              </svg>
+                            }
+                            @case ('portrait') {
+                              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                              </svg>
+                            }
+                            @case ('event') {
+                              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" />
+                              </svg>
+                            }
+                            @case ('commercial') {
+                              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z" />
+                              </svg>
+                            }
+                          }
+                        </div>
                         <div class="font-medium text-xs">{{ service.label }}</div>
                       </button>
                     }
@@ -150,10 +176,10 @@ export class ContactComponent {
   showServiceError = false;
 
   serviceTypes = [
-    { value: 'wedding', label: 'Boda', icon: '💍' },
-    { value: 'portrait', label: 'Retrato', icon: '👤' },
-    { value: 'event', label: 'Evento', icon: '🎉' },
-    { value: 'commercial', label: 'Comercial', icon: '💼' },
+    { value: 'wedding', label: 'Boda' },
+    { value: 'portrait', label: 'Retrato' },
+    { value: 'event', label: 'Evento' },
+    { value: 'commercial', label: 'Comercial' },
   ];
 
   contactInfo = [
@@ -210,6 +236,7 @@ export class ContactComponent {
         name: 'phone',
         placeholder: '+54 11 1234-5678',
         required: false,
+        maxlength: 25,
         validators: [
           { type: 'pattern', value: '^\\+?[0-9][0-9\\s\\-]{6,19}$', message: 'Ingresá un número de teléfono válido' },
         ],

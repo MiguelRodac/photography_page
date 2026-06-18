@@ -16,10 +16,6 @@ export class FooterComponent {
     return this.resource.getSiteName();
   }
 
-  get logo() {
-    return this.resource.getLogo();
-  }
-
   get footerText() {
     return this.resource.getFooterText();
   }

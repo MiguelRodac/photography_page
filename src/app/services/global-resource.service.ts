@@ -13,10 +13,6 @@ export class GlobalResourceService {
     return environment.siteName;
   }
 
-  getLogo(): string {
-    return 'assets/images/logo.png';
-  }
-
   getFooterText(): string {
     return `© ${new Date().getFullYear()} ${environment.siteName}. All Rights Reserved.`;
   }

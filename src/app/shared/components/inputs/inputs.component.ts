@@ -46,6 +46,7 @@ import { IInput } from '../../../interfaces/inputs';
             [id]="input.name"
             [placeholder]="input.placeholder || ''"
             [required]="input.required || false"
+            [attr.maxlength]="input.maxlength || null"
             (input)="formatPhone($event, input.formControl)"
             class="w-full px-4 py-3 text-sm bg-surface-100 dark:bg-surface-800 border rounded-xl outline-none transition-all duration-200"
             [ngClass]="{
