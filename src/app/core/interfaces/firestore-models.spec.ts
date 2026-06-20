@@ -8,7 +8,7 @@ import {
   SocialLinksContent,
 } from './firestore-models';
 
-fdescribe('Firestore Document Models', () => {
+describe('Firestore Document Models', () => {
   describe('PortfolioDoc', () => {
     it('should accept a valid document with all required fields', () => {
       const doc: PortfolioDoc = {

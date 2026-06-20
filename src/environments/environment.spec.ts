@@ -1,7 +1,7 @@
 import { environment } from './environment';
 import { environment as environmentProd } from './environment.prod';
 
-fdescribe('Environment Configuration', () => {
+describe('Environment Configuration', () => {
   describe('development environment', () => {
     it('should have firebase config with all required keys', () => {
       expect(environment.firebase).toBeDefined();

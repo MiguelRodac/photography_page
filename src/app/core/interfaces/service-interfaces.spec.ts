@@ -5,7 +5,7 @@ import { IContentService } from './content-service.interface';
 import { IPackageService } from './package-service.interface';
 import { PortfolioDoc, PackageDoc } from './firestore-models';
 
-fdescribe('Service Interfaces', () => {
+describe('Service Interfaces', () => {
   describe('IAuthService', () => {
     it('should allow a mock implementation with all required members', () => {
       const mockUser: AuthUser = {

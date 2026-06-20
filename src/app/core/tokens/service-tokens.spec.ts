@@ -4,7 +4,7 @@ import { PORTFOLIO_SERVICE } from './portfolio-service.token';
 import { CONTENT_SERVICE } from './content-service.token';
 import { PACKAGE_SERVICE } from './package-service.token';
 
-fdescribe('DI Injection Tokens', () => {
+describe('DI Injection Tokens', () => {
   it('should create AUTH_SERVICE as an InjectionToken', () => {
     expect(AUTH_SERVICE).toBeDefined();
     expect(AUTH_SERVICE).toBeInstanceOf(InjectionToken);
