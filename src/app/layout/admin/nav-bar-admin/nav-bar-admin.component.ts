@@ -24,6 +24,7 @@ export class NavBarAdminComponent {
     { label: 'Categories', link: '/admin-page/categories', icon: 'tag' },
     { label: 'Content', link: '/admin-page/content', icon: 'document' },
     { label: 'Packages', link: '/admin-page/packages', icon: 'cube' },
+    { label: 'Settings', link: '/admin-page/settings', icon: 'cog' },
   ];
 
   toggleMobileMenu(): void {

@@ -1,0 +1,111 @@
+<div class="min-h-screen bg-surface-900 p-4 sm:p-6 lg:p-8">
+  <div class="max-w-3xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">Settings</h1>
+      <p class="text-surface-400 text-sm mt-1">Manage site branding and general settings</p>
+    </div>
+
+    <!-- Loading State -->
+    @if (loading()) {
+      <div class="flex flex-col items-center justify-center py-16">
+        <div class="w-10 h-10 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mb-4"></div>
+        <p class="text-surface-400 text-sm">Loading settings...</p>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (error()) {
+      <div class="text-center py-16">
+        <p class="text-red-400 font-medium">{{ error() }}</p>
+      </div>
+    }
+
+    <!-- Settings Form -->
+    @if (!loading() && !error()) {
+      <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden">
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-surface-700">
+          <h2 class="text-xl font-display font-semibold text-surface-100">Site Branding</h2>
+          <div class="flex gap-2">
+            <button
+              (click)="save()"
+              [disabled]="saving()"
+              class="inline-flex items-center gap-1.5 px-4 py-1.5 text-sm bg-primary-600 hover:bg-primary-500 disabled:bg-surface-600 disabled:cursor-not-allowed text-white rounded-lg transition-all font-medium shadow-lg shadow-primary-600/20 disabled:shadow-none"
+            >
+              @if (saving()) {
+                <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+              }
+              {{ saving() ? 'Saving...' : 'Save' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="px-6 pt-4">
+          @if (successMessage()) {
+            <div class="bg-green-500/10 border border-green-500/20 text-green-300 px-4 py-3 rounded-xl mb-4 flex items-center gap-2 text-sm">
+              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {{ successMessage() }}
+            </div>
+          }
+          @if (errorMessage()) {
+            <div class="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-xl mb-4 flex items-center gap-2 text-sm">
+              <svg class="w-4 h-4 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+              </svg>
+              {{ errorMessage() }}
+            </div>
+          }
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="form" (ngSubmit)="$event.preventDefault()" class="p-6 space-y-5">
+          <div>
+            <label for="siteName" class="block text-sm font-medium text-surface-300 mb-1.5">Site Name</label>
+            <input
+              id="siteName"
+              type="text"
+              formControlName="siteName"
+              (input)="clearSuccessOnEdit()"
+              class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all duration-200"
+              placeholder="Photography ACAS"
+            />
+            <p class="text-xs text-surface-500 mt-1">Used in header, footer, and browser tab title</p>
+          </div>
+
+          <div>
+            <label for="logoUrl" class="block text-sm font-medium text-surface-300 mb-1.5">Logo URL</label>
+            <input
+              id="logoUrl"
+              type="url"
+              formControlName="logoUrl"
+              (input)="clearSuccessOnEdit()"
+              class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all duration-200"
+              placeholder="https://example.com/logo.png"
+            />
+            <p class="text-xs text-surface-500 mt-1">URL to your logo image (used in header)</p>
+          </div>
+
+          <div>
+            <label for="footerText" class="block text-sm font-medium text-surface-300 mb-1.5">Footer Text</label>
+            <input
+              id="footerText"
+              type="text"
+              formControlName="footerText"
+              (input)="clearSuccessOnEdit()"
+              class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all duration-200"
+              placeholder="© 2026 Photography ACAS. All Rights Reserved."
+            />
+            <p class="text-xs text-surface-500 mt-1">Copyright text displayed in the footer</p>
+          </div>
+        </form>
+      </div>
+    }
+  </div>
+</div>

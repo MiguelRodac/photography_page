@@ -55,12 +55,13 @@ describe('NavBarAdminComponent', () => {
       expect(linkTexts.some((t) => t?.includes('Portfolio'))).toBeTrue();
       expect(linkTexts.some((t) => t?.includes('Categories'))).toBeTrue();
       expect(linkTexts.some((t) => t?.includes('Content'))).toBeTrue();
+      expect(linkTexts.some((t) => t?.includes('Settings'))).toBeTrue();
     });
 
-    it('should have at least 4 nav links', () => {
+    it('should have at least 5 nav links', () => {
       const compiled = fixture.nativeElement as HTMLElement;
       const links = compiled.querySelectorAll('a');
-      expect(links.length).toBeGreaterThanOrEqual(4);
+      expect(links.length).toBeGreaterThanOrEqual(5);
     });
   });
 

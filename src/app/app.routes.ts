@@ -29,6 +29,7 @@ export const routes: Routes = [
       { path: 'content', loadComponent: () => import('./pages/admin/content-admin/content-admin.component').then(m => m.ContentAdminComponent) },
       { path: 'packages', loadComponent: () => import('./pages/admin/packages-admin/packages-admin.component').then(m => m.PackagesAdminComponent) },
       { path: 'categories', loadComponent: () => import('./pages/admin/categories-admin/categories-admin.component').then(m => m.CategoriesAdminComponent) },
+      { path: 'settings', loadComponent: () => import('./pages/admin/settings-admin/settings-admin.component').then(m => m.SettingsAdminComponent) },
       { path: 'unauthorized', loadComponent: () => import('./pages/admin/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent) },
     ],
   },
