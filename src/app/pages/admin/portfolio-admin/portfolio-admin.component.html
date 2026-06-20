@@ -65,57 +65,21 @@
             }
           </div>
 
-          <!-- Image Source -->
+          <!--
+            NOTE: Firebase Storage upload is disabled — free Spark plan does not support Storage.
+            Only external URL is available. Upload logic remains in component for future plan upgrade.
+          -->
           <div>
-            <label class="block text-sm font-medium text-surface-300 mb-2">Image Source</label>
-            <div class="flex gap-4 mb-3">
-              <label class="flex items-center gap-2">
-                <input type="radio" formControlName="imageSource" value="url" class="text-primary-500" />
-                <span class="text-surface-200">External URL</span>
-              </label>
-              <label class="flex items-center gap-2">
-                <input type="radio" formControlName="imageSource" value="upload" class="text-primary-500" />
-                <span class="text-surface-200">Upload File</span>
-              </label>
-            </div>
-
-            @if (form.controls['imageSource'].value === 'url') {
-              <input
-                type="url"
-                formControlName="img"
-                class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                placeholder="https://example.com/image.jpg"
-              />
-            } @else {
-              <div class="space-y-2">
-                <input
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp"
-                  (change)="onFileSelected($any($event.target).files[0])"
-                  class="w-full text-surface-200 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-primary-600 file:text-white hover:file:bg-primary-700"
-                />
-                @if (selectedFile()) {
-                  <button
-                    type="button"
-                    (click)="uploadImage()"
-                    [disabled]="uploading()"
-                    class="px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-surface-600 text-white rounded transition-colors"
-                  >
-                    {{ uploading() ? 'Uploading...' : 'Upload' }}
-                  </button>
-                  @if (uploading()) {
-                    <div class="w-full bg-surface-700 rounded-full h-2">
-                      <div
-                        class="bg-primary-500 h-2 rounded-full transition-all duration-300"
-                        [style.width.%]="uploadProgress()"
-                      ></div>
-                    </div>
-                  }
-                }
-              </div>
-            }
+            <label for="img" class="block text-sm font-medium text-surface-300 mb-1">Image URL</label>
+            <input
+              id="img"
+              type="url"
+              formControlName="img"
+              class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              placeholder="https://example.com/image.jpg"
+            />
             @if (form.controls['img'].touched && form.controls['img'].hasError('required')) {
-              <p class="text-red-400 text-sm mt-1">Image is required</p>
+              <p class="text-red-400 text-sm mt-1">Image URL is required</p>
             }
           </div>
 
