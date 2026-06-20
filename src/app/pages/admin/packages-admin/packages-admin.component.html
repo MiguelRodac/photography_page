@@ -1,0 +1,248 @@
+<div class="min-h-screen bg-surface-900 p-6">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-3xl font-display font-bold text-primary-400">Packages Management</h1>
+      <button
+        (click)="showAddForm()"
+        class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded transition-colors duration-200"
+      >
+        + Add New
+      </button>
+    </div>
+
+    <!-- Error Message -->
+    @if (errorMessage()) {
+      <div class="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded mb-4" role="alert">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <!-- Form -->
+    @if (showForm()) {
+      <div class="bg-surface-800 border border-surface-700 rounded-lg p-6 mb-6">
+        <h2 class="text-xl font-display font-semibold text-surface-100 mb-4">
+          {{ editingId() ? 'Edit Package' : 'New Package' }}
+        </h2>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+          <div>
+            <label for="name" class="block text-sm font-medium text-surface-300 mb-1">Name</label>
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+            @if (form.controls['name'].touched && form.controls['name'].hasError('required')) {
+              <p class="text-red-400 text-sm mt-1">Name is required</p>
+            }
+            @if (form.controls['name'].touched && form.controls['name'].hasError('minlength')) {
+              <p class="text-red-400 text-sm mt-1">Name must be at least 3 characters</p>
+            }
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label for="category" class="block text-sm font-medium text-surface-300 mb-1">Category</label>
+              <select
+                id="category"
+                formControlName="category"
+                class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              >
+                <option value="wedding">Wedding</option>
+                <option value="portrait">Portrait</option>
+                <option value="event">Event</option>
+                <option value="commercial">Commercial</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="price" class="block text-sm font-medium text-surface-300 mb-1">Price</label>
+              <input
+                id="price"
+                type="number"
+                formControlName="price"
+                class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+              @if (form.controls['price'].touched && form.controls['price'].hasError('min')) {
+                <p class="text-red-400 text-sm mt-1">Price must be positive</p>
+              }
+            </div>
+
+            <div>
+              <label for="currency" class="block text-sm font-medium text-surface-300 mb-1">Currency</label>
+              <input
+                id="currency"
+                type="text"
+                formControlName="currency"
+                class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+          </div>
+
+          <!-- Features (dynamic list) -->
+          <div formArrayName="features">
+            <label class="block text-sm font-medium text-surface-300 mb-2">Features</label>
+            <div class="space-y-2">
+              @for (feature of features.controls; track $index; let i = $index) {
+                <div class="flex gap-2">
+                  <input
+                    type="text"
+                    [formControlName]="i"
+                    placeholder="e.g. 4 hours coverage"
+                    class="flex-1 px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                  <button
+                    type="button"
+                    (click)="removeFeature(i)"
+                    class="px-3 py-2 bg-red-600/20 hover:bg-red-600/40 text-red-400 rounded transition-colors"
+                  >
+                    Remove
+                  </button>
+                </div>
+              }
+            </div>
+            <button
+              type="button"
+              (click)="addFeature()"
+              class="mt-2 px-3 py-1.5 bg-surface-700 hover:bg-surface-600 text-surface-200 text-sm rounded transition-colors"
+            >
+              + Add Feature
+            </button>
+          </div>
+
+          <div class="flex gap-3">
+            <button
+              type="submit"
+              class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded transition-colors"
+            >
+              {{ editingId() ? 'Update' : 'Create' }}
+            </button>
+            <button
+              type="button"
+              (click)="cancelForm()"
+              class="px-4 py-2 bg-surface-700 hover:bg-surface-600 text-surface-200 rounded transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    }
+
+    <!-- Category Filter -->
+    @if (categories().length > 0) {
+      <div class="mb-4">
+        <label for="filter" class="block text-sm font-medium text-surface-300 mb-1">Filter by Category</label>
+        <select
+          id="filter"
+          [value]="selectedCategory()"
+          (change)="selectedCategory.set($any($event.target).value)"
+          class="px-3 py-2 bg-surface-800 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+        >
+          <option value="">All Categories</option>
+          @for (cat of categories(); track cat) {
+            <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+      </div>
+    }
+
+    <!-- Loading State -->
+    @if (loading()) {
+      <div class="text-center py-12">
+        <p class="text-surface-400">Loading packages...</p>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (error()) {
+      <div class="text-center py-12">
+        <p class="text-red-400">{{ error() }}</p>
+      </div>
+    }
+
+    <!-- Empty State -->
+    @if (!loading() && !error() && filteredPackages().length === 0) {
+      <div class="text-center py-12 bg-surface-800 border border-surface-700 rounded-lg">
+        <p class="text-surface-400 mb-4">No packages yet. Create your first package.</p>
+        <button
+          (click)="showAddForm()"
+          class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded transition-colors"
+        >
+          Create your first package
+        </button>
+      </div>
+    }
+
+    <!-- Packages List -->
+    @if (!loading() && !error() && filteredPackages().length > 0) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (pkg of filteredPackages(); track pkg.id) {
+          <div
+            data-testid="package-item"
+            class="bg-surface-800 border border-surface-700 rounded-lg p-4 hover:border-primary-500 transition-colors"
+            [class.opacity-50]="!pkg.active"
+          >
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-lg font-semibold text-surface-100">{{ pkg.name }}</h3>
+              <span
+                class="text-xs px-2 py-1 rounded font-medium"
+                [class.bg-green-900]="pkg.active"
+                [class.text-green-300]="pkg.active"
+                [class.bg-red-900]="!pkg.active"
+                [class.text-red-300]="!pkg.active"
+              >
+                {{ pkg.active ? 'Active' : 'Inactive' }}
+              </span>
+            </div>
+            <p class="text-primary-400 font-display text-xl mb-2">{{ pkg.price }} {{ pkg.currency }}</p>
+            <p class="text-xs text-surface-500 uppercase tracking-wide mb-2">{{ pkg.category }}</p>
+            @if (pkg.features.length > 0) {
+              <ul class="space-y-1 mb-3">
+                @for (feature of pkg.features; track feature) {
+                  <li class="text-sm text-surface-300 flex items-center gap-1">
+                    <span class="text-primary-500">&#10003;</span> {{ feature }}
+                  </li>
+                }
+              </ul>
+            }
+            <div class="flex gap-2 pt-2 border-t border-surface-700">
+              <button
+                (click)="editPackage(pkg)"
+                class="text-sm text-primary-400 hover:text-primary-300 transition-colors"
+              >
+                Edit
+              </button>
+              <button
+                (click)="confirmToggleActive(pkg)"
+                class="text-sm transition-colors"
+                [class.text-yellow-400]="pkg.active"
+                [class.hover:text-yellow-300]="pkg.active"
+                [class.text-green-400]="!pkg.active"
+                [class.hover:text-green-300]="!pkg.active"
+              >
+                {{ pkg.active ? 'Deactivate' : 'Activate' }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Toggle Active Confirmation Dialog -->
+    @if (showToggleConfirm() && packageToToggle()) {
+      <app-confirm-dialog
+        [title]="packageToToggle()!.active ? 'Deactivate Package' : 'Activate Package'"
+        [message]="packageToToggle()!.active
+          ? 'Are you sure you want to deactivate \'' + packageToToggle()!.name + '\'? It will be hidden from the public site.'
+          : 'Are you sure you want to activate \'' + packageToToggle()!.name + '\'? It will be visible on the public site.'"
+        [confirmText]="packageToToggle()!.active ? 'Deactivate' : 'Activate'"
+        cancelText="Cancel"
+        (confirm)="onConfirmToggle()"
+        (cancel)="onCancelToggle()"
+      />
+    }
+  </div>
+</div>
