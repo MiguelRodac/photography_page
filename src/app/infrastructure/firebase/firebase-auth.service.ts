@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut, authState } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, signOut, authState, sendPasswordResetEmail as firebaseSendPasswordResetEmail } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { Observable, map, tap, shareReplay, switchMap, of, from } from 'rxjs';
 import { IAuthService, AuthUser } from '../../core/interfaces/auth-service.interface';
@@ -33,6 +33,10 @@ export class FirebaseAuthService implements IAuthService {
   async logout(): Promise<void> {
     await this.performSignOut();
     this._currentUser = null;
+  }
+
+  async sendPasswordResetEmail(email: string): Promise<void> {
+    await this.sendResetEmail(email);
   }
 
   hasRole(role: string): boolean {
@@ -75,6 +79,10 @@ export class FirebaseAuthService implements IAuthService {
 
   protected performSignOut(): Promise<void> {
     return signOut(this.auth);
+  }
+
+  protected sendResetEmail(email: string): Promise<void> {
+    return firebaseSendPasswordResetEmail(this.auth, email);
   }
 
   protected createDocRef(path: string): any {

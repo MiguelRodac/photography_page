@@ -19,7 +19,7 @@ describe('LoginComponent', () => {
   };
 
   beforeEach(async () => {
-    mockAuthService = jasmine.createSpyObj('IAuthService', ['login', 'logout'], {
+    mockAuthService = jasmine.createSpyObj('IAuthService', ['login', 'logout', 'sendPasswordResetEmail'], {
       authState$: of(null),
       getCurrentUser: null,
       hasRole: true,
@@ -151,7 +151,7 @@ describe('LoginComponent', () => {
 
   describe('Already authenticated redirect', () => {
     it('should redirect to /admin-page if user is already authenticated on init', fakeAsync(() => {
-      mockAuthService = jasmine.createSpyObj('IAuthService', ['login', 'logout'], {
+      mockAuthService = jasmine.createSpyObj('IAuthService', ['login', 'logout', 'sendPasswordResetEmail'], {
         authState$: of(mockUser),
         getCurrentUser: mockUser,
         hasRole: true,
@@ -172,6 +172,116 @@ describe('LoginComponent', () => {
       tick();
 
       expect(router.navigate).toHaveBeenCalledWith(['/admin-page']);
+    }));
+  });
+
+  describe('Password recovery', () => {
+    beforeEach(() => {
+      mockAuthService = jasmine.createSpyObj('IAuthService', ['login', 'logout', 'sendPasswordResetEmail'], {
+        authState$: of(null),
+        getCurrentUser: null,
+        hasRole: false,
+      });
+
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [LoginComponent],
+        providers: [{ provide: AUTH_SERVICE, useValue: mockAuthService }],
+      });
+
+      router = TestBed.inject(Router);
+      spyOn(router, 'navigate');
+
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    it('should start in login mode (not reset mode)', () => {
+      expect(component.resetMode()).toBeFalse();
+    });
+
+    it('should switch to reset mode when showReset is called', () => {
+      component.showReset();
+      expect(component.resetMode()).toBeTrue();
+    });
+
+    it('should switch back to login mode when backToLogin is called', () => {
+      component.showReset();
+      component.backToLogin();
+      expect(component.resetMode()).toBeFalse();
+    });
+
+    it('should clear error and reset form when switching to reset mode', () => {
+      component.errorMessage.set('Some error');
+      component.showReset();
+      expect(component.errorMessage()).toBeNull();
+    });
+
+    it('should require email in reset form', () => {
+      component.showReset();
+      expect(component.resetForm.valid).toBeFalse();
+      expect(component.resetForm.controls['email'].hasError('required')).toBeTrue();
+    });
+
+    it('should require valid email format in reset form', () => {
+      component.showReset();
+      component.resetForm.controls['email'].setValue('invalid');
+      expect(component.resetForm.controls['email'].hasError('email')).toBeTrue();
+    });
+
+    it('should call sendPasswordResetEmail on reset submit', fakeAsync(() => {
+      mockAuthService.sendPasswordResetEmail.and.resolveTo();
+      component.showReset();
+      component.resetForm.controls['email'].setValue('admin@test.com');
+
+      component.onResetSubmit();
+      tick();
+
+      expect(mockAuthService.sendPasswordResetEmail).toHaveBeenCalledWith('admin@test.com');
+    }));
+
+    it('should not call sendPasswordResetEmail if reset form is invalid', fakeAsync(() => {
+      component.showReset();
+      component.onResetSubmit();
+      tick();
+
+      expect(mockAuthService.sendPasswordResetEmail).not.toHaveBeenCalled();
+    }));
+
+    it('should show reset success message after email sent', fakeAsync(() => {
+      mockAuthService.sendPasswordResetEmail.and.resolveTo();
+      component.showReset();
+      component.resetForm.controls['email'].setValue('admin@test.com');
+
+      component.onResetSubmit();
+      tick();
+
+      expect(component.resetEmailSent()).toBeTrue();
+    }));
+
+    it('should display error on reset failure', fakeAsync(() => {
+      const error = new Error('auth/user-not-found');
+      mockAuthService.sendPasswordResetEmail.and.rejectWith(error);
+      component.showReset();
+      component.resetForm.controls['email'].setValue('unknown@test.com');
+
+      component.onResetSubmit();
+      tick();
+
+      expect(component.errorMessage()).toBeTruthy();
+      expect(component.resetEmailSent()).toBeFalse();
+    }));
+
+    it('should set loading state during reset', fakeAsync(() => {
+      mockAuthService.sendPasswordResetEmail.and.resolveTo();
+      component.showReset();
+      component.resetForm.controls['email'].setValue('admin@test.com');
+
+      component.onResetSubmit();
+      expect(component.resetLoading()).toBeTrue();
+      tick();
+      expect(component.resetLoading()).toBeFalse();
     }));
   });
 });

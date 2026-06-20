@@ -13,4 +13,5 @@ export interface IAuthService {
   logout(): Promise<void>;
   hasRole(role: string): boolean;
   getCurrentUser(): AuthUser | null;
+  sendPasswordResetEmail(email: string): Promise<void>;
 }

@@ -21,6 +21,7 @@ describe('Service Interfaces', () => {
         logout: () => Promise.resolve(),
         hasRole: (role: string) => true,
         getCurrentUser: () => mockUser,
+        sendPasswordResetEmail: (email: string) => Promise.resolve(),
       };
 
       expect(mock.authState$).toBeInstanceOf(Observable);
@@ -28,6 +29,7 @@ describe('Service Interfaces', () => {
       expect(typeof mock.logout).toBe('function');
       expect(typeof mock.hasRole).toBe('function');
       expect(typeof mock.getCurrentUser).toBe('function');
+      expect(typeof mock.sendPasswordResetEmail).toBe('function');
       expect(mock.getCurrentUser()?.uid).toBe('test-uid');
       expect(mock.hasRole('admin')).toBeTrue();
     });
@@ -39,6 +41,7 @@ describe('Service Interfaces', () => {
         logout: jasmine.createSpy('logout').and.resolveTo(),
         hasRole: jasmine.createSpy('hasRole').and.returnValue(false),
         getCurrentUser: () => null,
+        sendPasswordResetEmail: jasmine.createSpy('sendPasswordResetEmail').and.resolveTo(),
       };
 
       expect(mock.getCurrentUser()).toBeNull();

@@ -19,10 +19,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   readonly loading = signal(false);
   readonly errorMessage = signal<string | null>(null);
+  readonly resetMode = signal(false);
+  readonly resetLoading = signal(false);
+  readonly resetEmailSent = signal(false);
 
   readonly loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
+  });
+
+  readonly resetForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
   });
 
   ngOnInit(): void {
@@ -55,6 +62,40 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.errorMessage.set(err?.message || 'Login failed. Please try again.');
     } finally {
       this.loading.set(false);
+    }
+  }
+
+  showReset(): void {
+    this.errorMessage.set(null);
+    this.resetMode.set(true);
+    this.resetEmailSent.set(false);
+    this.resetForm.reset();
+  }
+
+  backToLogin(): void {
+    this.resetMode.set(false);
+    this.resetEmailSent.set(false);
+    this.errorMessage.set(null);
+  }
+
+  async onResetSubmit(): Promise<void> {
+    if (this.resetForm.invalid) {
+      this.resetForm.markAllAsTouched();
+      return;
+    }
+
+    this.errorMessage.set(null);
+    this.resetLoading.set(true);
+
+    const { email } = this.resetForm.value;
+
+    try {
+      await this.authService.sendPasswordResetEmail(email!);
+      this.resetEmailSent.set(true);
+    } catch (err: any) {
+      this.errorMessage.set(err?.message || 'Failed to send reset email. Please try again.');
+    } finally {
+      this.resetLoading.set(false);
     }
   }
 }

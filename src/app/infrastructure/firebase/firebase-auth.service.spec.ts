@@ -173,6 +173,24 @@ describe('FirebaseAuthService', () => {
     });
   });
 
+  describe('sendPasswordResetEmail', () => {
+    it('should call sendResetEmail with the provided email', async () => {
+      const spy = spyOn(service as any, 'sendResetEmail').and.returnValue(Promise.resolve());
+
+      await service.sendPasswordResetEmail('admin@test.com');
+      expect(spy).toHaveBeenCalledWith('admin@test.com');
+    });
+
+    it('should propagate errors from Firebase', async () => {
+      spyOn(service as any, 'sendResetEmail').and.returnValue(
+        Promise.reject(new Error('auth/user-not-found')),
+      );
+
+      await expectAsync(service.sendPasswordResetEmail('unknown@test.com'))
+        .toBeRejectedWithError('auth/user-not-found');
+    });
+  });
+
   describe('getCurrentUser', () => {
     it('should return null when no user is logged in', () => {
       expect(service.getCurrentUser()).toBeNull();

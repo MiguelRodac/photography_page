@@ -20,6 +20,7 @@ describe('authGuard', () => {
       logout: jasmine.createSpy('logout').and.resolveTo(),
       hasRole: jasmine.createSpy('hasRole').and.returnValue(hasRoleResult),
       getCurrentUser: () => authStateValue,
+      sendPasswordResetEmail: jasmine.createSpy('sendPasswordResetEmail').and.resolveTo(),
     };
   }
 
