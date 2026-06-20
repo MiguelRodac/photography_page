@@ -45,3 +45,8 @@ Thumbs.db
 .atl
 ROADMAP.md
 openspec
+enviroments/
+
+src/environments/environment.ts
+src/environments/environment.prod.ts
+src/environments/environment.spec.ts
