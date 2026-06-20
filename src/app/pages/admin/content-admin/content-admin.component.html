@@ -12,10 +12,11 @@
               <button
                 (click)="selectSection(section.id)"
                 class="w-full text-left px-3 py-2 rounded transition-colors duration-200"
-                [ngClass]="{
-                  'bg-primary-600 text-white': selectedSection() === section.id,
-                  'text-surface-300 hover:bg-surface-700 hover:text-surface-100': selectedSection() !== section.id
-                }"
+                [class.bg-primary-600]="selectedSection() === section.id"
+                [class.text-white]="selectedSection() === section.id"
+                [class.text-surface-300]="selectedSection() !== section.id"
+                [class.hover:bg-surface-700]="selectedSection() !== section.id"
+                [class.hover:text-surface-100]="selectedSection() !== section.id"
               >
                 {{ section.label }}
               </button>
@@ -26,11 +27,22 @@
 
       <!-- Editor Area -->
       <div class="lg:col-span-3">
+        <!-- No section selected -->
         @if (!selectedSection()) {
           <div class="bg-surface-800 border border-surface-700 rounded-lg p-12 text-center">
             <p class="text-surface-400">Select a section to edit</p>
           </div>
-        } @else {
+        }
+
+        <!-- Section selected: Loading -->
+        @if (selectedSection() && loading()) {
+          <div class="bg-surface-800 border border-surface-700 rounded-lg p-12 text-center">
+            <p class="text-surface-400">Loading section...</p>
+          </div>
+        }
+
+        <!-- Section selected: Editor (not loading) -->
+        @if (selectedSection() && !loading()) {
           <div class="bg-surface-800 border border-surface-700 rounded-lg p-6">
             <!-- Header -->
             <div class="flex items-center justify-between mb-4">
@@ -62,7 +74,7 @@
               </div>
             </div>
 
-            <!-- Success/Error Messages -->
+            <!-- Messages -->
             @if (successMessage()) {
               <div class="bg-green-900/50 border border-green-700 text-green-300 px-4 py-3 rounded mb-4">
                 {{ successMessage() }}
@@ -79,144 +91,103 @@
               </div>
             }
 
-            <!-- Loading State -->
-            @if (loading()) {
-              <div class="text-center py-8">
-                <p class="text-surface-400">Loading section...</p>
+            <!-- Preview Mode -->
+            @if (previewMode()) {
+              <div class="bg-surface-900 border border-surface-600 rounded p-6 prose prose-invert max-w-none">
+                @if (form.controls['title'].value) {
+                  <h1 class="text-2xl font-bold text-surface-100 mb-2">{{ form.controls['title'].value }}</h1>
+                }
+                @if (form.controls['subtitle'].value) {
+                  <p class="text-lg text-surface-300 mb-4">{{ form.controls['subtitle'].value }}</p>
+                }
+                @if (form.controls['description'].value) {
+                  <div class="text-surface-200 mb-4" [innerHTML]="form.controls['description'].value"></div>
+                }
+                @if (form.controls['cta'].value) {
+                  <button class="px-4 py-2 bg-primary-600 text-white rounded">{{ form.controls['cta'].value }}</button>
+                }
+                @if (form.controls['address'].value) {
+                  <p class="text-surface-300">{{ form.controls['address'].value }}</p>
+                }
+                @if (form.controls['email'].value) {
+                  <p class="text-surface-300">{{ form.controls['email'].value }}</p>
+                }
+                @if (form.controls['phone'].value) {
+                  <p class="text-surface-300">{{ form.controls['phone'].value }}</p>
+                }
               </div>
-            } @else {
-              <!-- Preview Mode -->
-              @if (previewMode()) {
-                <div class="bg-surface-900 border border-surface-600 rounded p-6 prose prose-invert max-w-none">
-                  @if (form.controls['title'].value) {
-                    <h1 class="text-2xl font-bold text-surface-100 mb-2">{{ form.controls['title'].value }}</h1>
-                  }
-                  @if (form.controls['subtitle'].value) {
-                    <p class="text-lg text-surface-300 mb-4">{{ form.controls['subtitle'].value }}</p>
-                  }
-                  @if (form.controls['description'].value) {
-                    <div class="text-surface-200 mb-4" [innerHTML]="form.controls['description'].value"></div>
-                  }
-                  @if (form.controls['cta'].value) {
-                    <button class="px-4 py-2 bg-primary-600 text-white rounded">{{ form.controls['cta'].value }}</button>
-                  }
-                  @if (form.controls['address'].value) {
-                    <p class="text-surface-300">{{ form.controls['address'].value }}</p>
-                  }
-                  @if (form.controls['email'].value) {
-                    <p class="text-surface-300">{{ form.controls['email'].value }}</p>
-                  }
-                  @if (form.controls['phone'].value) {
-                    <p class="text-surface-300">{{ form.controls['phone'].value }}</p>
-                  }
-                </div>
-              } @else {
-                <!-- Edit Mode -->
-                <form [formGroup]="form" (ngSubmit)="$event.preventDefault()" class="space-y-4">
-                  @if (getCurrentSection()?.fields?.includes('title')) {
-                    <div>
-                      <label class="block text-sm font-medium text-surface-300 mb-1">Title</label>
-                      <input
-                        type="text"
-                        formControlName="title"
-                        (input)="clearSuccessOnEdit()"
-                        class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      />
-                    </div>
-                  }
-                  @if (getCurrentSection()?.fields?.includes('subtitle')) {
-                    <div>
-                      <label class="block text-sm font-medium text-surface-300 mb-1">Subtitle</label>
-                      <input
-                        type="text"
-                        formControlName="subtitle"
-                        (input)="clearSuccessOnEdit()"
-                        class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      />
-                    </div>
-                  }
-                  @if (getCurrentSection()?.fields?.includes('description')) {
-                    <div>
-                      <label class="block text-sm font-medium text-surface-300 mb-1">Description (HTML supported)</label>
-                      <textarea
-                        formControlName="description"
-                        (input)="clearSuccessOnEdit()"
-                        rows="6"
-                        class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
-                      ></textarea>
-                      <p class="text-xs text-surface-500 mt-1">HTML tags are supported: &lt;b&gt;, &lt;i&gt;, &lt;a&gt;, &lt;h2&gt;, etc.</p>
-                    </div>
-                  }
-                  @if (getCurrentSection()?.fields?.includes('cta')) {
-                    <div>
-                      <label class="block text-sm font-medium text-surface-300 mb-1">Call to Action</label>
-                      <input
-                        type="text"
-                        formControlName="cta"
-                        (input)="clearSuccessOnEdit()"
-                        class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      />
-                    </div>
-                  }
-                  @if (getCurrentSection()?.fields?.includes('address')) {
-                    <div>
-                      <label class="block text-sm font-medium text-surface-300 mb-1">Address</label>
-                      <input
-                        type="text"
-                        formControlName="address"
-                        (input)="clearSuccessOnEdit()"
-                        class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      />
-                    </div>
-                  }
-                  @if (getCurrentSection()?.fields?.includes('email')) {
-                    <div>
-                      <label class="block text-sm font-medium text-surface-300 mb-1">Email</label>
-                      <input
-                        type="email"
-                        formControlName="email"
-                        (input)="clearSuccessOnEdit()"
-                        class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      />
-                    </div>
-                  }
-                  @if (getCurrentSection()?.fields?.includes('phone')) {
-                    <div>
-                      <label class="block text-sm font-medium text-surface-300 mb-1">Phone</label>
-                      <input
-                        type="tel"
-                        formControlName="phone"
-                        (input)="clearSuccessOnEdit()"
-                        class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      />
-                    </div>
-                  }
-                  @if (getCurrentSection()?.fields?.includes('image')) {
-                    <div>
-                      <label class="block text-sm font-medium text-surface-300 mb-1">Image URL</label>
-                      <input
-                        type="url"
-                        formControlName="image"
-                        (input)="clearSuccessOnEdit()"
-                        class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      />
-                    </div>
-                  }
-                  @if (getCurrentSection()?.fields?.includes('links')) {
-                    <div>
-                      <label class="block text-sm font-medium text-surface-300 mb-1">Social Links (JSON)</label>
-                      <textarea
-                        formControlName="links"
-                        (input)="clearSuccessOnEdit()"
-                        rows="8"
-                        class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
-                        placeholder='[{"platform": "Instagram", "url": "https://instagram.com/..."}]'
-                      ></textarea>
-                      <p class="text-xs text-surface-500 mt-1">JSON array of {platform, url} objects</p>
-                    </div>
-                  }
-                </form>
-              }
+            }
+
+            <!-- Edit Mode -->
+            @if (!previewMode()) {
+              <form [formGroup]="form" (ngSubmit)="$event.preventDefault()" class="space-y-4">
+                @if (getCurrentSection()?.fields?.includes('title')) {
+                  <div>
+                    <label class="block text-sm font-medium text-surface-300 mb-1">Title</label>
+                    <input type="text" formControlName="title" (input)="clearSuccessOnEdit()"
+                      class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                  </div>
+                }
+                @if (getCurrentSection()?.fields?.includes('subtitle')) {
+                  <div>
+                    <label class="block text-sm font-medium text-surface-300 mb-1">Subtitle</label>
+                    <input type="text" formControlName="subtitle" (input)="clearSuccessOnEdit()"
+                      class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                  </div>
+                }
+                @if (getCurrentSection()?.fields?.includes('description')) {
+                  <div>
+                    <label class="block text-sm font-medium text-surface-300 mb-1">Description (HTML supported)</label>
+                    <textarea formControlName="description" (input)="clearSuccessOnEdit()" rows="6"
+                      class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"></textarea>
+                    <p class="text-xs text-surface-500 mt-1">HTML tags are supported</p>
+                  </div>
+                }
+                @if (getCurrentSection()?.fields?.includes('cta')) {
+                  <div>
+                    <label class="block text-sm font-medium text-surface-300 mb-1">Call to Action</label>
+                    <input type="text" formControlName="cta" (input)="clearSuccessOnEdit()"
+                      class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                  </div>
+                }
+                @if (getCurrentSection()?.fields?.includes('address')) {
+                  <div>
+                    <label class="block text-sm font-medium text-surface-300 mb-1">Address</label>
+                    <input type="text" formControlName="address" (input)="clearSuccessOnEdit()"
+                      class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                  </div>
+                }
+                @if (getCurrentSection()?.fields?.includes('email')) {
+                  <div>
+                    <label class="block text-sm font-medium text-surface-300 mb-1">Email</label>
+                    <input type="email" formControlName="email" (input)="clearSuccessOnEdit()"
+                      class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                  </div>
+                }
+                @if (getCurrentSection()?.fields?.includes('phone')) {
+                  <div>
+                    <label class="block text-sm font-medium text-surface-300 mb-1">Phone</label>
+                    <input type="tel" formControlName="phone" (input)="clearSuccessOnEdit()"
+                      class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                  </div>
+                }
+                @if (getCurrentSection()?.fields?.includes('image')) {
+                  <div>
+                    <label class="block text-sm font-medium text-surface-300 mb-1">Image URL</label>
+                    <input type="url" formControlName="image" (input)="clearSuccessOnEdit()"
+                      class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                  </div>
+                }
+                @if (getCurrentSection()?.fields?.includes('links')) {
+                  <div>
+                    <label class="block text-sm font-medium text-surface-300 mb-1">Social Links (JSON)</label>
+                    <textarea formControlName="links" (input)="clearSuccessOnEdit()" rows="8"
+                      class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
+                      placeholder='[{"platform": "Instagram", "url": "https://instagram.com/..."}]'></textarea>
+                    <p class="text-xs text-surface-500 mt-1">JSON array of platform/url objects</p>
+                  </div>
+                }
+              </form>
             }
           </div>
         }
@@ -227,7 +198,7 @@
     @if (showDiscardConfirm()) {
       <app-confirm-dialog
         title="Discard Changes"
-        message="Are you sure you want to discard your changes? This action cannot be undone."
+        message="Are you sure you want to discard your changes?"
         confirmText="Discard"
         cancelText="Keep Editing"
         (confirm)="onConfirmDiscard()"

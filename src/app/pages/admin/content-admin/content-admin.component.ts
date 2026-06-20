@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IContentService } from '../../../core/interfaces/content-service.interface';
 import { CONTENT_SERVICE } from '../../../core/tokens/content-service.token';
