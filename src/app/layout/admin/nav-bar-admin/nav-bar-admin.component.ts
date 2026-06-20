@@ -19,10 +19,10 @@ export class NavBarAdminComponent {
   readonly user$: Observable<AuthUser | null> = this.authService.authState$;
 
   readonly navLinks = [
-    { label: 'Dashboard', link: '/admin-page' },
-    { label: 'Portfolio', link: '/admin-page/portfolio' },
-    { label: 'Content', link: '/admin-page/content' },
-    { label: 'Packages', link: '/admin-page/packages' },
+    { label: 'Dashboard', link: '/admin-page', icon: 'home' },
+    { label: 'Portfolio', link: '/admin-page/portfolio', icon: 'photo' },
+    { label: 'Content', link: '/admin-page/content', icon: 'document' },
+    { label: 'Packages', link: '/admin-page/packages', icon: 'cube' },
   ];
 
   toggleMobileMenu(): void {
