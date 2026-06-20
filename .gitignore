@@ -46,7 +46,7 @@ Thumbs.db
 ROADMAP.md
 openspec
 
-environments/
-# src/environments/environment.ts
-# src/environments/environment.prod.ts
-# src/environments/environment.spec.ts
+# environments
+environment.ts
+environment.prod.ts
+environment.spec.ts

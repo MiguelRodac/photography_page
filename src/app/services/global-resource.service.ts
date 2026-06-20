@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../environments/environment';
 import portfolioData from '../../data/portfolio.json';
 import servicesData from '../../data/services.json';
 import siteContent from '../../data/site-content.json';
