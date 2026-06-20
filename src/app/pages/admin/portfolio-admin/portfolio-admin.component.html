@@ -1,147 +1,177 @@
-<div class="min-h-screen bg-surface-900 p-6">
+<div class="min-h-screen bg-surface-900 p-4 sm:p-6 lg:p-8">
   <div class="max-w-6xl mx-auto">
     <!-- Header -->
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-3xl font-display font-bold text-primary-400">Portfolio Management</h1>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">Portfolio</h1>
+        <p class="text-surface-400 text-sm mt-1">Manage your photography portfolio items</p>
+      </div>
       <button
         (click)="showAddForm()"
-        class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded transition-colors duration-200"
+        class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-primary-600/20 hover:shadow-primary-500/30 text-sm"
       >
-        + Add New
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        Add New
       </button>
     </div>
 
     <!-- Error Message -->
     @if (errorMessage()) {
-      <div class="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded mb-4" role="alert">
-        {{ errorMessage() }}
+      <div class="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-xl mb-4 flex items-center gap-3" role="alert">
+        <svg class="w-5 h-5 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        <span class="text-sm">{{ errorMessage() }}</span>
       </div>
     }
 
-    <!-- Form -->
+    <!-- Modal Form -->
     @if (showForm()) {
-      <div class="bg-surface-800 border border-surface-700 rounded-lg p-6 mb-6">
-        <h2 class="text-xl font-display font-semibold text-surface-100 mb-4">
-          {{ editingId() ? 'Edit Item' : 'New Portfolio Item' }}
-        </h2>
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
-          <div>
-            <label for="title" class="block text-sm font-medium text-surface-300 mb-1">Title</label>
-            <input
-              id="title"
-              type="text"
-              formControlName="title"
-              class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
-            @if (form.controls['title'].touched && form.controls['title'].hasError('required')) {
-              <p class="text-red-400 text-sm mt-1">Title is required</p>
-            }
+      <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="cancelForm()"></div>
+        <div class="relative bg-surface-800 border border-surface-700 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+          <div class="sticky top-0 bg-surface-800 border-b border-surface-700 px-6 py-4 rounded-t-2xl">
+            <h2 class="text-xl font-display font-semibold text-surface-100">
+              {{ editingId() ? 'Edit Item' : 'New Portfolio Item' }}
+            </h2>
           </div>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-6 space-y-4">
+            <div>
+              <label for="title" class="block text-sm font-medium text-surface-300 mb-1.5">Title</label>
+              <input
+                id="title"
+                type="text"
+                formControlName="title"
+                class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all duration-200"
+                placeholder="Enter title..."
+              />
+              @if (form.controls['title'].touched && form.controls['title'].hasError('required')) {
+                <p class="text-red-400 text-xs mt-1">Title is required</p>
+              }
+            </div>
 
-          <div>
-            <label for="description" class="block text-sm font-medium text-surface-300 mb-1">Description</label>
-            <textarea
-              id="description"
-              formControlName="description"
-              rows="3"
-              class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-            ></textarea>
-            @if (form.controls['description'].touched && form.controls['description'].hasError('required')) {
-              <p class="text-red-400 text-sm mt-1">Description is required</p>
-            }
-          </div>
+            <div>
+              <label for="description" class="block text-sm font-medium text-surface-300 mb-1.5">Description</label>
+              <textarea
+                id="description"
+                formControlName="description"
+                rows="3"
+                class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all duration-200 resize-none"
+                placeholder="Describe this piece..."
+              ></textarea>
+              @if (form.controls['description'].touched && form.controls['description'].hasError('required')) {
+                <p class="text-red-400 text-xs mt-1">Description is required</p>
+              }
+            </div>
 
-          <div>
-            <label for="category" class="block text-sm font-medium text-surface-300 mb-1">Category</label>
-            <input
-              id="category"
-              type="text"
-              formControlName="category"
-              class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="wedding, portrait, event, etc."
-            />
-            @if (form.controls['category'].touched && form.controls['category'].hasError('required')) {
-              <p class="text-red-400 text-sm mt-1">Category is required</p>
-            }
-          </div>
+            <div>
+              <label for="category" class="block text-sm font-medium text-surface-300 mb-1.5">Category</label>
+              <input
+                id="category"
+                type="text"
+                formControlName="category"
+                class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all duration-200"
+                placeholder="wedding, portrait, event..."
+              />
+              @if (form.controls['category'].touched && form.controls['category'].hasError('required')) {
+                <p class="text-red-400 text-xs mt-1">Category is required</p>
+              }
+            </div>
 
-          <!--
-            NOTE: Firebase Storage upload is disabled — free Spark plan does not support Storage.
-            Only external URL is available. Upload logic remains in component for future plan upgrade.
-          -->
-          <div>
-            <label for="img" class="block text-sm font-medium text-surface-300 mb-1">Image URL</label>
-            <input
-              id="img"
-              type="url"
-              formControlName="img"
-              class="w-full px-3 py-2 bg-surface-900 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder="https://example.com/image.jpg"
-            />
-            @if (form.controls['img'].touched && form.controls['img'].hasError('required')) {
-              <p class="text-red-400 text-sm mt-1">Image URL is required</p>
-            }
-          </div>
+            <div>
+              <label for="img" class="block text-sm font-medium text-surface-300 mb-1.5">Image URL</label>
+              <input
+                id="img"
+                type="url"
+                formControlName="img"
+                class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all duration-200"
+                placeholder="https://example.com/image.jpg"
+              />
+              @if (form.controls['img'].touched && form.controls['img'].hasError('required')) {
+                <p class="text-red-400 text-xs mt-1">Image URL is required</p>
+              }
+            </div>
 
-          <div class="flex gap-3">
-            <button
-              type="submit"
-              class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded transition-colors"
-            >
-              {{ editingId() ? 'Update' : 'Create' }}
-            </button>
-            <button
-              type="button"
-              (click)="cancelForm()"
-              class="px-4 py-2 bg-surface-700 hover:bg-surface-600 text-surface-200 rounded transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
+            <div class="flex gap-3 pt-2">
+              <button
+                type="submit"
+                class="flex-1 px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-primary-600/20"
+              >
+                {{ editingId() ? 'Update' : 'Create' }}
+              </button>
+              <button
+                type="button"
+                (click)="cancelForm()"
+                class="flex-1 px-4 py-2.5 bg-surface-700 hover:bg-surface-600 text-surface-200 font-medium rounded-lg transition-colors border border-surface-600"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     }
 
-    <!-- Category Filter -->
-    @if (categories().length > 0) {
-      <div class="mb-4">
-        <label for="filter" class="block text-sm font-medium text-surface-300 mb-1">Filter by Category</label>
-        <select
-          id="filter"
-          [value]="selectedCategory()"
-          (change)="selectedCategory.set($any($event.target).value)"
-          class="px-3 py-2 bg-surface-800 border border-surface-600 rounded text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+    <!-- Category Filter Tabs -->
+    @if (categories().length) {
+      <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
+        <button
+          (click)="selectedCategory.set('')"
+          [class]="!selectedCategory() ? 'px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 border bg-primary-600/15 text-primary-400 border-primary-500/30' : 'px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 border bg-surface-800 text-surface-400 border-surface-700 hover:bg-surface-700'"
         >
-          <option value="">All Categories</option>
-          @for (cat of categories(); track cat) {
-            <option [value]="cat">{{ cat }}</option>
-          }
-        </select>
+          All
+          <span class="ml-1 text-xs opacity-70">({{ items().length }})</span>
+        </button>
+        @for (cat of categories(); track cat) {
+          <button
+            (click)="selectedCategory.set(cat)"
+            [class]="selectedCategory() === cat ? 'px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 border capitalize bg-primary-600/15 text-primary-400 border-primary-500/30' : 'px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 border capitalize bg-surface-800 text-surface-400 border-surface-700 hover:bg-surface-700'"
+          >
+            {{ cat }}
+            <span class="ml-1 text-xs opacity-70">({{ countByCategory(cat) }})</span>
+          </button>
+        }
       </div>
     }
 
     <!-- Loading State -->
     @if (loading()) {
-      <div class="text-center py-12">
-        <p class="text-surface-400">Loading portfolio items...</p>
+      <div class="flex flex-col items-center justify-center py-16">
+        <div class="w-10 h-10 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mb-4"></div>
+        <p class="text-surface-400 text-sm">Loading portfolio items...</p>
       </div>
     }
 
     <!-- Error State -->
     @if (error()) {
-      <div class="text-center py-12">
-        <p class="text-red-400">{{ error() }}</p>
+      <div class="text-center py-16">
+        <div class="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+        </div>
+        <p class="text-red-400 font-medium">{{ error() }}</p>
       </div>
     }
 
     <!-- Empty State -->
     @if (!loading() && !error() && filteredItems().length === 0) {
-      <div class="text-center py-12 bg-surface-800 border border-surface-700 rounded-lg">
-        <p class="text-surface-400 mb-4">No portfolio items yet. Create one.</p>
+      <div class="text-center py-16 bg-surface-800 border border-surface-700 rounded-xl">
+        <div class="w-16 h-16 rounded-full bg-surface-700 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-surface-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+          </svg>
+        </div>
+        <p class="text-surface-400 mb-4">No portfolio items yet. Create one to get started.</p>
         <button
           (click)="showAddForm()"
-          class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded transition-colors"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all duration-200 text-sm"
         >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
           Create your first portfolio item
         </button>
       </div>
@@ -153,30 +183,43 @@
         @for (item of filteredItems(); track item.id) {
           <div
             data-testid="portfolio-item"
-            class="bg-surface-800 border border-surface-700 rounded-lg overflow-hidden hover:border-primary-500 transition-colors"
+            class="group bg-surface-800 border border-surface-700 rounded-xl overflow-hidden hover:border-primary-500/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary-600/5"
           >
-            <img
-              [src]="item.img"
-              [alt]="item.title"
-              class="w-full h-48 object-cover"
-            />
+            <div class="relative overflow-hidden">
+              <img
+                [src]="item.img"
+                [alt]="item.title"
+                class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div class="absolute top-2 right-2">
+                <span class="px-2 py-1 text-xs font-medium bg-surface-900/80 backdrop-blur-sm text-surface-200 rounded-md capitalize">
+                  {{ item.category }}
+                </span>
+              </div>
+            </div>
             <div class="p-4">
-              <h3 class="text-lg font-semibold text-surface-100 mb-1">{{ item.title }}</h3>
-              <p class="text-surface-400 text-sm mb-2">{{ item.description }}</p>
-              <div class="flex items-center justify-between">
-                <span class="text-xs px-2 py-1 bg-surface-700 text-surface-300 rounded">{{ item.category }}</span>
-                <div class="flex gap-2">
+              <h3 class="text-lg font-semibold text-surface-100 mb-1 truncate">{{ item.title }}</h3>
+              <p class="text-surface-400 text-sm mb-3 line-clamp-2">{{ item.description }}</p>
+              <div class="flex items-center justify-between pt-3 border-t border-surface-700">
+                <span class="text-xs text-surface-500">{{ item.category }}</span>
+                <div class="flex gap-1">
                   <button
                     (click)="editItem(item)"
-                    class="text-sm text-primary-400 hover:text-primary-300 transition-colors"
+                    class="p-1.5 rounded-lg text-surface-400 hover:text-primary-400 hover:bg-primary-500/10 transition-all duration-200"
+                    title="Edit"
                   >
-                    Edit
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                    </svg>
                   </button>
                   <button
                     (click)="confirmDelete(item)"
-                    class="text-sm text-red-400 hover:text-red-300 transition-colors"
+                    class="p-1.5 rounded-lg text-surface-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
+                    title="Delete"
                   >
-                    Delete
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.207a51.715 51.715 0 00-3.41 0c-1.18.043-2.09 1.027-2.09 2.207v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                    </svg>
                   </button>
                 </div>
               </div>

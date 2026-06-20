@@ -39,6 +39,10 @@ export class PortfolioAdminComponent implements OnInit {
     return this.items().filter((item) => item.category === cat);
   });
 
+  countByCategory(cat: string): number {
+    return this.items().filter((item) => item.category === cat).length;
+  }
+
   readonly form = this.fb.group({
     title: ['', [Validators.required]],
     description: ['', [Validators.required]],
