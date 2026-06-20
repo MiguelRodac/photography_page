@@ -1,5 +1,4 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IContentService } from '../../../core/interfaces/content-service.interface';
 import { CONTENT_SERVICE } from '../../../core/tokens/content-service.token';
@@ -14,7 +13,7 @@ interface SectionConfig {
 @Component({
   selector: 'app-content-admin',
   standalone: true,
-  imports: [AsyncPipe, ReactiveFormsModule, NgClass, ConfirmDialogComponent],
+  imports: [ReactiveFormsModule, ConfirmDialogComponent],
   templateUrl: './content-admin.component.html',
 })
 export class ContentAdminComponent implements OnInit {

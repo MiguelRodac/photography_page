@@ -1,5 +1,4 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import { AsyncPipe, NgClass } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PortfolioDoc } from '../../../core/interfaces/firestore-models';
 import { IPortfolioService, PortfolioCreate } from '../../../core/interfaces/portfolio-service.interface';
@@ -9,7 +8,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 @Component({
   selector: 'app-portfolio-admin',
   standalone: true,
-  imports: [AsyncPipe, ReactiveFormsModule, NgClass, ConfirmDialogComponent],
+  imports: [ReactiveFormsModule, ConfirmDialogComponent],
   templateUrl: './portfolio-admin.component.html',
 })
 export class PortfolioAdminComponent implements OnInit {

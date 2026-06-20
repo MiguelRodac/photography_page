@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AUTH_SERVICE } from '../../../core/tokens/auth-service.token';
 import { IAuthService } from '../../../core/interfaces/auth-service.interface';
 import { take, Subscription } from 'rxjs';
@@ -8,7 +8,7 @@ import { take, Subscription } from 'rxjs';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit, OnDestroy {
