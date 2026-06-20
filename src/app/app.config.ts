@@ -6,7 +6,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 
 import { routes } from './app.routes';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 import { AUTH_SERVICE } from './core/tokens/auth-service.token';
 import { PORTFOLIO_SERVICE } from './core/tokens/portfolio-service.token';
