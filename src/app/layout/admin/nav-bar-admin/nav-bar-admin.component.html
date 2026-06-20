@@ -1,1 +1,79 @@
-<p>nav-bar-admin works!</p>
+<nav class="bg-surface-800 border-b border-surface-700">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-14">
+      <!-- Left: nav links (desktop) -->
+      <div class="hidden md:flex items-center space-x-4">
+        @for (link of navLinks; track link.link) {
+          <a
+            [routerLink]="link.link"
+            routerLinkActive="bg-primary-600 text-white"
+            [routerLinkActiveOptions]="{ exact: link.link === '/admin-page' }"
+            class="px-3 py-2 rounded-md text-sm font-medium text-surface-300 hover:bg-surface-700 hover:text-surface-100 transition-colors"
+          >
+            {{ link.label }}
+          </a>
+        }
+      </div>
+
+      <!-- Right: user info + logout (desktop) -->
+      <div class="hidden md:flex items-center space-x-4">
+        @if (user$ | async; as user) {
+          <span class="text-sm text-surface-400">{{ user.email }}</span>
+        }
+        <button
+          (click)="onLogout()"
+          class="px-3 py-2 rounded-md text-sm font-medium text-surface-300 hover:bg-surface-700 hover:text-surface-100 transition-colors"
+        >
+          Logout
+        </button>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button
+          (click)="toggleMobileMenu()"
+          class="inline-flex items-center justify-center p-2 rounded-md text-surface-400 hover:bg-surface-700 hover:text-surface-100"
+          aria-label="Toggle menu"
+        >
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            @if (mobileMenuOpen()) {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            } @else {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            }
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  @if (mobileMenuOpen()) {
+    <div class="md:hidden border-t border-surface-700">
+      <div class="px-2 pt-2 pb-3 space-y-1">
+        @for (link of navLinks; track link.link) {
+          <a
+            [routerLink]="link.link"
+            routerLinkActive="bg-primary-600 text-white"
+            [routerLinkActiveOptions]="{ exact: link.link === '/admin-page' }"
+            (click)="toggleMobileMenu()"
+            class="block px-3 py-2 rounded-md text-base font-medium text-surface-300 hover:bg-surface-700 hover:text-surface-100"
+          >
+            {{ link.label }}
+          </a>
+        }
+      </div>
+      <div class="border-t border-surface-700 px-4 py-3">
+        @if (user$ | async; as user) {
+          <p class="text-sm text-surface-400 mb-2">{{ user.email }}</p>
+        }
+        <button
+          (click)="onLogout()"
+          class="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-surface-300 hover:bg-surface-700"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  }
+</nav>
