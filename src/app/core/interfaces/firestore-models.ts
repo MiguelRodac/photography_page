@@ -62,3 +62,24 @@ export interface SocialLink {
 export interface SocialLinksContent {
   links: SocialLink[];
 }
+
+export interface CategoryDoc {
+  id: string;
+  name: string;
+  slug: string;
+  order: number;
+}
+
+export interface SettingsDoc {
+  siteName: string;
+  logoUrl: string;
+  footerText: string;
+}
+
+export interface NavLinkDoc {
+  id: string;
+  label: string;
+  path: string;
+  order: number;
+  visible: boolean;
+}

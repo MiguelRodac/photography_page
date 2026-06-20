@@ -21,6 +21,7 @@ export class NavBarAdminComponent {
   readonly navLinks = [
     { label: 'Dashboard', link: '/admin-page', icon: 'home' },
     { label: 'Portfolio', link: '/admin-page/portfolio', icon: 'photo' },
+    { label: 'Categories', link: '/admin-page/categories', icon: 'tag' },
     { label: 'Content', link: '/admin-page/content', icon: 'document' },
     { label: 'Packages', link: '/admin-page/packages', icon: 'cube' },
   ];

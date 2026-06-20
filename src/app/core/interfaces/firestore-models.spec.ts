@@ -6,6 +6,9 @@ import {
   AboutMeContent,
   ContactContent,
   SocialLinksContent,
+  CategoryDoc,
+  SettingsDoc,
+  NavLinkDoc,
 } from './firestore-models';
 
 describe('Firestore Document Models', () => {
@@ -176,6 +179,51 @@ describe('Firestore Document Models', () => {
       expect(content.links).toHaveSize(2);
       expect(content.links[0].platform).toBe('instagram');
       expect(content.links[1].url).toContain('wa.me');
+    });
+  });
+
+  describe('CategoryDoc', () => {
+    it('should accept a valid category', () => {
+      const cat: CategoryDoc = {
+        id: 'cat-1',
+        name: 'Weddings',
+        slug: 'weddings',
+        order: 1,
+      };
+
+      expect(cat.id).toBe('cat-1');
+      expect(cat.name).toBe('Weddings');
+      expect(cat.slug).toBe('weddings');
+      expect(cat.order).toBe(1);
+    });
+  });
+
+  describe('SettingsDoc', () => {
+    it('should accept valid settings', () => {
+      const settings: SettingsDoc = {
+        siteName: 'Photography ACAS',
+        logoUrl: 'https://example.com/logo.png',
+        footerText: '© 2026 Photography ACAS',
+      };
+
+      expect(settings.siteName).toBe('Photography ACAS');
+      expect(settings.logoUrl).toContain('https://');
+    });
+  });
+
+  describe('NavLinkDoc', () => {
+    it('should accept a valid navigation link', () => {
+      const link: NavLinkDoc = {
+        id: 'nav-1',
+        label: 'Home',
+        path: '/',
+        order: 1,
+        visible: true,
+      };
+
+      expect(link.id).toBe('nav-1');
+      expect(link.label).toBe('Home');
+      expect(link.visible).toBeTrue();
     });
   });
 });
