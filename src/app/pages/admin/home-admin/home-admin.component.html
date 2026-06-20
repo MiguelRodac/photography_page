@@ -1,1 +1,52 @@
-<p>home-admin works!</p>
+<div class="min-h-screen bg-surface-900 p-6">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-display font-bold text-primary-400">Dashboard</h1>
+        @if (user$ | async; as user) {
+          <p class="text-surface-400 mt-1">Welcome, {{ user.email }}</p>
+        }
+      </div>
+      <button
+        (click)="onLogout()"
+        class="px-4 py-2 bg-surface-700 hover:bg-surface-600 text-surface-200 rounded transition-colors duration-200"
+      >
+        Logout
+      </button>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div class="bg-surface-800 border border-surface-700 rounded-lg p-6">
+        <p class="text-surface-400 text-sm">Portfolio Items</p>
+        <p class="text-2xl font-bold text-surface-100">—</p>
+      </div>
+      <div class="bg-surface-800 border border-surface-700 rounded-lg p-6">
+        <p class="text-surface-400 text-sm">Packages</p>
+        <p class="text-2xl font-bold text-surface-100">—</p>
+      </div>
+      <div class="bg-surface-800 border border-surface-700 rounded-lg p-6">
+        <p class="text-surface-400 text-sm">Messages</p>
+        <p class="text-2xl font-bold text-surface-100">—</p>
+      </div>
+    </div>
+
+    <!-- Navigation Cards -->
+    <h2 class="text-xl font-display font-semibold text-surface-200 mb-4">Quick Access</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      @for (card of navCards; track card.link) {
+        <a
+          [routerLink]="card.link"
+          class="bg-surface-800 border border-surface-700 rounded-lg p-6 hover:border-primary-500 transition-colors duration-200 group"
+        >
+          <span class="text-3xl block mb-3">{{ card.icon }}</span>
+          <h3 class="text-lg font-semibold text-surface-100 group-hover:text-primary-400 transition-colors">
+            {{ card.title }}
+          </h3>
+          <p class="text-surface-400 text-sm mt-1">{{ card.description }}</p>
+        </a>
+      }
+    </div>
+  </div>
+</div>
