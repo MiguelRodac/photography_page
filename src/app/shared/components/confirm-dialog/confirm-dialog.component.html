@@ -1,0 +1,20 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+  <div class="bg-surface-800 border border-surface-700 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+    <h2 class="text-xl font-display font-semibold text-surface-100 mb-2">{{ title }}</h2>
+    <p class="text-surface-400 mb-6">{{ message }}</p>
+    <div class="flex justify-end gap-3">
+      <button
+        (click)="onCancel()"
+        class="px-4 py-2 bg-surface-700 hover:bg-surface-600 text-surface-200 rounded transition-colors duration-200"
+      >
+        {{ cancelText }}
+      </button>
+      <button
+        (click)="onConfirm()"
+        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition-colors duration-200"
+      >
+        {{ confirmText }}
+      </button>
+    </div>
+  </div>
+</div>
