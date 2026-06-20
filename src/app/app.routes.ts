@@ -25,6 +25,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: '', loadComponent: () => import('./pages/admin/home-admin/home-admin.component').then(m => m.HomeAdminComponent) },
+      { path: 'unauthorized', loadComponent: () => import('./pages/admin/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent) },
     ],
   },
   { path: '**', loadComponent: () => import('./pages/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent) },
