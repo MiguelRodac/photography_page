@@ -4,20 +4,21 @@
     <div class="absolute inset-0 bg-surface-950">
       <div class="absolute inset-0 bg-gradient-to-b from-surface-950/80 via-surface-950/60 to-surface-950/90 z-10"></div>
       <div class="absolute inset-0 animate-parallax z-0"
-           style="background-image: url('https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center;">
+           [style.background-image]="'url(' + (heroData()?.bgImage || 'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=1920&q=80') + ')'"
+           style="background-size: cover; background-position: center;">
       </div>
     </div>
     <div class="relative z-20 text-center px-6 max-w-4xl mx-auto">
       <h1 class="text-5xl md:text-7xl lg:text-8xl font-display text-white mb-6 opacity-0 animate-fade-in">
-        {{ content.hero.title }}
+        {{ heroData()?.title || content.hero.title }}
       </h1>
       <p class="text-xl md:text-2xl text-surface-300 mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.3s;">
-        {{ content.hero.subtitle }}
+        {{ heroData()?.subtitle || content.hero.subtitle }}
       </p>
       <a routerLink="/portfolio"
          class="inline-block px-8 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 opacity-0 animate-fade-up"
          style="animation-delay: 0.6s;">
-        {{ content.hero.cta }}
+        {{ heroData()?.cta || content.hero.cta }}
       </a>
     </div>
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
@@ -37,7 +38,7 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      @for (service of services; track service.id; let i = $index) {
+      @for (service of (servicesData()?.services || services); track service.id || service.title; let i = $index) {
         <div appReveal class="reveal-delay-{{ i + 1 }} group p-8 rounded-2xl bg-surface-100 dark:bg-surface-900 hover:bg-surface-200 dark:hover:bg-surface-800 transition-all duration-300 cursor-default">
           <div class="w-14 h-14 bg-primary-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500/20 transition-colors">
             @switch (service.id) {
