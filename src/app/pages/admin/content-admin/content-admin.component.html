@@ -117,6 +117,52 @@
                     </div>
                   }
 
+                  <!-- Social Links Repeater (Footer only) -->
+                  @if (section.id === 'footer') {
+                    <div class="space-y-3">
+                      <label class="block text-sm font-medium text-surface-300">Social Links</label>
+                      @for (link of footerLinks(); track $index) {
+                        <div class="flex items-start gap-3">
+                          <input
+                            type="text"
+                            [value]="link.platform"
+                            (input)="updateFooterLink($index, 'platform', $any($event.target).value)"
+                            placeholder="Platform (e.g. Instagram)"
+                            class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all text-sm"
+                          />
+                          <input
+                            type="url"
+                            [value]="link.url"
+                            (input)="updateFooterLink($index, 'url', $any($event.target).value)"
+                            placeholder="https://..."
+                            class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all text-sm"
+                          />
+                          <button
+                            type="button"
+                            (click)="removeFooterLink($index)"
+                            class="px-2.5 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
+                          >
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      } @empty {
+                        <p class="text-surface-500 text-sm">No social links added yet.</p>
+                      }
+                      <button
+                        type="button"
+                        (click)="addFooterLink()"
+                        class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors"
+                      >
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        Add Link
+                      </button>
+                    </div>
+                  }
+
                   <!-- Save Button -->
                   <div class="flex justify-end pt-2">
                     <button

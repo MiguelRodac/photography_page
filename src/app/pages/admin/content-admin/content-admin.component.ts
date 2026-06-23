@@ -26,7 +26,7 @@ export class ContentAdminComponent implements OnInit {
     { id: 'about', label: 'About Me', icon: 'user', fields: ['title', 'description', 'image', 'stats'] },
     { id: 'contact', label: 'Contact', icon: 'envelope', fields: ['title', 'description', 'email', 'phone', 'address', 'mapEmbed'] },
     { id: 'header', label: 'Header', icon: 'bars', fields: ['siteName', 'logoUrl'] },
-    { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText', 'socialLinks'] },
+    { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText'] },
     { id: 'whatsapp', label: 'WhatsApp', icon: 'chat', fields: ['phoneNumber', 'defaultMessage'] },
   ];
 
@@ -36,6 +36,7 @@ export class ContentAdminComponent implements OnInit {
   readonly successSections = signal<Set<string>>(new Set());
   readonly errorSections = signal<Map<string, string>>(new Map());
   readonly sectionData = signal<Map<string, any>>(new Map());
+  readonly footerLinks = signal<{ platform: string; url: string }[]>([]);
 
   readonly sectionForms = new Map<string, ReturnType<typeof this.fb.group>>();
 
@@ -96,6 +97,10 @@ export class ContentAdminComponent implements OnInit {
           if (form) {
             const patchData: any = {};
             for (const key of Object.keys(data)) {
+              if (key === 'socialLinks' && sectionId === 'footer') {
+                this.footerLinks.set(Array.isArray(data[key]) ? data[key] : []);
+                continue;
+              }
               if (form.controls[key]) {
                 if (typeof data[key] === 'object' && data[key] !== null) {
                   patchData[key] = JSON.stringify(data[key], null, 2);
@@ -142,7 +147,7 @@ export class ContentAdminComponent implements OnInit {
     for (const field of section.fields) {
       const val = form.controls[field]?.value;
       if (val !== null && val !== undefined && val !== '') {
-        if (field === 'services' || field === 'stats' || field === 'socialLinks') {
+        if (field === 'services' || field === 'stats') {
           try {
             data[field] = JSON.parse(val);
           } catch {
@@ -156,6 +161,11 @@ export class ContentAdminComponent implements OnInit {
           data[field] = val;
         }
       }
+    }
+
+    // Add social links for footer
+    if (sectionId === 'footer') {
+      data['socialLinks'] = this.footerLinks().filter((l) => l.platform && l.url);
     }
 
     try {
@@ -196,7 +206,7 @@ export class ContentAdminComponent implements OnInit {
   }
 
   isJsonField(field: string): boolean {
-    return ['services', 'stats', 'socialLinks'].includes(field);
+    return ['services', 'stats'].includes(field);
   }
 
   isLongTextField(field: string): boolean {
@@ -213,7 +223,23 @@ export class ContentAdminComponent implements OnInit {
   getJsonPlaceholder(field: string): string {
     if (field === 'services') return '[{"id": "wedding", "title": "Weddings", "description": "..."}]';
     if (field === 'stats') return '[{"value": "500+", "label": "Sessions"}]';
-    if (field === 'socialLinks') return '[{"platform": "instagram", "url": "https://..."}]';
     return '[]';
+  }
+
+  // --- Footer social links repeater ---
+
+  addFooterLink(): void {
+    this.footerLinks.update((links) => [...links, { platform: '', url: '' }]);
+  }
+
+  removeFooterLink(index: number): void {
+    this.footerLinks.update((links) => links.filter((_, i) => i !== index));
+  }
+
+  updateFooterLink(index: number, key: 'platform' | 'url', value: string): void {
+    this.footerLinks.update((links) =>
+      links.map((link, i) => (i === index ? { ...link, [key]: value } : link)),
+    );
+    this.clearSuccessOnEdit('footer');
   }
 }
