@@ -22,8 +22,8 @@ export class ContentAdminComponent implements OnInit {
 
   readonly sections: SectionConfig[] = [
     { id: 'hero', label: 'Home Hero', icon: 'bolt', fields: ['title', 'subtitle', 'cta', 'bgImage'] },
-    { id: 'services', label: 'Home Services', icon: 'briefcase', fields: ['services'] },
-    { id: 'about', label: 'About Me', icon: 'user', fields: ['title', 'description', 'image', 'stats'] },
+    { id: 'services', label: 'Home Services', icon: 'briefcase', fields: [] },
+    { id: 'about', label: 'About Me', icon: 'user', fields: ['title', 'description', 'image'] },
     { id: 'contact', label: 'Contact', icon: 'envelope', fields: ['title', 'description', 'email', 'phone', 'address', 'mapEmbed'] },
     { id: 'header', label: 'Header', icon: 'bars', fields: ['siteName', 'logoUrl'] },
     { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText'] },
@@ -37,6 +37,8 @@ export class ContentAdminComponent implements OnInit {
   readonly errorSections = signal<Map<string, string>>(new Map());
   readonly sectionData = signal<Map<string, any>>(new Map());
   readonly footerLinks = signal<{ platform: string; url: string }[]>([]);
+  readonly servicesItems = signal<{ id: string; title: string; description: string; icon: string }[]>([]);
+  readonly aboutStats = signal<{ value: string; label: string }[]>([]);
 
   readonly sectionForms = new Map<string, ReturnType<typeof this.fb.group>>();
 
@@ -99,6 +101,14 @@ export class ContentAdminComponent implements OnInit {
             for (const key of Object.keys(data)) {
               if (key === 'socialLinks' && sectionId === 'footer') {
                 this.footerLinks.set(Array.isArray(data[key]) ? data[key] : []);
+                continue;
+              }
+              if (key === 'services' && sectionId === 'services') {
+                this.servicesItems.set(Array.isArray(data[key]) ? data[key] : []);
+                continue;
+              }
+              if (key === 'stats' && sectionId === 'about') {
+                this.aboutStats.set(Array.isArray(data[key]) ? data[key] : []);
                 continue;
               }
               if (form.controls[key]) {
@@ -168,6 +178,16 @@ export class ContentAdminComponent implements OnInit {
       data['socialLinks'] = this.footerLinks().filter((l) => l.platform && l.url);
     }
 
+    // Add services items
+    if (sectionId === 'services') {
+      data['services'] = this.servicesItems().filter((s) => s.title);
+    }
+
+    // Add about stats
+    if (sectionId === 'about') {
+      data['stats'] = this.aboutStats().filter((s) => s.label);
+    }
+
     try {
       await this.contentService.updateSection(sectionId, data);
       form.markAsPristine();
@@ -206,7 +226,7 @@ export class ContentAdminComponent implements OnInit {
   }
 
   isJsonField(field: string): boolean {
-    return ['services', 'stats'].includes(field);
+    return false; // All repeaters now use visual UI, no raw JSON
   }
 
   isLongTextField(field: string): boolean {
@@ -218,12 +238,6 @@ export class ContentAdminComponent implements OnInit {
     if (field === 'email') return 'email';
     if (field === 'phone' || field === 'phoneNumber') return 'tel';
     return 'text';
-  }
-
-  getJsonPlaceholder(field: string): string {
-    if (field === 'services') return '[{"id": "wedding", "title": "Weddings", "description": "..."}]';
-    if (field === 'stats') return '[{"value": "500+", "label": "Sessions"}]';
-    return '[]';
   }
 
   // --- Footer social links repeater ---
@@ -241,5 +255,39 @@ export class ContentAdminComponent implements OnInit {
       links.map((link, i) => (i === index ? { ...link, [key]: value } : link)),
     );
     this.clearSuccessOnEdit('footer');
+  }
+
+  // --- Services repeater ---
+
+  addServiceItem(): void {
+    this.servicesItems.update((items) => [...items, { id: '', title: '', description: '', icon: '📸' }]);
+  }
+
+  removeServiceItem(index: number): void {
+    this.servicesItems.update((items) => items.filter((_, i) => i !== index));
+  }
+
+  updateServiceItem(index: number, key: 'id' | 'title' | 'description' | 'icon', value: string): void {
+    this.servicesItems.update((items) =>
+      items.map((item, i) => (i === index ? { ...item, [key]: value } : item)),
+    );
+    this.clearSuccessOnEdit('services');
+  }
+
+  // --- Stats repeater ---
+
+  addStatItem(): void {
+    this.aboutStats.update((stats) => [...stats, { value: '', label: '' }]);
+  }
+
+  removeStatItem(index: number): void {
+    this.aboutStats.update((stats) => stats.filter((_, i) => i !== index));
+  }
+
+  updateStatItem(index: number, key: 'value' | 'label', value: string): void {
+    this.aboutStats.update((stats) =>
+      stats.map((stat, i) => (i === index ? { ...stat, [key]: value } : stat)),
+    );
+    this.clearSuccessOnEdit('about');
   }
 }
