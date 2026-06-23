@@ -28,6 +28,8 @@ export class FirebaseAuthService implements IAuthService {
       displayName: credential.user.displayName || undefined,
       role: userDoc?.role || 'admin',
     };
+    // Reset cached auth state so guard gets fresh authenticated user
+    this._authState$ = null;
   }
 
   async logout(): Promise<void> {
