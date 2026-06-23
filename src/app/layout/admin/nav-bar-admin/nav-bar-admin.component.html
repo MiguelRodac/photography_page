@@ -79,7 +79,7 @@
     @if (user$ | async; as user) {
       <div class="flex items-center gap-3 px-3 py-2 mb-2">
         <div class="w-8 h-8 rounded-full bg-primary-600/20 border border-primary-500/30 flex items-center justify-center">
-          <span class="text-xs font-bold text-primary-400 uppercase">{{ user.email?.[0] }}</span>
+          <span class="text-xs font-bold text-primary-400 uppercase">{{ user.email[0] }}</span>
         </div>
         <div class="flex-1 min-w-0">
           <p class="text-sm font-medium text-surface-200 truncate">{{ user.email }}</p>
