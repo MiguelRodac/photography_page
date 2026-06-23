@@ -229,6 +229,10 @@ export class ContentAdminComponent implements OnInit {
     return false; // All repeaters now use visual UI, no raw JSON
   }
 
+  getJsonPlaceholder(field: string): string {
+    return ''; // No longer used — all fields are typed or repeaters
+  }
+
   isLongTextField(field: string): boolean {
     return ['description', 'defaultMessage'].includes(field);
   }
