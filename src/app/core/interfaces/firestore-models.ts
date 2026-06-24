@@ -83,3 +83,22 @@ export interface NavLinkDoc {
   order: number;
   visible: boolean;
 }
+
+export interface ThemeSettings {
+  primaryColor: string;
+  primaryHover: string;
+  displayFont: string;
+  bodyFont: string;
+  borderRadius: string;
+  darkModeDefault: boolean;
+}
+
+export interface PageSectionItem {
+  id: string;
+  visible: boolean;
+  order: number;
+}
+
+export interface PageSectionsConfig {
+  sections: PageSectionItem[];
+}

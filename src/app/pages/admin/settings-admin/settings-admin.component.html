@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="mb-6">
       <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">Settings</h1>
-      <p class="text-surface-400 text-sm mt-1">Manage site branding and general settings</p>
+      <p class="text-surface-400 text-sm mt-1">Manage site branding, theme, and general settings</p>
     </div>
 
     <!-- Loading State -->
@@ -23,7 +23,7 @@
 
     <!-- Settings Form -->
     @if (!loading() && !error()) {
-      <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden">
+      <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden mb-6">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-surface-700">
           <h2 class="text-xl font-display font-semibold text-surface-100">Site Branding</h2>
@@ -100,11 +100,198 @@
               formControlName="footerText"
               (input)="clearSuccessOnEdit()"
               class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all duration-200"
-              placeholder="© 2026 Photography ACAS. All Rights Reserved."
+              placeholder="&copy; 2026 Photography ACAS. All Rights Reserved."
             />
             <p class="text-xs text-surface-500 mt-1">Copyright text displayed in the footer</p>
           </div>
         </form>
+      </div>
+
+      <!-- Theme Editor -->
+      <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-surface-700">
+          <h2 class="text-xl font-display font-semibold text-surface-100">Theme</h2>
+          <button
+            (click)="saveTheme()"
+            [disabled]="themeSaving()"
+            class="inline-flex items-center gap-1.5 px-4 py-1.5 text-sm bg-primary-600 hover:bg-primary-500 disabled:bg-surface-600 disabled:cursor-not-allowed text-white rounded-lg transition-all font-medium shadow-lg shadow-primary-600/20 disabled:shadow-none"
+          >
+            @if (themeSaving()) {
+              <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+            }
+            {{ themeSaving() ? 'Saving...' : 'Save Theme' }}
+          </button>
+        </div>
+
+        @if (themeLoading()) {
+          <div class="flex items-center justify-center py-8">
+            <div class="w-6 h-6 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
+            <span class="text-surface-400 text-sm ml-3">Loading theme...</span>
+          </div>
+        }
+
+        @if (!themeLoading()) {
+          <!-- Messages -->
+          <div class="px-6 pt-4">
+            @if (themeSuccess()) {
+              <div class="bg-green-500/10 border border-green-500/20 text-green-300 px-4 py-3 rounded-xl mb-4 flex items-center gap-2 text-sm">
+                <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {{ themeSuccess() }}
+              </div>
+            }
+            @if (themeError()) {
+              <div class="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-xl mb-4 flex items-center gap-2 text-sm">
+                <svg class="w-4 h-4 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                {{ themeError() }}
+              </div>
+            }
+          </div>
+
+          <form [formGroup]="themeForm" (ngSubmit)="$event.preventDefault()" class="p-6 space-y-5">
+            <!-- Colors -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-medium text-surface-300 mb-1.5">Primary Color</label>
+                <div class="flex items-center gap-3">
+                  <input
+                    type="color"
+                    formControlName="primaryColor"
+                    (input)="clearThemeSuccessOnEdit()"
+                    class="w-10 h-10 rounded-lg border border-surface-600 cursor-pointer bg-transparent"
+                  />
+                  <input
+                    type="text"
+                    formControlName="primaryColor"
+                    (input)="clearThemeSuccessOnEdit()"
+                    class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all text-sm font-mono"
+                    placeholder="#d4892e"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-surface-300 mb-1.5">Primary Hover</label>
+                <div class="flex items-center gap-3">
+                  <input
+                    type="color"
+                    formControlName="primaryHover"
+                    (input)="clearThemeSuccessOnEdit()"
+                    class="w-10 h-10 rounded-lg border border-surface-600 cursor-pointer bg-transparent"
+                  />
+                  <input
+                    type="text"
+                    formControlName="primaryHover"
+                    (input)="clearThemeSuccessOnEdit()"
+                    class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all text-sm font-mono"
+                    placeholder="#bd7023"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Fonts -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-medium text-surface-300 mb-1.5">Display Font</label>
+                <select
+                  formControlName="displayFont"
+                  (change)="clearThemeSuccessOnEdit()"
+                  class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
+                >
+                  @for (font of displayFonts; track font.value) {
+                    <option [value]="font.value">{{ font.label }}</option>
+                  }
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-surface-300 mb-1.5">Body Font</label>
+                <select
+                  formControlName="bodyFont"
+                  (change)="clearThemeSuccessOnEdit()"
+                  class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
+                >
+                  @for (font of bodyFonts; track font.value) {
+                    <option [value]="font.value">{{ font.label }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <!-- Border Radius -->
+            <div>
+              <label class="block text-sm font-medium text-surface-300 mb-1.5">
+                Border Radius: {{ themeForm.value.borderRadius || '12' }}px
+              </label>
+              <input
+                type="range"
+                formControlName="borderRadius"
+                (input)="clearThemeSuccessOnEdit()"
+                min="0"
+                max="24"
+                class="w-full h-2 bg-surface-700 rounded-lg appearance-none cursor-pointer accent-primary-500"
+              />
+              <div class="flex justify-between text-xs text-surface-500 mt-1">
+                <span>0px (sharp)</span>
+                <span>24px (round)</span>
+              </div>
+            </div>
+
+            <!-- Live Preview -->
+            <div class="border border-surface-700 rounded-xl p-5 bg-surface-900/50">
+              <p class="text-xs text-surface-500 uppercase tracking-wider mb-3 font-medium">Live Preview</p>
+              <div
+                class="space-y-3"
+                [style.--preview-primary]="themeForm.value.primaryColor || '#d4892e'"
+                [style.--preview-hover]="themeForm.value.primaryHover || '#bd7023'"
+                [style.--preview-radius]="(themeForm.value.borderRadius || '12') + 'px'"
+              >
+                <h3
+                  class="text-2xl font-display font-bold text-surface-100"
+                  [style.font-family]="previewFontFamily(themeForm.value.displayFont || '')"
+                >
+                  Heading Preview
+                </h3>
+                <p
+                  class="text-surface-400 text-sm"
+                  [style.font-family]="previewFontFamily(themeForm.value.bodyFont || '')"
+                >
+                  Body text preview — The quick brown fox jumps over the lazy dog. This is how your content will look with the selected fonts and colors.
+                </p>
+                <div class="flex gap-3 pt-1">
+                  <button
+                    type="button"
+                    class="px-5 py-2.5 text-white text-sm font-medium transition-all hover:scale-105"
+                    [style.background-color]="themeForm.value.primaryColor || '#d4892e'"
+                    [style.border-radius]="(themeForm.value.borderRadius || '12') + 'px'"
+                  >
+                    Primary Button
+                  </button>
+                  <button
+                    type="button"
+                    class="px-5 py-2.5 text-sm font-medium border-2 transition-all"
+                    [style.borderColor]="themeForm.value.primaryColor || '#d4892e'"
+                    [style.color]="themeForm.value.primaryColor || '#d4892e'"
+                    [style.border-radius]="(themeForm.value.borderRadius || '12') + 'px'"
+                  >
+                    Secondary Button
+                  </button>
+                </div>
+                <div
+                  class="p-4 border border-surface-600 bg-surface-800"
+                  [style.border-radius]="(themeForm.value.borderRadius || '12') + 'px'"
+                >
+                  <p class="text-xs text-surface-400">Card with current border radius</p>
+                </div>
+              </div>
+            </div>
+          </form>
+        }
       </div>
     }
   </div>

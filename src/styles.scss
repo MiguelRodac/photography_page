@@ -2,13 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary: #d4892e;
+  --primary-hover: #bd7023;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --radius: 12px;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  @apply bg-surface-50 text-surface-900 font-body antialiased;
+  @apply bg-surface-50 text-surface-900 antialiased;
+  font-family: var(--font-body);
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.font-display {
+  font-family: var(--font-display);
 }
 
 .dark body {

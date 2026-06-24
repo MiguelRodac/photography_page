@@ -35,8 +35,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        body: ['"Inter"', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'Georgia', 'serif'],
+        body: ['var(--font-body)', 'system-ui', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.7s ease-out forwards',
