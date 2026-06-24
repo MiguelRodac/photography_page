@@ -1,0 +1,74 @@
+<div class="min-h-screen bg-surface-900 p-4 sm:p-6 lg:p-8">
+  <div class="max-w-3xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">Seed Firestore</h1>
+      <p class="text-surface-400 text-sm mt-1">Upload initial static data to Firestore collections</p>
+    </div>
+
+    <!-- Warning -->
+    <div class="bg-yellow-500/10 border border-yellow-500/20 text-yellow-300 px-4 py-3 rounded-xl mb-6 flex items-start gap-3 text-sm">
+      <svg class="w-5 h-5 text-yellow-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+      </svg>
+      <div>
+        <p class="font-medium">One-time operation</p>
+        <p class="text-yellow-300/70 mt-1">This will seed portfolio items, services, content sections, navigation, categories, theme defaults, and assign super-admin role to the current user. Existing data will be merged (not overwritten).</p>
+      </div>
+    </div>
+
+    <!-- Action -->
+    <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden">
+      <div class="p-6">
+        <button
+          (click)="runSeed()"
+          [disabled]="seeding()"
+          class="inline-flex items-center gap-2 px-6 py-3 text-sm bg-primary-600 hover:bg-primary-500 disabled:bg-surface-600 disabled:cursor-not-allowed text-white rounded-lg transition-all font-medium shadow-lg shadow-primary-600/20 disabled:shadow-none"
+        >
+          @if (seeding()) {
+            <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            <span>Seeding...</span>
+          } @else {
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+            </svg>
+            <span>{{ done() ? 'Re-seed Data' : 'Start Seed' }}</span>
+          }
+        </button>
+      </div>
+
+      <!-- Logs -->
+      @if (logs().length > 0) {
+        <div class="border-t border-surface-700 p-6">
+          <h3 class="text-sm font-medium text-surface-300 mb-3">Seed Log</h3>
+          <div class="space-y-2">
+            @for (log of logs(); track $index) {
+              <div class="flex items-center gap-3 text-sm">
+                @if (log.status === 'success') {
+                  <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                }
+                @if (log.status === 'error') {
+                  <svg class="w-4 h-4 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                  </svg>
+                }
+                @if (log.status === 'pending') {
+                  <div class="w-4 h-4 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin shrink-0"></div>
+                }
+                <span class="text-surface-400 font-mono text-xs w-32 shrink-0">{{ log.collection }}</span>
+                <span [class]="log.status === 'success' ? 'text-green-300' : log.status === 'error' ? 'text-red-300' : 'text-surface-400'">
+                  {{ log.message }}
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
