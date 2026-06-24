@@ -49,17 +49,14 @@
                 (change)="onPathChange($any($event.target).value)"
                 class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all">
                 <option value="" disabled selected>Select a route...</option>
-                @for (route of availableRoutes(); track route.path) {
+                @for (route of ALL_ROUTES; track route.path) {
                   <option [value]="route.path" [disabled]="!editingId() && usedPaths().includes(route.path)">
-                    {{ route.label }} — {{ route.path }}
+                    {{ route.label }} — {{ route.path }} {{ usedPaths().includes(route.path) && !editingId() ? '(in use)' : '' }}
                   </option>
                 }
               </select>
               @if (selectedRouteDescription()) {
                 <p class="text-xs text-surface-500 mt-1">{{ selectedRouteDescription() }}</p>
-              }
-              @if (availableRoutes().length === 0) {
-                <p class="text-xs text-yellow-400 mt-1">All routes are in use. Delete an existing link to reassign.</p>
               }
             </div>
             <div class="grid grid-cols-2 gap-4">

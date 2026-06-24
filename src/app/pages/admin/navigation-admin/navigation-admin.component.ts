@@ -25,6 +25,7 @@ const AVAILABLE_ROUTES: RouteOption[] = [
   templateUrl: './navigation-admin.component.html',
 })
 export class NavigationAdminComponent implements OnInit {
+  readonly ALL_ROUTES = AVAILABLE_ROUTES;
   private readonly fb = inject(FormBuilder);
   private readonly navigationService = inject(NAVIGATION_SERVICE);
 
@@ -44,19 +45,11 @@ export class NavigationAdminComponent implements OnInit {
     visible: [true],
   });
 
-  // Used paths (excluding the one being edited)
-  readonly usedPaths = computed(() => {
-    const editingPath = this.form.controls.path.value;
-    return this.links()
+  // Used paths (excluding current editing item)
+  readonly usedPaths = computed(() =>
+    this.links()
       .filter((l) => l.id !== this.editingId())
-      .map((l) => l.path);
-  });
-
-  // Routes not yet used (plus the one being edited)
-  readonly availableRoutes = computed(() =>
-    AVAILABLE_ROUTES.filter(
-      (r) => !this.usedPaths().includes(r.path) || r.path === this.editingPath(),
-    ),
+      .map((l) => l.path),
   );
 
   // Can't add more links than available routes
@@ -90,9 +83,10 @@ export class NavigationAdminComponent implements OnInit {
     if (!this.canAddMore()) return;
     this.editingId.set(null);
     this.form.reset({ order: this.links().length, visible: true });
-    // Pre-select first available route
-    const firstAvailable = this.availableRoutes()[0];
-    if (firstAvailable) this.form.patchValue({ path: firstAvailable.path, label: firstAvailable.label });
+    // Pre-select first unused route
+    const usedSet = new Set(this.usedPaths());
+    const firstFree = this.ALL_ROUTES.find((r) => !usedSet.has(r.path));
+    if (firstFree) this.form.patchValue({ path: firstFree.path, label: firstFree.label });
     this.showForm.set(true);
   }
 
