@@ -1,9 +1,22 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavLinkDoc } from '../../../core/interfaces/firestore-models';
 import { INavigationService, NavLinkCreate } from '../../../core/interfaces/navigation-service.interface';
 import { NAVIGATION_SERVICE } from '../../../core/tokens/navigation-service.token';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+
+interface RouteOption {
+  path: string;
+  label: string;
+  description: string;
+}
+
+const AVAILABLE_ROUTES: RouteOption[] = [
+  { path: '/', label: 'Home', description: 'Landing page with hero, services, and portfolio preview' },
+  { path: '/portfolio', label: 'Portfolio', description: 'Photo gallery with category filters and lightbox' },
+  { path: '/about-me', label: 'About Me', description: 'Photographer bio, philosophy, and services overview' },
+  { path: '/contact', label: 'Contact', description: 'Contact form and location information' },
+];
 
 @Component({
   selector: 'app-navigation-admin',
@@ -31,6 +44,30 @@ export class NavigationAdminComponent implements OnInit {
     visible: [true],
   });
 
+  // Used paths (excluding the one being edited)
+  readonly usedPaths = computed(() => {
+    const editingPath = this.form.controls.path.value;
+    return this.links()
+      .filter((l) => l.id !== this.editingId())
+      .map((l) => l.path);
+  });
+
+  // Routes not yet used (plus the one being edited)
+  readonly availableRoutes = computed(() =>
+    AVAILABLE_ROUTES.filter(
+      (r) => !this.usedPaths().includes(r.path) || r.path === this.editingPath(),
+    ),
+  );
+
+  // Can't add more links than available routes
+  readonly canAddMore = computed(() => this.links().length < AVAILABLE_ROUTES.length);
+
+  // Description for selected path
+  readonly selectedRouteDescription = computed(() => {
+    const path = this.form.controls.path.value;
+    return AVAILABLE_ROUTES.find((r) => r.path === path)?.description || '';
+  });
+
   ngOnInit(): void {
     this.loadLinks();
   }
@@ -50,8 +87,12 @@ export class NavigationAdminComponent implements OnInit {
   }
 
   showAddForm(): void {
+    if (!this.canAddMore()) return;
     this.editingId.set(null);
-    this.form.reset({ order: 0, visible: true });
+    this.form.reset({ order: this.links().length, visible: true });
+    // Pre-select first available route
+    const firstAvailable = this.availableRoutes()[0];
+    if (firstAvailable) this.form.patchValue({ path: firstAvailable.path, label: firstAvailable.label });
     this.showForm.set(true);
   }
 
@@ -69,7 +110,13 @@ export class NavigationAdminComponent implements OnInit {
   cancelForm(): void {
     this.showForm.set(false);
     this.editingId.set(null);
-    this.form.reset({ order: 0, visible: true });
+  }
+
+  onPathChange(path: string): void {
+    const route = AVAILABLE_ROUTES.find((r) => r.path === path);
+    if (route && !this.editingId()) {
+      this.form.patchValue({ label: route.label });
+    }
   }
 
   async onSubmit(): Promise<void> {
