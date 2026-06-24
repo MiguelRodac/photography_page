@@ -1,6 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
+import { PageSectionsConfig, PageSectionItem } from '../../core/interfaces/firestore-models';
 import { take } from 'rxjs';
 
 @Component({
@@ -19,6 +20,7 @@ export class AboutMeComponent implements OnInit {
   readonly philosophyQuote = signal('');
   readonly philosophyText = signal('');
   readonly profileImage = signal('');
+  readonly aboutSections = signal<PageSectionItem[]>([]);
 
   stats = [
     { value: '500+', label: 'Sesiones' },
@@ -47,6 +49,19 @@ export class AboutMeComponent implements OnInit {
         if (data.services) this.services = data.services;
       }
     });
+
+    this.contentCache.getSection<PageSectionsConfig>('about-sections').pipe(take(1)).subscribe((data) => {
+      if (data?.sections) {
+        this.aboutSections.set(data.sections);
+      }
+    });
+  }
+
+  isSectionVisible(sectionId: string): boolean {
+    const sections = this.aboutSections();
+    if (sections.length === 0) return true;
+    const section = sections.find((s) => s.id === sectionId);
+    return section ? section.visible : true;
   }
 
   getServiceIcon(id: string): string {

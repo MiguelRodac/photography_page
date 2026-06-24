@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { GlobalResourceService } from '../../services/global-resource.service';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
 import { RevealDirective } from '../../shared/directives/reveal.directive';
+import { PageSectionsConfig, PageSectionItem } from '../../core/interfaces/firestore-models';
 import { take } from 'rxjs';
 
 @Component({
@@ -22,6 +23,7 @@ export class HomeComponent implements OnInit {
   // Dynamic content from Firebase
   readonly heroData = signal<any>(null);
   readonly servicesData = signal<any>(null);
+  readonly homeSections = signal<PageSectionItem[]>([]);
 
   readonly testimonials = [
     { name: 'María García', role: 'Boda • Mayo 2024', text: 'Increíble trabajo. Capturó cada momento especial de nuestra boda con una sensibilidad única. Las fotos son espectaculares.' },
@@ -40,5 +42,18 @@ export class HomeComponent implements OnInit {
     this.contentCache.getSection<any>('services').pipe(take(1)).subscribe((data) => {
       if (data) this.servicesData.set(data);
     });
+
+    this.contentCache.getSection<PageSectionsConfig>('home-sections').pipe(take(1)).subscribe((data) => {
+      if (data?.sections) {
+        this.homeSections.set(data.sections);
+      }
+    });
+  }
+
+  isSectionVisible(sectionId: string): boolean {
+    const sections = this.homeSections();
+    if (sections.length === 0) return true; // Default: show all if no config
+    const section = sections.find((s) => s.id === sectionId);
+    return section ? section.visible : true;
   }
 }

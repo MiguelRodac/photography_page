@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { IContentService } from '../../../core/interfaces/content-service.interface';
 import { CONTENT_SERVICE } from '../../../core/tokens/content-service.token';
+import { PageSectionItem, PageSectionsConfig } from '../../../core/interfaces/firestore-models';
 
 interface SectionConfig {
   id: string;
@@ -40,12 +41,31 @@ export class ContentAdminComponent implements OnInit {
   readonly servicesItems = signal<{ id: string; title: string; description: string; icon: string }[]>([]);
   readonly aboutStats = signal<{ value: string; label: string }[]>([]);
 
+  // Section visibility/ordering
+  readonly homeSections = signal<PageSectionItem[]>([
+    { id: 'hero', visible: true, order: 1 },
+    { id: 'services', visible: true, order: 2 },
+    { id: 'portfolio-preview', visible: true, order: 3 },
+    { id: 'testimonials', visible: true, order: 4 },
+    { id: 'cta', visible: true, order: 5 },
+  ]);
+  readonly aboutSections = signal<PageSectionItem[]>([
+    { id: 'hero', visible: true, order: 1 },
+    { id: 'philosophy', visible: true, order: 2 },
+    { id: 'services', visible: true, order: 3 },
+    { id: 'cta', visible: true, order: 4 },
+  ]);
+  readonly sectionsConfigLoading = signal(false);
+  readonly sectionsConfigSaving = signal<string | null>(null);
+  readonly sectionsConfigSuccess = signal<string | null>(null);
+
   readonly sectionForms = new Map<string, ReturnType<typeof this.fb.group>>();
 
   ngOnInit(): void {
     for (const section of this.sections) {
       this.sectionForms.set(section.id, this.buildForm(section.fields));
     }
+    this.loadSectionsConfig();
   }
 
   private buildForm(fields: string[]): ReturnType<typeof this.fb.group> {
@@ -55,6 +75,76 @@ export class ContentAdminComponent implements OnInit {
     }
     return this.fb.group(controls);
   }
+
+  // --- Section visibility/ordering ---
+
+  private loadSectionsConfig(): void {
+    this.sectionsConfigLoading.set(true);
+
+    this.contentService.getSection<PageSectionsConfig>('home-sections').subscribe({
+      next: (data) => {
+        if (data?.sections) {
+          this.homeSections.set(data.sections);
+        }
+        this.sectionsConfigLoading.set(false);
+      },
+      error: () => this.sectionsConfigLoading.set(false),
+    });
+
+    this.contentService.getSection<PageSectionsConfig>('about-sections').subscribe({
+      next: (data) => {
+        if (data?.sections) {
+          this.aboutSections.set(data.sections);
+        }
+      },
+    });
+  }
+
+  moveSection(page: 'home' | 'about', index: number, direction: 'up' | 'down'): void {
+    const sections = page === 'home' ? [...this.homeSections()] : [...this.aboutSections()];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= sections.length) return;
+
+    [sections[index], sections[targetIndex]] = [sections[targetIndex], sections[index]];
+    sections.forEach((s, i) => (s.order = i + 1));
+
+    if (page === 'home') {
+      this.homeSections.set(sections);
+    } else {
+      this.aboutSections.set(sections);
+    }
+  }
+
+  toggleSectionVisibility(page: 'home' | 'about', index: number): void {
+    const sections = page === 'home' ? [...this.homeSections()] : [...this.aboutSections()];
+    sections[index] = { ...sections[index], visible: !sections[index].visible };
+
+    if (page === 'home') {
+      this.homeSections.set(sections);
+    } else {
+      this.aboutSections.set(sections);
+    }
+  }
+
+  async saveSectionsConfig(page: 'home' | 'about'): Promise<void> {
+    const sectionId = page === 'home' ? 'home-sections' : 'about-sections';
+    const data = page === 'home' ? this.homeSections() : this.aboutSections();
+
+    this.sectionsConfigSaving.set(page);
+    this.sectionsConfigSuccess.set(null);
+
+    try {
+      await this.contentService.updateSection(sectionId, { sections: data });
+      this.sectionsConfigSuccess.set(page);
+      setTimeout(() => this.sectionsConfigSuccess.set(null), 3000);
+    } catch (err: any) {
+      console.error('Failed to save sections config:', err);
+    } finally {
+      this.sectionsConfigSaving.set(null);
+    }
+  }
+
+  // --- Content section expand/collapse ---
 
   toggleSection(sectionId: string): void {
     const expanded = new Set(this.expandedSections());
