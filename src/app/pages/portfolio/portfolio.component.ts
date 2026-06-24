@@ -1,7 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { GlobalResourceService } from '../../services/global-resource.service';
 import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
+import { PORTFOLIO_SERVICE } from '../../core/tokens/portfolio-service.token';
+import { PortfolioDoc } from '../../core/interfaces/firestore-models';
+import { take } from 'rxjs';
+
+interface PortfolioItem {
+  id: string | number;
+  title: string;
+  category: string;
+  img: string;
+  description: string;
+}
 
 @Component({
   selector: 'app-portfolio',
@@ -23,8 +34,8 @@ import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
               <button (click)="setFilter(cat.key)"
                       class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300"
                       [ngClass]="{
-                        'bg-primary-500 text-white shadow-lg shadow-primary-500/25': activeFilter === cat.key,
-                        'bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-300 hover:bg-surface-200 dark:hover:bg-surface-700': activeFilter !== cat.key
+                        'bg-primary-500 text-white shadow-lg shadow-primary-500/25': activeFilter() === cat.key,
+                        'bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-300 hover:bg-surface-200 dark:hover:bg-surface-700': activeFilter() !== cat.key
                       }">
                 {{ cat.label }}
               </button>
@@ -32,13 +43,13 @@ import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
           </div>
 
           <!-- Grid -->
-          @if (filteredItems.length === 0) {
+          @if (filteredItems().length === 0) {
             <div class="text-center py-16 text-surface-400">
               <p class="text-lg">No hay imágenes en esta categoría aún.</p>
             </div>
           } @else {
             <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
-              @for (item of filteredItems; track item.id; let i = $index) {
+              @for (item of filteredItems(); track item.id; let i = $index) {
                 <div class="break-inside-avoid group cursor-pointer"
                      (click)="openLightbox(i)">
                   <div class="relative overflow-hidden rounded-2xl">
@@ -60,16 +71,21 @@ import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
 
       @if (lightboxOpen) {
         <app-lightbox
-          [items]="filteredItems"
+          [items]="filteredItems()"
           [index]="lightboxIndex"
           (close)="lightboxOpen = false" />
       }
     </main>
   `,
 })
-export class PortfolioComponent {
+export class PortfolioComponent implements OnInit {
   private readonly resource = inject(GlobalResourceService);
-  portfolio = this.resource.getPortfolioItems();
+  private readonly portfolioService = inject(PORTFOLIO_SERVICE, { optional: true });
+
+  readonly portfolioItems = signal<PortfolioItem[]>([]);
+  readonly activeFilter = signal('all');
+  lightboxOpen = false;
+  lightboxIndex = 0;
 
   categories = [
     { key: 'all', label: 'Todos' },
@@ -80,18 +96,41 @@ export class PortfolioComponent {
     { key: 'commercial', label: 'Comercial' },
   ];
 
-  activeFilter = 'all';
-  lightboxOpen = false;
-  lightboxIndex = 0;
+  readonly filteredItems = computed(() => {
+    const filter = this.activeFilter();
+    const items = this.portfolioItems();
+    return filter === 'all' ? items : items.filter(item => item.category === filter);
+  });
 
-  get filteredItems() {
-    return this.activeFilter === 'all'
-      ? this.portfolio
-      : this.portfolio.filter(item => item.category === this.activeFilter);
+  ngOnInit(): void {
+    if (this.portfolioService) {
+      this.portfolioService.getAll().pipe(take(1)).subscribe(docs => {
+        const mapped: PortfolioItem[] = docs
+          .filter((d: PortfolioDoc) => !d.deleted)
+          .map((d: PortfolioDoc) => ({
+            id: d.id,
+            title: d.title,
+            category: d.category,
+            img: d.img,
+            description: d.description,
+          }));
+        if (mapped.length > 0) {
+          this.portfolioItems.set(mapped);
+        } else {
+          this.loadStaticFallback();
+        }
+      });
+    } else {
+      this.loadStaticFallback();
+    }
+  }
+
+  private loadStaticFallback(): void {
+    this.portfolioItems.set(this.resource.getPortfolioItems());
   }
 
   setFilter(key: string) {
-    this.activeFilter = key;
+    this.activeFilter.set(key);
   }
 
   openLightbox(index: number) {

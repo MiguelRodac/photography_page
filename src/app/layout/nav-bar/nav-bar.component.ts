@@ -1,5 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { take } from 'rxjs';
+import { NAVIGATION_SERVICE } from '../../core/tokens/navigation-service.token';
+import { NavLinkDoc } from '../../core/interfaces/firestore-models';
+
+interface NavItem {
+  path: string;
+  label: string;
+}
 
 @Component({
   selector: 'app-nav-bar',
@@ -8,7 +16,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     <nav>
       <!-- Desktop -->
       <div class="hidden md:flex items-center gap-1">
-        @for (link of links; track link.path) {
+        @for (link of links(); track link.path) {
           <a [routerLink]="link.path"
              routerLinkActive="bg-primary-500/10 text-primary-600 dark:text-primary-400"
              [routerLinkActiveOptions]="{ exact: link.path === '/' }"
@@ -37,7 +45,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
       @if (!classMobile) {
         <div class="absolute top-20 left-0 right-0 bg-surface-50 dark:bg-surface-950 border-b border-surface-200 dark:border-surface-800 shadow-lg md:hidden">
           <div class="px-4 py-3 space-y-1">
-            @for (link of links; track link.path) {
+            @for (link of links(); track link.path) {
               <a [routerLink]="link.path"
                  (click)="toggleMobileMenu()"
                  routerLinkActive="bg-primary-500/10 text-primary-600 dark:text-primary-400"
@@ -52,15 +60,31 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     </nav>
   `,
 })
-export class NavBarComponent {
+export class NavBarComponent implements OnInit {
+  private readonly navService = inject(NAVIGATION_SERVICE, { optional: true });
+
   classMobile = true;
 
-  links = [
+  readonly links = signal<NavItem[]>([
     { path: '/', label: 'INICIO' },
     { path: '/about-me', label: 'SOBRE MI' },
     { path: '/portfolio', label: 'PORTAFOLIO' },
     { path: '/contact', label: 'CONTACTO' },
-  ];
+  ]);
+
+  ngOnInit(): void {
+    if (this.navService) {
+      this.navService.getAll().pipe(take(1)).subscribe(docs => {
+        const visible = docs
+          .filter((d: NavLinkDoc) => d.visible)
+          .sort((a: NavLinkDoc, b: NavLinkDoc) => a.order - b.order)
+          .map((d: NavLinkDoc) => ({ path: d.path, label: d.label }));
+        if (visible.length > 0) {
+          this.links.set(visible);
+        }
+      });
+    }
+  }
 
   toggleMobileMenu(): void {
     this.classMobile = !this.classMobile;
