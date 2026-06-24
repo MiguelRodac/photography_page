@@ -31,6 +31,24 @@ export class ContentAdminComponent implements OnInit {
     { id: 'whatsapp', label: 'WhatsApp', icon: 'chat', fields: ['phoneNumber', 'defaultMessage'] },
   ];
 
+  readonly heroLayouts = [
+    { value: 'parallax', label: 'Parallax (full-screen bg)' },
+    { value: 'gradient', label: 'Gradient overlay' },
+    { value: 'split', label: 'Split (image left, text right)' },
+    { value: 'minimal', label: 'Minimal (text only)' },
+  ];
+
+  readonly servicesLayouts = [
+    { value: 'grid-4', label: '4-column grid' },
+    { value: 'grid-3', label: '3-column grid' },
+    { value: 'list', label: 'Vertical list' },
+  ];
+
+  readonly sectionLayouts = signal<Map<string, string>>(new Map([
+    ['hero', 'parallax'],
+    ['services', 'grid-4'],
+  ]));
+
   readonly expandedSections = signal<Set<string>>(new Set());
   readonly loadingSections = signal<Set<string>>(new Set());
   readonly savingSection = signal<string | null>(null);
@@ -201,6 +219,12 @@ export class ContentAdminComponent implements OnInit {
                 this.aboutStats.set(Array.isArray(data[key]) ? data[key] : []);
                 continue;
               }
+              if (key === 'layout') {
+                const layouts = new Map(this.sectionLayouts());
+                layouts.set(sectionId, data[key]);
+                this.sectionLayouts.set(layouts);
+                continue;
+              }
               if (form.controls[key]) {
                 if (typeof data[key] === 'object' && data[key] !== null) {
                   patchData[key] = JSON.stringify(data[key], null, 2);
@@ -276,6 +300,12 @@ export class ContentAdminComponent implements OnInit {
     // Add about stats
     if (sectionId === 'about') {
       data['stats'] = this.aboutStats().filter((s) => s.label);
+    }
+
+    // Add layout field for sections that support it
+    const layout = this.sectionLayouts().get(sectionId);
+    if (layout) {
+      data['layout'] = layout;
     }
 
     try {
@@ -383,5 +413,28 @@ export class ContentAdminComponent implements OnInit {
       stats.map((stat, i) => (i === index ? { ...stat, [key]: value } : stat)),
     );
     this.clearSuccessOnEdit('about');
+  }
+
+  // --- Layout management ---
+
+  getLayout(sectionId: string): string {
+    return this.sectionLayouts().get(sectionId) || '';
+  }
+
+  setLayout(sectionId: string, layout: string): void {
+    const layouts = new Map(this.sectionLayouts());
+    layouts.set(sectionId, layout);
+    this.sectionLayouts.set(layouts);
+    this.clearSuccessOnEdit(sectionId);
+  }
+
+  hasLayoutOptions(sectionId: string): boolean {
+    return sectionId === 'hero' || sectionId === 'services';
+  }
+
+  getLayoutOptions(sectionId: string): { value: string; label: string }[] {
+    if (sectionId === 'hero') return this.heroLayouts;
+    if (sectionId === 'services') return this.servicesLayouts;
+    return [];
   }
 }

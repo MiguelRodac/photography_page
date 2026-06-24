@@ -346,6 +346,24 @@
                     </div>
                   }
 
+                  <!-- Layout Selector (Hero & Services) -->
+                  @if (hasLayoutOptions(section.id)) {
+                    <div>
+                      <label class="block text-sm font-medium text-surface-300 mb-1.5">Layout Preset</label>
+                      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        @for (opt of getLayoutOptions(section.id); track opt.value) {
+                          <button
+                            type="button"
+                            (click)="setLayout(section.id, opt.value)"
+                            [class]="'px-3 py-2 text-xs rounded-lg border transition-all text-left ' + (getLayout(section.id) === opt.value ? 'border-primary-500 bg-primary-500/10 text-primary-400' : 'border-surface-600 text-surface-400 hover:border-surface-500')"
+                          >
+                            {{ opt.label }}
+                          </button>
+                        }
+                      </div>
+                    </div>
+                  }
+
                   <!-- Save Button -->
                   <div class="flex justify-end pt-2">
                     <button

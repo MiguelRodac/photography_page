@@ -56,4 +56,12 @@ export class HomeComponent implements OnInit {
     const section = sections.find((s) => s.id === sectionId);
     return section ? section.visible : true;
   }
+
+  getHeroLayout(): string {
+    return this.heroData()?.layout || 'parallax';
+  }
+
+  getServicesLayout(): string {
+    return this.servicesData()?.layout || 'grid-4';
+  }
 }
