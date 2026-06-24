@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, NgZone } from '@angular/core';
 import { Firestore, doc, docData, setDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { IContentService } from '../../core/interfaces/content-service.interface';
@@ -6,6 +6,7 @@ import { IContentService } from '../../core/interfaces/content-service.interface
 @Injectable({ providedIn: 'root' })
 export class FirebaseContentService implements IContentService {
   private readonly firestore = inject(Firestore);
+  private readonly zone = inject(NgZone);
   private readonly collectionName = 'content';
 
   getSection<T>(sectionId: string): Observable<T | null> {
@@ -25,7 +26,14 @@ export class FirebaseContentService implements IContentService {
   }
 
   protected observeDocData<T>(docRef: any): Observable<T | null> {
-    return docData(docRef) as Observable<T | null>;
+    return new Observable<T | null>((subscriber) => {
+      const sub = (docData(docRef) as Observable<T | null>).subscribe({
+        next: (val) => this.zone.run(() => subscriber.next(val)),
+        error: (err) => this.zone.run(() => subscriber.error(err)),
+        complete: () => this.zone.run(() => subscriber.complete()),
+      });
+      return () => sub.unsubscribe();
+    });
   }
 
   protected async writeDocData(docRef: any, data: any, options?: any): Promise<void> {

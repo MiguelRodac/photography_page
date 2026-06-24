@@ -19,23 +19,23 @@ export class PublicContentCacheService {
     const cached = this.getFromCache<T>(cacheKey);
 
     if (cached) {
-      console.debug(`[ContentCache] ✅ Serving "${sectionId}" from cache`, cached);
+      console.log(`[ContentCache] ✅ "${sectionId}" from cache`);
       return of(cached);
     }
 
-    console.debug(`[ContentCache] 🔍 Fetching "${sectionId}" from Firestore...`);
+    console.log(`[ContentCache] 🔍 Fetching "${sectionId}" from Firestore...`);
     return this.contentService.getSection<T>(sectionId).pipe(
       map((data) => {
         if (data) {
-          console.debug(`[ContentCache] ✅ Got "${sectionId}" from Firestore`, data);
+          console.log(`[ContentCache] ✅ "${sectionId}" from Firestore`, data);
           this.saveToCache(cacheKey, data);
           return data;
         }
-        console.warn(`[ContentCache] ⚠️ Firestore returned empty for "${sectionId}" — document may not exist`);
+        console.warn(`[ContentCache] ⚠️ "${sectionId}" returned empty`);
         return null;
       }),
       catchError((err) => {
-        console.error(`[ContentCache] ❌ Failed to fetch "${sectionId}":`, err);
+        console.error(`[ContentCache] ❌ "${sectionId}" FAILED:`, err);
         return of(null);
       }),
     );
