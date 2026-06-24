@@ -15,20 +15,11 @@ export class PublicContentCacheService {
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
   getSection<T>(sectionId: string): Observable<T | null> {
-    const cacheKey = `content_${sectionId}`;
-    const cached = this.getFromCache<T>(cacheKey);
-
-    if (cached) {
-      console.log(`[ContentCache] ✅ "${sectionId}" from cache`);
-      return of(cached);
-    }
-
     console.log(`[ContentCache] 🔍 Fetching "${sectionId}" from Firestore...`);
     return this.contentService.getSection<T>(sectionId).pipe(
       map((data) => {
         if (data) {
           console.log(`[ContentCache] ✅ "${sectionId}" from Firestore`, data);
-          this.saveToCache(cacheKey, data);
           return data;
         }
         console.warn(`[ContentCache] ⚠️ "${sectionId}" returned empty`);
