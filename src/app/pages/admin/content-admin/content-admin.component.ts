@@ -1,5 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
 import { IContentService } from '../../../core/interfaces/content-service.interface';
 import { CONTENT_SERVICE } from '../../../core/tokens/content-service.token';
 import { PageSectionItem, PageSectionsConfig } from '../../../core/interfaces/firestore-models';
@@ -26,7 +27,7 @@ const AVAILABLE_ROUTES: RouteOption[] = [
 @Component({
   selector: 'app-content-admin',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgClass],
   templateUrl: './content-admin.component.html',
 })
 export class ContentAdminComponent implements OnInit {
@@ -65,12 +66,18 @@ export class ContentAdminComponent implements OnInit {
     ['services', 'grid-4'],
   ]));
 
+  /** @deprecated Accordion state — kept for backward compat, sidebar uses activeSection */
   readonly expandedSections = signal<Set<string>>(new Set());
   readonly loadingSections = signal<Set<string>>(new Set());
   readonly savingSection = signal<string | null>(null);
   readonly successSections = signal<Set<string>>(new Set());
   readonly errorSections = signal<Map<string, string>>(new Map());
   readonly sectionData = signal<Map<string, any>>(new Map());
+
+  // Sidebar navigation
+  readonly activeSection = signal<string>('hero');
+  readonly loadedSections = signal<Set<string>>(new Set());
+  readonly activeView = signal<'section' | 'page-sections'>('section');
   readonly footerLinks = signal<{ platform: string; url: string }[]>([]);
   readonly servicesItems = signal<{ id: string; title: string; description: string; icon: string }[]>([]);
   readonly aboutStats = signal<{ value: string; label: string }[]>([]);
@@ -109,6 +116,62 @@ export class ContentAdminComponent implements OnInit {
       this.sectionForms.set(section.id, this.buildForm(section.fields));
     }
     this.loadSectionsConfig();
+    // Load the initially active section
+    this.selectSection('hero');
+  }
+
+  // --- Sidebar navigation ---
+
+  selectSection(sectionId: string): void {
+    this.activeSection.set(sectionId);
+    this.activeView.set('section');
+    if (!this.loadedSections().has(sectionId)) {
+      this.loadSection(sectionId);
+      const loaded = new Set(this.loadedSections());
+      loaded.add(sectionId);
+      this.loadedSections.set(loaded);
+    }
+  }
+
+  selectPageSections(): void {
+    this.activeView.set('page-sections');
+  }
+
+  isActiveSection(sectionId: string): boolean {
+    return this.activeSection() === sectionId && this.activeView() === 'section';
+  }
+
+  isActivePageSections(): boolean {
+    return this.activeView() === 'page-sections';
+  }
+
+  isSectionDirty(sectionId: string): boolean {
+    return this.isDirty(sectionId);
+  }
+
+  isSectionSuccess(sectionId: string): boolean {
+    return this.isSuccess(sectionId);
+  }
+
+  /** @deprecated Accordion toggle — sidebar uses selectSection instead */
+  toggleSection(sectionId: string): void {
+    const expanded = new Set(this.expandedSections());
+    if (expanded.has(sectionId)) {
+      expanded.delete(sectionId);
+    } else {
+      expanded.add(sectionId);
+      this.loadSection(sectionId);
+    }
+    this.expandedSections.set(expanded);
+  }
+
+  /** @deprecated Use isActiveSection() instead */
+  isExpanded(sectionId: string): boolean {
+    return this.expandedSections().has(sectionId);
+  }
+
+  isLoading(sectionId: string): boolean {
+    return this.loadingSections().has(sectionId);
   }
 
   private buildForm(fields: string[]): ReturnType<typeof this.fb.group> {
@@ -187,26 +250,7 @@ export class ContentAdminComponent implements OnInit {
     }
   }
 
-  // --- Content section expand/collapse ---
-
-  toggleSection(sectionId: string): void {
-    const expanded = new Set(this.expandedSections());
-    if (expanded.has(sectionId)) {
-      expanded.delete(sectionId);
-    } else {
-      expanded.add(sectionId);
-      this.loadSection(sectionId);
-    }
-    this.expandedSections.set(expanded);
-  }
-
-  isExpanded(sectionId: string): boolean {
-    return this.expandedSections().has(sectionId);
-  }
-
-  isLoading(sectionId: string): boolean {
-    return this.loadingSections().has(sectionId);
-  }
+  // --- Content section helpers ---
 
   isSuccess(sectionId: string): boolean {
     return this.successSections().has(sectionId);
