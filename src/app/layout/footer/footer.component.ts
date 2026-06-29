@@ -22,6 +22,9 @@ export class FooterComponent implements OnInit {
   readonly copyrightText = signal(
     `© ${new Date().getFullYear()} ${environment.siteName}. All Rights Reserved.`
   );
+  readonly tagline = signal('Capturando momentos únicos con pasión y profesionalismo.');
+  readonly linksTitle = signal('Enlaces');
+  readonly socialTitle = signal('Sígueme');
   readonly socialLinks = signal<SocialLink[]>([
     { platform: 'instagram', url: environment.socialMedia.instagram },
     { platform: 'whatsapp', url: environment.socialMedia.whatsapp },
@@ -30,6 +33,9 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {
     this.contentCache.getSection<Record<string, unknown>>('footer').pipe(take(1)).subscribe(data => {
       if (data?.['copyrightText']) this.copyrightText.set(data['copyrightText'] as string);
+      if (data?.['tagline']) this.tagline.set(data['tagline'] as string);
+      if (data?.['linksTitle']) this.linksTitle.set(data['linksTitle'] as string);
+      if (data?.['socialTitle']) this.socialTitle.set(data['socialTitle'] as string);
       if (data?.['socialLinks']) {
         const links = data['socialLinks'] as SocialLink[];
         if (links.length > 0) this.socialLinks.set(links);

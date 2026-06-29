@@ -18,12 +18,12 @@
           <span class="text-lg font-display font-semibold">{{ siteName() }}</span>
         </a>
         <p class="text-sm text-surface-500 dark:text-surface-400">
-          Capturando momentos únicos con pasión y profesionalismo.
+          {{ tagline() }}
         </p>
       </div>
 
       <div>
-        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">Enlaces</h3>
+        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">{{ linksTitle() }}</h3>
         <nav class="space-y-2">
           <a routerLink="/" class="block text-sm text-surface-500 dark:text-surface-400 hover:text-primary-500 transition-colors">Inicio</a>
           <a routerLink="/about-me" class="block text-sm text-surface-500 dark:text-surface-400 hover:text-primary-500 transition-colors">Sobre mí</a>
@@ -33,7 +33,7 @@
       </div>
 
       <div>
-        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">Sígueme</h3>
+        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">{{ socialTitle() }}</h3>
         <div class="flex gap-3">
           <a [href]="getSocialUrl('instagram')" target="_blank" rel="noopener noreferrer"
              class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-200 dark:bg-surface-800 hover:bg-primary-500/20 text-surface-600 dark:text-surface-300 hover:text-primary-500 transition-all"
