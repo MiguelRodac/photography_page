@@ -123,7 +123,51 @@ export class SeedComponent {
       email: 'info@photographyacas.com',
       phone: '+54 11 1234-5678',
       address: content.contact.address,
-      mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26249.96372986841!2d-58.4!3d-34.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDM2JzAwLjAiUyA1OMKwMjQnMDAuMCJX!5e0!3m2!1ses!2sar!4v1',
+      mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26249.96372986841!2d-58.4!3d-34.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzLCsDM2JzAwLjAiUyA1OMKwMjQnMDAuMCJX!5e0!3m2!1ses!2sar!4v1',
+      formFields: [
+        {
+          name: 'name',
+          type: 'text',
+          label: 'Nombre completo',
+          placeholder: 'Ej: María García',
+          required: true,
+          validators: [
+            { type: 'required', message: 'El nombre es obligatorio' },
+            { type: 'minLength', value: 3, message: 'Mínimo 3 caracteres' },
+          ],
+        },
+        {
+          name: 'email',
+          type: 'email',
+          label: 'Email',
+          placeholder: 'tu@email.com',
+          required: true,
+          validators: [
+            { type: 'required', message: 'El email es obligatorio' },
+            { type: 'email', message: 'Formato de email inválido' },
+          ],
+        },
+        {
+          name: 'phone',
+          type: 'tel',
+          label: 'Teléfono (opcional)',
+          placeholder: '+54 11 1234-5678',
+          required: false,
+          validators: [],
+        },
+        {
+          name: 'message',
+          type: 'textarea',
+          label: 'Contame tu idea',
+          placeholder: 'Describí tu proyecto, fecha estimada, presupuesto...',
+          required: true,
+          validators: [
+            { type: 'required', message: 'El mensaje es obligatorio' },
+            { type: 'minLength', value: 10, message: 'Mínimo 10 caracteres' },
+            { type: 'maxLength', value: 800, message: 'Máximo 800 caracteres' },
+          ],
+        },
+      ],
     }, { merge: true });
     this.addLog('content/contact', 'success', 'Seeded contact content');
 

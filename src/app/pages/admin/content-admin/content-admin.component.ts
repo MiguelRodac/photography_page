@@ -75,6 +75,14 @@ export class ContentAdminComponent implements OnInit {
   readonly servicesItems = signal<{ id: string; title: string; description: string; icon: string }[]>([]);
   readonly aboutStats = signal<{ value: string; label: string }[]>([]);
   readonly testimonialsItems = signal<{ name: string; role: string; text: string }[]>([]);
+  readonly contactFormFields = signal<{
+    name: string;
+    type: string;
+    label: string;
+    placeholder: string;
+    required: boolean;
+    validators: { type: string; value?: string | number; message: string }[];
+  }[]>([]);
 
   // Section visibility/ordering
   readonly homeSections = signal<PageSectionItem[]>([
@@ -240,6 +248,10 @@ export class ContentAdminComponent implements OnInit {
                 this.testimonialsItems.set(Array.isArray(data[key]) ? data[key] : []);
                 continue;
               }
+              if (key === 'formFields' && sectionId === 'contact') {
+                this.contactFormFields.set(Array.isArray(data[key]) ? data[key] : []);
+                continue;
+              }
               if (key === 'layout') {
                 const layouts = new Map(this.sectionLayouts());
                 layouts.set(sectionId, data[key]);
@@ -326,6 +338,11 @@ export class ContentAdminComponent implements OnInit {
     // Add testimonials items
     if (sectionId === 'testimonials') {
       data['testimonials'] = this.testimonialsItems().filter((t) => t.name);
+    }
+
+    // Add contact form fields
+    if (sectionId === 'contact') {
+      data['formFields'] = this.contactFormFields().filter((f) => f.name);
     }
 
     // Add layout field for sections that support it
@@ -464,6 +481,83 @@ export class ContentAdminComponent implements OnInit {
       items.map((item, i) => (i === index ? { ...item, [key]: value } : item)),
     );
     this.clearSuccessOnEdit('testimonials');
+  }
+
+  // --- Contact Form Fields repeater ---
+
+  addFormField(): void {
+    this.contactFormFields.update((fields) => [
+      ...fields,
+      { name: '', type: 'text', label: '', placeholder: '', required: false, validators: [] },
+    ]);
+  }
+
+  removeFormField(index: number): void {
+    this.contactFormFields.update((fields) => fields.filter((_, i) => i !== index));
+  }
+
+  updateFormField(index: number, key: 'name' | 'type' | 'label' | 'placeholder', value: string): void {
+    this.contactFormFields.update((fields) =>
+      fields.map((field, i) => (i === index ? { ...field, [key]: value } : field)),
+    );
+    this.clearSuccessOnEdit('contact');
+  }
+
+  toggleFormFieldRequired(index: number): void {
+    this.contactFormFields.update((fields) =>
+      fields.map((field, i) => (i === index ? { ...field, required: !field.required } : field)),
+    );
+    this.clearSuccessOnEdit('contact');
+  }
+
+  moveFormField(index: number, direction: 'up' | 'down'): void {
+    const fields = [...this.contactFormFields()];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= fields.length) return;
+
+    [fields[index], fields[targetIndex]] = [fields[targetIndex], fields[index]];
+    this.contactFormFields.set(fields);
+    this.clearSuccessOnEdit('contact');
+  }
+
+  addFormFieldValidator(fieldIndex: number): void {
+    this.contactFormFields.update((fields) =>
+      fields.map((field, i) =>
+        i === fieldIndex
+          ? { ...field, validators: [...field.validators, { type: 'required', message: '' }] }
+          : field,
+      ),
+    );
+    this.clearSuccessOnEdit('contact');
+  }
+
+  removeFormFieldValidator(fieldIndex: number, validatorIndex: number): void {
+    this.contactFormFields.update((fields) =>
+      fields.map((field, i) =>
+        i === fieldIndex
+          ? { ...field, validators: field.validators.filter((_, vi) => vi !== validatorIndex) }
+          : field,
+      ),
+    );
+    this.clearSuccessOnEdit('contact');
+  }
+
+  updateFormFieldValidator(fieldIndex: number, validatorIndex: number, key: 'type' | 'value' | 'message', value: string): void {
+    this.contactFormFields.update((fields) =>
+      fields.map((field, i) => {
+        if (i !== fieldIndex) return field;
+        const validators = field.validators.map((v, vi) => {
+          if (vi !== validatorIndex) return v;
+          if (key === 'value') {
+            const numVal = Number(value);
+            return { ...v, value: isNaN(numVal) ? value : numVal };
+          }
+          return { ...v, [key]: value };
+        });
+        return { ...field, validators };
+      }),
+    );
+    this.clearSuccessOnEdit('contact');
   }
 
   // --- Layout management ---

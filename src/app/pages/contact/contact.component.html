@@ -80,7 +80,7 @@
               }
             </div>
 
-            <app-forms [formInput]="form" [canSubmit]="!!selectedService()" (formOutput)="onFormSubmit($event)" />
+            <app-forms [formInput]="formConfig()" [canSubmit]="!!selectedService()" (formOutput)="onFormSubmit($event)" />
           </div>
         </div>
 

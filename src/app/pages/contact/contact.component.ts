@@ -4,6 +4,7 @@ import { FormsComponent } from "../../shared/components/forms/forms.component";
 import { GlobalResourceService } from '../../services/global-resource.service';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
 import { take } from 'rxjs';
+import { IFormGroup, IInput } from '../../interfaces/inputs';
 
 @Component({
   selector: 'app-contact',
@@ -42,6 +43,12 @@ export class ContactComponent implements OnInit {
     { value: 'commercial', label: 'Comercial' },
   ]);
 
+  readonly formConfig = signal<IFormGroup>({
+    formId: 'contactForm',
+    submitText: 'Enviar consulta',
+    inputs: [],
+  });
+
   contactInfo = [
     { label: 'Email', value: 'contacto@photographyacas.com', iconPath: 'M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75' },
     { label: 'Ubicación', value: 'Palermo Soho, Buenos Aires', iconPath: 'M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z' },
@@ -69,6 +76,28 @@ export class ContactComponent implements OnInit {
         if (data['whatsappSubtitle']) this.whatsappSubtitle.set(data['whatsappSubtitle']);
         if (data['statsValue']) this.statsValue.set(data['statsValue']);
         if (data['statsLabel']) this.statsLabel.set(data['statsLabel']);
+        if (Array.isArray(data['formFields']) && data['formFields'].length > 0) {
+          const inputs: IInput[] = data['formFields'].map((f: any) => ({
+            formControl: f.name,
+            name: f.name,
+            type: f.type || 'text',
+            label: f.label || '',
+            placeholder: f.placeholder || '',
+            required: !!f.required,
+            validators: Array.isArray(f.validators)
+              ? f.validators.map((v: any) => ({
+                  type: v.type,
+                  value: v.value,
+                  message: v.message || '',
+                }))
+              : [],
+          }));
+          this.formConfig.set({
+            formId: 'contactForm',
+            submitText: 'Enviar consulta',
+            inputs,
+          });
+        }
         this.contactInfo = [
           { label: this.infoEmailLabel(), value: data.email || '', iconPath: 'M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75' },
           { label: this.infoLocationLabel(), value: data.address || '', iconPath: 'M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z' },
@@ -85,64 +114,6 @@ export class ContactComponent implements OnInit {
       }
     });
   }
-
-  form = {
-    formId: 'contactForm',
-    submitText: 'Enviar consulta',
-    inputs: [
-      {
-        formControl: 'name',
-        type: 'text',
-        label: 'Nombre completo',
-        name: 'name',
-        placeholder: 'Ej: María García',
-        required: true,
-        validators: [
-          { type: 'required', message: 'El nombre es obligatorio' },
-          { type: 'minLength', value: 3, message: 'Mínimo 3 caracteres' },
-          { type: 'pattern', value: '^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$', message: 'Solo letras y espacios' },
-        ],
-      },
-      {
-        formControl: 'email',
-        type: 'email',
-        label: 'Email',
-        name: 'email',
-        placeholder: 'tu@email.com',
-        required: true,
-        validators: [
-          { type: 'required', message: 'El email es obligatorio' },
-          { type: 'email', message: 'Formato de email inválido' },
-        ],
-      },
-      {
-        formControl: 'phone',
-        type: 'tel',
-        label: 'Teléfono (opcional)',
-        name: 'phone',
-        placeholder: '+54 11 1234-5678',
-        required: false,
-        maxlength: 25,
-        validators: [
-          { type: 'pattern', value: '^\\+?[0-9][0-9\\s\\-]{6,19}$', message: 'Ingresá un número de teléfono válido' },
-        ],
-      },
-      {
-        formControl: 'message',
-        type: 'textarea',
-        label: 'Contame tu idea',
-        name: 'message',
-        placeholder: 'Describí tu proyecto, fecha estimada, presupuesto... ¡cualquier detalle ayuda!',
-        required: true,
-        maxlength: 1000,
-        validators: [
-          { type: 'required', message: 'El mensaje es obligatorio' },
-          { type: 'minLength', value: 10, message: 'Mínimo 10 caracteres' },
-          { type: 'maxLength', value: 800, message: 'Máximo 800 caracteres' },
-        ],
-      },
-    ],
-  };
 
   onFormSubmit(event: { formId: string; formData: Record<string, unknown> }) {
     if (!this.selectedService()) {
