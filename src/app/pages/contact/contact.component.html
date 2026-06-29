@@ -66,6 +66,27 @@
             </div>
 
             <app-forms [formInput]="formConfig()" [canSubmit]="!!selectedService()" (formOutput)="onFormSubmit($event)" />
+
+            @if (formError()) {
+              <div class="mt-6 p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 flex items-start gap-3">
+                <span class="text-red-500 text-lg flex-shrink-0">⚠️</span>
+                <div class="flex-1">
+                  <p class="text-sm text-red-700 dark:text-red-300">{{ formError() }}</p>
+                  <button type="button"
+                          (click)="retrySubmission()"
+                          class="mt-2 text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-500 underline underline-offset-2 cursor-pointer">
+                    Try again
+                  </button>
+                </div>
+              </div>
+            }
+
+            @if (formSuccess()) {
+              <div class="mt-6 p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 flex items-start gap-3">
+                <span class="text-green-500 text-lg flex-shrink-0">✓</span>
+                <p class="text-sm text-green-700 dark:text-green-300">Your message has been sent successfully. I'll get back to you soon!</p>
+              </div>
+            }
           </div>
         </div>
 

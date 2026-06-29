@@ -1,8 +1,9 @@
-import { Component, inject, signal, OnInit, computed } from '@angular/core';
+import { Component, inject, signal, OnInit, computed, ViewChild } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormsComponent } from "../../shared/components/forms/forms.component";
 import { GlobalResourceService } from '../../services/global-resource.service';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
+import { EmailService } from '../../services/email.service';
 import { take } from 'rxjs';
 import { IFormGroup, IInput } from '../../interfaces/inputs';
 
@@ -18,12 +19,19 @@ interface ContactInfoItem {
   templateUrl: './contact.component.html',
 })
 export class ContactComponent implements OnInit {
+  @ViewChild(FormsComponent) formsComponent?: FormsComponent;
+
   private readonly resource = inject(GlobalResourceService);
   private readonly contentCache = inject(PublicContentCacheService);
+  private readonly emailService = inject(EmailService);
 
   whatsappLink = this.resource.getWhatsAppLink();
   readonly showServiceError = signal(false);
   readonly selectedService = signal('');
+
+  readonly formSending = signal(false);
+  readonly formSuccess = signal(false);
+  readonly formError = signal('');
 
   readonly contactHeroLabel = signal('');
   readonly contactHeroTitle = signal('');
@@ -130,6 +138,35 @@ export class ContactComponent implements OnInit {
       this.showServiceError.set(true);
       return;
     }
-    void { ...event.formData, serviceType: this.selectedService() };
+
+    this.formSending.set(true);
+    this.formError.set('');
+    this.formSuccess.set(false);
+
+    const templateData: Record<string, unknown> = {
+      name: event.formData['name'],
+      email: event.formData['email'],
+      phone: event.formData['phone'],
+      message: event.formData['message'],
+      service_type: this.selectedService(),
+    };
+
+    this.emailService
+      .sendForm(templateData)
+      .then(() => {
+        this.formSending.set(false);
+        this.formSuccess.set(true);
+        this.formsComponent?.reset();
+      })
+      .catch(() => {
+        this.formSending.set(false);
+        this.formError.set('Failed to send message. Please try again or contact via WhatsApp.');
+        this.formsComponent?.reset();
+      });
+  }
+
+  retrySubmission() {
+    this.formError.set('');
+    this.formsComponent?.reset();
   }
 }
