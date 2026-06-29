@@ -1,9 +1,11 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { GlobalResourceService } from '../../services/global-resource.service';
+import { PublicContentCacheService } from '../../services/public-content-cache.service';
 import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
 import { PORTFOLIO_SERVICE } from '../../core/tokens/portfolio-service.token';
-import { PortfolioDoc } from '../../core/interfaces/firestore-models';
+import { CATEGORIES_SERVICE } from '../../core/tokens/categories-service.token';
+import { PortfolioDoc, CategoryDoc } from '../../core/interfaces/firestore-models';
 import { take } from 'rxjs';
 
 interface PortfolioItem {
@@ -22,15 +24,15 @@ interface PortfolioItem {
       <section class="py-24 px-6">
         <div class="max-w-7xl mx-auto">
           <div class="text-center mb-16">
-            <h1 class="text-4xl md:text-5xl font-display font-semibold mb-4">Portafolio</h1>
+            <h1 class="text-4xl md:text-5xl font-display font-semibold mb-4">{{ pageTitle() }}</h1>
             <p class="text-surface-500 dark:text-surface-400 text-lg max-w-xl mx-auto">
-              Una selección de mi mejor trabajo en diferentes categorías.
+              {{ pageSubtitle() }}
             </p>
           </div>
 
           <!-- Filter Buttons -->
           <div class="flex flex-wrap justify-center gap-3 mb-12">
-            @for (cat of categories; track cat.key) {
+            @for (cat of categories(); track cat.key) {
               <button (click)="setFilter(cat.key)"
                       class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300"
                       [ngClass]="{
@@ -45,7 +47,7 @@ interface PortfolioItem {
           <!-- Grid -->
           @if (filteredItems().length === 0) {
             <div class="text-center py-16 text-surface-400">
-              <p class="text-lg">No hay imágenes en esta categoría aún.</p>
+              <p class="text-lg">{{ emptyMessage() }}</p>
             </div>
           } @else {
             <div class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
@@ -81,20 +83,19 @@ interface PortfolioItem {
 export class PortfolioComponent implements OnInit {
   private readonly resource = inject(GlobalResourceService);
   private readonly portfolioService = inject(PORTFOLIO_SERVICE, { optional: true });
+  private readonly contentCache = inject(PublicContentCacheService);
+  private readonly categoriesService = inject(CATEGORIES_SERVICE, { optional: true });
 
   readonly portfolioItems = signal<PortfolioItem[]>([]);
   readonly activeFilter = signal('all');
   lightboxOpen = false;
   lightboxIndex = 0;
 
-  categories = [
-    { key: 'all', label: 'Todos' },
-    { key: 'wedding', label: 'Bodas' },
-    { key: 'portrait', label: 'Retratos' },
-    { key: 'landscape', label: 'Paisajes' },
-    { key: 'event', label: 'Eventos' },
-    { key: 'commercial', label: 'Comercial' },
-  ];
+  // Dynamic content from Firebase
+  readonly pageTitle = signal('Portafolio');
+  readonly pageSubtitle = signal('Una selección de mi mejor trabajo en diferentes categorías.');
+  readonly emptyMessage = signal('No hay imágenes en esta categoría aún.');
+  readonly categories = signal<{ key: string; label: string }[]>([{ key: 'all', label: 'Todos' }]);
 
   readonly filteredItems = computed(() => {
     const filter = this.activeFilter();
@@ -103,6 +104,25 @@ export class PortfolioComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    // Load page content from Firebase
+    this.contentCache.getSection<any>('portfolio').pipe(take(1)).subscribe((data) => {
+      if (data) {
+        if (data['pageTitle']) this.pageTitle.set(data['pageTitle']);
+        if (data['pageSubtitle']) this.pageSubtitle.set(data['pageSubtitle']);
+        if (data['emptyMessage']) this.emptyMessage.set(data['emptyMessage']);
+      }
+    });
+
+    // Load categories from Firebase
+    if (this.categoriesService) {
+      this.categoriesService.getAll().pipe(take(1)).subscribe((docs: CategoryDoc[]) => {
+        const dynamic = docs
+          .sort((a, b) => a.order - b.order)
+          .map((d) => ({ key: d.slug, label: d.name }));
+        this.categories.set([{ key: 'all', label: 'Todos' }, ...dynamic]);
+      });
+    }
+
     if (this.portfolioService) {
       this.portfolioService.getAll().pipe(take(1)).subscribe(docs => {
         const mapped: PortfolioItem[] = docs
@@ -139,6 +159,6 @@ export class PortfolioComponent implements OnInit {
   }
 
   getCategoryLabel(key: string): string {
-    return this.categories.find(c => c.key === key)?.label || key;
+    return this.categories().find(c => c.key === key)?.label || key;
   }
 }
