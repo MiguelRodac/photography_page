@@ -1,6 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GlobalResourceService } from '../../services/global-resource.service';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
 import { RevealDirective } from '../../shared/directives/reveal.directive';
 import { PageSectionsConfig, PageSectionItem } from '../../core/interfaces/firestore-models';
@@ -13,23 +12,26 @@ import { take } from 'rxjs';
   standalone: true,
 })
 export class HomeComponent implements OnInit {
-  private readonly resource = inject(GlobalResourceService);
   private readonly contentCache = inject(PublicContentCacheService);
-
-  readonly services = this.resource.getServices();
-  readonly portfolio = this.resource.getPortfolioItems().slice(0, 3);
-  readonly content = this.resource.getSiteContent();
 
   // Dynamic content from Firebase
   readonly heroData = signal<any>(null);
   readonly servicesData = signal<any>(null);
   readonly homeSections = signal<PageSectionItem[]>([]);
+  readonly testimonials = signal<any[]>([]);
+  readonly portfolioItems = signal<any[]>([]);
 
-  readonly testimonials = [
-    { name: 'María García', role: 'Boda • Mayo 2024', text: 'Increíble trabajo. Capturó cada momento especial de nuestra boda con una sensibilidad única. Las fotos son espectaculares.' },
-    { name: 'Carlos Mendoza', role: 'Retrato Corporativo', text: 'Profesionalismo absoluto. Las fotos para nuestro equipo directivo quedaron impecables. Superó todas nuestras expectativas.' },
-    { name: 'Ana López', role: 'Sesión Familiar', text: 'Hizo que toda la familia se sintiera cómoda. Las fotos naturales son justo lo que queríamos. ¡Repetiremos sin duda!' },
-  ];
+  // Section text from Firebase
+  readonly servicesSectionTitle = signal('');
+  readonly servicesSectionDesc = signal('');
+  readonly portfolioPreviewTitle = signal('');
+  readonly portfolioPreviewDesc = signal('');
+  readonly portfolioPreviewCta = signal('');
+  readonly testimonialsTitle = signal('');
+  readonly testimonialsDesc = signal('');
+  readonly ctaTitle = signal('');
+  readonly ctaDesc = signal('');
+  readonly ctaButtonText = signal('');
 
   ngOnInit(): void {
     const start = performance.now();
@@ -40,7 +42,36 @@ export class HomeComponent implements OnInit {
     });
 
     this.contentCache.getSection<any>('services').pipe(take(1)).subscribe((data) => {
-      if (data) this.servicesData.set(data);
+      if (data) {
+        this.servicesData.set(data);
+        if (data['sectionTitle']) this.servicesSectionTitle.set(data['sectionTitle']);
+        if (data['sectionDescription']) this.servicesSectionDesc.set(data['sectionDescription']);
+      }
+    });
+
+    this.contentCache.getSection<any>('testimonials').pipe(take(1)).subscribe((data) => {
+      if (data) {
+        if (data['sectionTitle']) this.testimonialsTitle.set(data['sectionTitle']);
+        if (data['sectionDescription']) this.testimonialsDesc.set(data['sectionDescription']);
+        if (data['testimonials']) this.testimonials.set(data['testimonials']);
+      }
+    });
+
+    this.contentCache.getSection<any>('portfolio-preview').pipe(take(1)).subscribe((data) => {
+      if (data) {
+        if (data['sectionTitle']) this.portfolioPreviewTitle.set(data['sectionTitle']);
+        if (data['sectionDescription']) this.portfolioPreviewDesc.set(data['sectionDescription']);
+        if (data['ctaText']) this.portfolioPreviewCta.set(data['ctaText']);
+        if (data['items']) this.portfolioItems.set(data['items']);
+      }
+    });
+
+    this.contentCache.getSection<any>('cta').pipe(take(1)).subscribe((data) => {
+      if (data) {
+        if (data['title']) this.ctaTitle.set(data['title']);
+        if (data['description']) this.ctaDesc.set(data['description']);
+        if (data['buttonText']) this.ctaButtonText.set(data['buttonText']);
+      }
     });
 
     this.contentCache.getSection<PageSectionsConfig>('home-sections').pipe(take(1)).subscribe((data) => {

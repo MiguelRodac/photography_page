@@ -18,12 +18,17 @@ export class ContactComponent implements OnInit {
   readonly showServiceError = signal(false);
   readonly selectedService = signal('');
 
-  readonly serviceTypes = [
+  readonly contactHeroLabel = signal('');
+  readonly contactHeroTitle = signal('');
+  readonly contactHeroTitleAccent = signal('');
+  readonly contactHeroSubtitle = signal('');
+  readonly contactFormTitle = signal('');
+  readonly contactServices = signal<{ value: string; label: string }[]>([
     { value: 'wedding', label: 'Boda' },
     { value: 'portrait', label: 'Retrato' },
     { value: 'event', label: 'Evento' },
     { value: 'commercial', label: 'Comercial' },
-  ];
+  ]);
 
   contactInfo = [
     { label: 'Email', value: 'contacto@photographyacas.com', iconPath: 'M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75' },
@@ -34,9 +39,15 @@ export class ContactComponent implements OnInit {
   ngOnInit(): void {
     this.contentCache.getSection<any>('contact').pipe(take(1)).subscribe((data) => {
       if (data) {
+        if (data['heroLabel']) this.contactHeroLabel.set(data['heroLabel']);
+        if (data['heroTitle']) this.contactHeroTitle.set(data['heroTitle']);
+        if (data['heroTitleAccent']) this.contactHeroTitleAccent.set(data['heroTitleAccent']);
+        if (data['heroSubtitle']) this.contactHeroSubtitle.set(data['heroSubtitle']);
+        if (data['formTitle']) this.contactFormTitle.set(data['formTitle']);
+        if (data['serviceTypes']) this.contactServices.set(data['serviceTypes']);
         this.contactInfo = [
-          { label: 'Email', value: data.email || 'contacto@photographyacas.com', iconPath: 'M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75' },
-          { label: 'Ubicación', value: data.address || 'Palermo Soho, Buenos Aires', iconPath: 'M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z' },
+          { label: 'Email', value: data.email || '', iconPath: 'M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75' },
+          { label: 'Ubicación', value: data.address || '', iconPath: 'M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z' },
           { label: 'Respuesta', value: 'Menos de 24 horas', iconPath: 'M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' },
         ];
       }

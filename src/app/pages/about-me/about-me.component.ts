@@ -21,18 +21,15 @@ export class AboutMeComponent implements OnInit {
   readonly philosophyText = signal('');
   readonly profileImage = signal('');
   readonly aboutSections = signal<PageSectionItem[]>([]);
+  readonly aboutCtaTitle = signal('');
+  readonly aboutCtaDesc = signal('');
+  readonly aboutCtaButtonText = signal('');
+  readonly aboutServices = signal<{ id: string; title: string; description: string }[]>([]);
 
   stats = [
     { value: '500+', label: 'Sesiones' },
     { value: '150+', label: 'Clientes' },
     { value: '10', label: 'Años exp.' },
-  ];
-
-  services = [
-    { id: 'events', title: 'Bodas y eventos', description: 'Cobertura completa de tu día especial con un enfoque documental que captura cada emoción genuina.' },
-    { id: 'portrait', title: 'Retratos', description: 'Sesiones personalizadas que reflejan tu personalidad, desde retratos profesionales hasta familiares.' },
-    { id: 'commercial', title: 'Comercial', description: 'Fotografía de producto, arquitectura y contenido visual para impulsar tu marca o negocio.' },
-    { id: 'editing', title: 'Edición profesional', description: 'Procesamiento digital avanzado con atención al color, iluminación y detalle en cada imagen.' },
   ];
 
   ngOnInit(): void {
@@ -46,13 +43,27 @@ export class AboutMeComponent implements OnInit {
         this.philosophyText.set(data.philosophy || '');
         this.profileImage.set(data.image || '');
         if (data.stats) this.stats = data.stats;
-        if (data.services) this.services = data.services;
+        if (data.services) this.aboutServices.set(data.services);
       }
     });
 
-    this.contentCache.getSection<PageSectionsConfig>('about-sections').pipe(take(1)).subscribe((data) => {
+    this.contentCache.getSection<any>('about-sections').pipe(take(1)).subscribe((data) => {
       if (data?.sections) {
         this.aboutSections.set(data.sections);
+      }
+    });
+
+    this.contentCache.getSection<any>('services').pipe(take(1)).subscribe((data) => {
+      if (data?.services) {
+        this.aboutServices.set(data.services);
+      }
+    });
+
+    this.contentCache.getSection<any>('cta').pipe(take(1)).subscribe((data) => {
+      if (data) {
+        if (data['title']) this.aboutCtaTitle.set(data['title']);
+        if (data['description']) this.aboutCtaDesc.set(data['description']);
+        if (data['buttonText']) this.aboutCtaButtonText.set(data['buttonText']);
       }
     });
   }

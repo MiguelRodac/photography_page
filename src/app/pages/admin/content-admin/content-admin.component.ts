@@ -23,9 +23,12 @@ export class ContentAdminComponent implements OnInit {
 
   readonly sections: SectionConfig[] = [
     { id: 'hero', label: 'Home Hero', icon: 'bolt', fields: ['title', 'subtitle', 'cta', 'bgImage'] },
-    { id: 'services', label: 'Home Services', icon: 'briefcase', fields: [] },
-    { id: 'about', label: 'About Me', icon: 'user', fields: ['title', 'description', 'image'] },
-    { id: 'contact', label: 'Contact', icon: 'envelope', fields: ['title', 'description', 'email', 'phone', 'address', 'mapEmbed'] },
+    { id: 'services', label: 'Home Services', icon: 'briefcase', fields: ['sectionTitle', 'sectionDescription'] },
+    { id: 'testimonials', label: 'Testimonials', icon: 'star', fields: ['sectionTitle', 'sectionDescription'] },
+    { id: 'portfolio-preview', label: 'Portfolio Preview', icon: 'image', fields: ['sectionTitle', 'sectionDescription', 'ctaText'] },
+    { id: 'cta', label: 'Call to Action', icon: 'megaphone', fields: ['title', 'description', 'buttonText'] },
+    { id: 'about', label: 'About Me', icon: 'user', fields: ['title', 'subtitle', 'description', 'extra', 'quote', 'philosophy', 'image'] },
+    { id: 'contact', label: 'Contact', icon: 'envelope', fields: ['heroLabel', 'heroTitle', 'heroTitleAccent', 'heroSubtitle', 'formTitle', 'serviceTypes', 'email', 'phone', 'address', 'mapEmbed'] },
     { id: 'header', label: 'Header', icon: 'bars', fields: ['siteName', 'logoUrl'] },
     { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText'] },
     { id: 'whatsapp', label: 'WhatsApp', icon: 'chat', fields: ['phoneNumber', 'defaultMessage'] },
@@ -58,6 +61,7 @@ export class ContentAdminComponent implements OnInit {
   readonly footerLinks = signal<{ platform: string; url: string }[]>([]);
   readonly servicesItems = signal<{ id: string; title: string; description: string; icon: string }[]>([]);
   readonly aboutStats = signal<{ value: string; label: string }[]>([]);
+  readonly testimonialsItems = signal<{ name: string; role: string; text: string }[]>([]);
 
   // Section visibility/ordering
   readonly homeSections = signal<PageSectionItem[]>([
@@ -219,6 +223,10 @@ export class ContentAdminComponent implements OnInit {
                 this.aboutStats.set(Array.isArray(data[key]) ? data[key] : []);
                 continue;
               }
+              if (key === 'testimonials' && sectionId === 'testimonials') {
+                this.testimonialsItems.set(Array.isArray(data[key]) ? data[key] : []);
+                continue;
+              }
               if (key === 'layout') {
                 const layouts = new Map(this.sectionLayouts());
                 layouts.set(sectionId, data[key]);
@@ -302,6 +310,11 @@ export class ContentAdminComponent implements OnInit {
       data['stats'] = this.aboutStats().filter((s) => s.label);
     }
 
+    // Add testimonials items
+    if (sectionId === 'testimonials') {
+      data['testimonials'] = this.testimonialsItems().filter((t) => t.name);
+    }
+
     // Add layout field for sections that support it
     const layout = this.sectionLayouts().get(sectionId);
     if (layout) {
@@ -354,7 +367,7 @@ export class ContentAdminComponent implements OnInit {
   }
 
   isLongTextField(field: string): boolean {
-    return ['description', 'defaultMessage'].includes(field);
+    return ['description', 'defaultMessage', 'philosophy', 'extra', 'quote', 'sectionDescription', 'heroSubtitle'].includes(field);
   }
 
   getInputType(field: string): string {
@@ -413,6 +426,23 @@ export class ContentAdminComponent implements OnInit {
       stats.map((stat, i) => (i === index ? { ...stat, [key]: value } : stat)),
     );
     this.clearSuccessOnEdit('about');
+  }
+
+  // --- Testimonials repeater ---
+
+  addTestimonialItem(): void {
+    this.testimonialsItems.update((items) => [...items, { name: '', role: '', text: '' }]);
+  }
+
+  removeTestimonialItem(index: number): void {
+    this.testimonialsItems.update((items) => items.filter((_, i) => i !== index));
+  }
+
+  updateTestimonialItem(index: number, key: 'name' | 'role' | 'text', value: string): void {
+    this.testimonialsItems.update((items) =>
+      items.map((item, i) => (i === index ? { ...item, [key]: value } : item)),
+    );
+    this.clearSuccessOnEdit('testimonials');
   }
 
   // --- Layout management ---

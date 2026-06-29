@@ -9,13 +9,13 @@
       </div>
     </div>
     <div class="relative z-20 max-w-4xl mx-auto text-center">
-      <p class="text-primary-600 dark:text-primary-500 font-medium mb-4 text-sm tracking-widest uppercase">Contacto</p>
+      <p class="text-primary-600 dark:text-primary-500 font-medium mb-4 text-sm tracking-widest uppercase">{{ contactHeroLabel() }}</p>
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-semibold text-surface-900 dark:text-white mb-6">
-        Hagamos realidad<br/>
-        <span class="text-primary-600 dark:text-primary-400">tu proyecto</span>
+        {{ contactHeroTitle() }}<br/>
+        <span class="text-primary-600 dark:text-primary-400">{{ contactHeroTitleAccent() }}</span>
       </h1>
       <p class="text-surface-500 dark:text-surface-300 text-lg md:text-xl max-w-xl mx-auto">
-        Completa el formulario y cuéntame tu idea. Te responderé en menos de 24 horas.
+        {{ contactHeroSubtitle() }}
       </p>
     </div>
   </section>
@@ -33,7 +33,7 @@
                 </svg>
               </div>
               <div>
-                <h2 class="text-xl font-display font-semibold">Envíame tu consulta</h2>
+                <h2 class="text-xl font-display font-semibold">{{ contactFormTitle() }}</h2>
                 <p class="text-sm text-surface-400">Campos marcados con <span class="text-red-400">*</span> son obligatorios</p>
               </div>
             </div>
@@ -43,7 +43,7 @@
                 ¿Qué tipo de sesión te interesa? <span class="text-red-400">*</span>
               </p>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                @for (service of serviceTypes; track service.value) {
+                @for (service of contactServices(); track service.value) {
                   <button type="button"
                           (click)="selectedService.set(service.value); showServiceError.set(false)"
                           class="p-3 rounded-2xl border-2 text-center transition-all duration-300"
