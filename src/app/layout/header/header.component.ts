@@ -5,7 +5,6 @@ import { NavBarComponent } from "../nav-bar/nav-bar.component";
 import { ThemeToggleComponent } from "../../shared/theme-toggle/theme-toggle.component";
 import { GlobalResourceService } from '../../services/global-resource.service';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
-import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +14,7 @@ export class HeaderComponent implements OnInit {
   private readonly resource = inject(GlobalResourceService);
   private readonly contentCache = inject(PublicContentCacheService);
 
-  readonly siteName = signal(environment.siteName);
+  readonly siteName = signal('');
   readonly logoUrl = signal('');
 
   ngOnInit(): void {

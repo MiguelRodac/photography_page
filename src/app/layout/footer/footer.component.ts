@@ -27,7 +27,7 @@ export class FooterComponent implements OnInit {
   private readonly contentCache = inject(PublicContentCacheService);
   private readonly navService = inject(NAVIGATION_SERVICE, { optional: true });
 
-  readonly siteName = signal(environment.siteName);
+  readonly siteName = signal('');
   readonly logoUrl = signal('');
   readonly copyrightText = signal('');
   readonly tagline = signal('');

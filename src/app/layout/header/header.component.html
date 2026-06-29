@@ -6,7 +6,7 @@
           <img [src]="logoUrl()" [alt]="siteName()" class="h-10 w-10 rounded-full object-cover" />
         } @else {
           <span class="h-10 w-10 rounded-full bg-primary-500/15 flex items-center justify-center text-primary-600 dark:text-primary-400 font-display font-bold text-lg">
-            {{ siteName().charAt(0) || 'P' }}
+            {{ siteName().charAt(0) }}
           </span>
         }
         <span class="text-xl font-display font-semibold text-surface-900 dark:text-white group-hover:text-primary-500 transition-colors">{{ siteName() }}</span>
