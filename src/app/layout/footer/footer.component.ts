@@ -3,11 +3,18 @@ import { RouterLink } from '@angular/router';
 import { take } from 'rxjs';
 import { GlobalResourceService } from '../../services/global-resource.service';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
+import { NAVIGATION_SERVICE } from '../../core/tokens/navigation-service.token';
+import { NavLinkDoc } from '../../core/interfaces/firestore-models';
 import { environment } from '../../../environments/environment';
 
 interface SocialLink {
   platform: string;
   url: string;
+}
+
+interface FooterNavLink {
+  path: string;
+  label: string;
 }
 
 @Component({
@@ -17,6 +24,7 @@ interface SocialLink {
 export class FooterComponent implements OnInit {
   private readonly resource = inject(GlobalResourceService);
   private readonly contentCache = inject(PublicContentCacheService);
+  private readonly navService = inject(NAVIGATION_SERVICE, { optional: true });
 
   readonly siteName = signal(environment.siteName);
   readonly copyrightText = signal(
@@ -25,6 +33,7 @@ export class FooterComponent implements OnInit {
   readonly tagline = signal('Capturando momentos únicos con pasión y profesionalismo.');
   readonly linksTitle = signal('Enlaces');
   readonly socialTitle = signal('Sígueme');
+  readonly navLinks = signal<FooterNavLink[]>([]);
   readonly socialLinks = signal<SocialLink[]>([
     { platform: 'instagram', url: environment.socialMedia.instagram },
     { platform: 'whatsapp', url: environment.socialMedia.whatsapp },
@@ -41,6 +50,16 @@ export class FooterComponent implements OnInit {
         if (links.length > 0) this.socialLinks.set(links);
       }
     });
+
+    if (this.navService) {
+      this.navService.getAll().pipe(take(1)).subscribe(docs => {
+        const visible = docs
+          .filter((d: NavLinkDoc) => d.visible)
+          .sort((a: NavLinkDoc, b: NavLinkDoc) => a.order - b.order)
+          .map((d: NavLinkDoc) => ({ path: d.path, label: d.label }));
+        this.navLinks.set(visible);
+      });
+    }
   }
 
   get title(): string {

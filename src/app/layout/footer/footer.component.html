@@ -25,10 +25,9 @@
       <div>
         <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">{{ linksTitle() }}</h3>
         <nav class="space-y-2">
-          <a routerLink="/" class="block text-sm text-surface-500 dark:text-surface-400 hover:text-primary-500 transition-colors">Inicio</a>
-          <a routerLink="/about-me" class="block text-sm text-surface-500 dark:text-surface-400 hover:text-primary-500 transition-colors">Sobre mí</a>
-          <a routerLink="/portfolio" class="block text-sm text-surface-500 dark:text-surface-400 hover:text-primary-500 transition-colors">Portafolio</a>
-          <a routerLink="/contact" class="block text-sm text-surface-500 dark:text-surface-400 hover:text-primary-500 transition-colors">Contacto</a>
+          @for (link of navLinks(); track link.path) {
+            <a [routerLink]="link.path" class="block text-sm text-surface-500 dark:text-surface-400 hover:text-primary-500 transition-colors">{{ link.label }}</a>
+          }
         </nav>
       </div>
 

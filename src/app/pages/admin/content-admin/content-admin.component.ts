@@ -32,7 +32,7 @@ export class ContentAdminComponent implements OnInit {
     { id: 'header', label: 'Header', icon: 'bars', fields: ['siteName', 'logoUrl'] },
     { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText', 'tagline', 'linksTitle', 'socialTitle'] },
     { id: 'portfolio', label: 'Portfolio Page', icon: 'image', fields: ['pageTitle', 'pageSubtitle', 'emptyMessage'] },
-    { id: 'whatsapp', label: 'WhatsApp', icon: 'chat', fields: ['phoneNumber', 'defaultMessage'] },
+    { id: 'whatsapp', label: 'WhatsApp', icon: 'chat', fields: ['phoneNumber', 'defaultMessage', 'buttonTooltip', 'buttonAriaLabel'] },
   ];
 
   readonly heroLayouts = [

@@ -65,12 +65,7 @@ export class NavBarComponent implements OnInit {
 
   classMobile = true;
 
-  readonly links = signal<NavItem[]>([
-    { path: '/', label: 'INICIO' },
-    { path: '/about-me', label: 'SOBRE MI' },
-    { path: '/portfolio', label: 'PORTAFOLIO' },
-    { path: '/contact', label: 'CONTACTO' },
-  ]);
+  readonly links = signal<NavItem[]>([]);
 
   ngOnInit(): void {
     if (this.navService) {
@@ -79,9 +74,7 @@ export class NavBarComponent implements OnInit {
           .filter((d: NavLinkDoc) => d.visible)
           .sort((a: NavLinkDoc, b: NavLinkDoc) => a.order - b.order)
           .map((d: NavLinkDoc) => ({ path: d.path, label: d.label }));
-        if (visible.length > 0) {
-          this.links.set(visible);
-        }
+        this.links.set(visible);
       });
     }
   }
