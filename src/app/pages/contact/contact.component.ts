@@ -1,10 +1,16 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, computed } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormsComponent } from "../../shared/components/forms/forms.component";
 import { GlobalResourceService } from '../../services/global-resource.service';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
 import { take } from 'rxjs';
 import { IFormGroup, IInput } from '../../interfaces/inputs';
+
+interface ContactInfoItem {
+  label: string;
+  value: string;
+  icon: string;
+}
 
 @Component({
   selector: 'app-contact',
@@ -23,37 +29,43 @@ export class ContactComponent implements OnInit {
   readonly contactHeroTitle = signal('');
   readonly contactHeroTitleAccent = signal('');
   readonly contactHeroSubtitle = signal('');
-  readonly contactBgImage = signal('https://images.unsplash.com/photo-1473968512527-509dea398408?auto=format&fit=crop&w=1920&q=80');
+  readonly contactBgImage = signal('');
   readonly contactFormTitle = signal('');
-  readonly formSubtitle = signal('Campos marcados con * son obligatorios');
-  readonly serviceTypeLabel = signal('¿Qué tipo de sesión te interesa?');
-  readonly serviceTypeError = signal('Seleccioná un tipo de sesión para continuar');
-  readonly infoEmailLabel = signal('Email');
-  readonly infoLocationLabel = signal('Ubicación');
-  readonly infoResponseLabel = signal('Respuesta');
-  readonly infoResponseValue = signal('Menos de 24 horas');
-  readonly whatsappTitle = signal('¿Prefieres WhatsApp?');
-  readonly whatsappSubtitle = signal('Respondo más rápido por aquí');
-  readonly statsValue = signal('500+');
-  readonly statsLabel = signal('clientes satisfechos');
-  readonly contactServices = signal<{ value: string; label: string }[]>([
-    { value: 'wedding', label: 'Boda' },
-    { value: 'portrait', label: 'Retrato' },
-    { value: 'event', label: 'Evento' },
-    { value: 'commercial', label: 'Comercial' },
-  ]);
+  readonly formSubtitle = signal('');
+  readonly serviceTypeLabel = signal('');
+  readonly serviceTypeError = signal('');
+  readonly whatsappTitle = signal('');
+  readonly whatsappSubtitle = signal('');
+  readonly whatsappColorStart = signal('#22c55e');
+  readonly whatsappColorEnd = signal('#16a34a');
+  readonly statsValue = signal('');
+  readonly statsLabel = signal('');
+
+  readonly contactServices = signal<{ value: string; label: string; icon: string }[]>([]);
+
+  readonly contactInfo = computed<ContactInfoItem[]>(() => {
+    const email = this.infoEmail();
+    const address = this.infoAddress();
+    const responseTime = this.infoResponseTime();
+    const items: ContactInfoItem[] = [];
+    if (email) items.push({ label: this.infoEmailLabel(), value: email, icon: '✉️' });
+    if (address) items.push({ label: this.infoLocationLabel(), value: address, icon: '📍' });
+    if (responseTime) items.push({ label: this.infoResponseLabel(), value: responseTime, icon: '⏱️' });
+    return items;
+  });
+
+  private readonly infoEmail = signal('');
+  private readonly infoAddress = signal('');
+  private readonly infoResponseTime = signal('');
+  readonly infoEmailLabel = signal('');
+  readonly infoLocationLabel = signal('');
+  readonly infoResponseLabel = signal('');
 
   readonly formConfig = signal<IFormGroup>({
     formId: 'contactForm',
-    submitText: 'Enviar consulta',
+    submitText: '',
     inputs: [],
   });
-
-  contactInfo = [
-    { label: 'Email', value: 'contacto@photographyacas.com', iconPath: 'M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75' },
-    { label: 'Ubicación', value: 'Palermo Soho, Buenos Aires', iconPath: 'M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z' },
-    { label: 'Respuesta', value: 'Menos de 24 horas', iconPath: 'M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' },
-  ];
 
   ngOnInit(): void {
     this.contentCache.getSection<any>('contact').pipe(take(1)).subscribe((data) => {
@@ -68,14 +80,21 @@ export class ContactComponent implements OnInit {
         if (data['serviceTypeLabel']) this.serviceTypeLabel.set(data['serviceTypeLabel']);
         if (data['serviceTypeError']) this.serviceTypeError.set(data['serviceTypeError']);
         if (data['serviceTypes']) this.contactServices.set(data['serviceTypes']);
+        if (data['email']) this.infoEmail.set(data['email']);
+        if (data['address']) this.infoAddress.set(data['address']);
         if (data['infoEmailLabel']) this.infoEmailLabel.set(data['infoEmailLabel']);
         if (data['infoLocationLabel']) this.infoLocationLabel.set(data['infoLocationLabel']);
         if (data['infoResponseLabel']) this.infoResponseLabel.set(data['infoResponseLabel']);
-        if (data['infoResponseValue']) this.infoResponseValue.set(data['infoResponseValue']);
+        if (data['infoResponseValue']) this.infoResponseTime.set(data['infoResponseValue']);
         if (data['whatsappTitle']) this.whatsappTitle.set(data['whatsappTitle']);
         if (data['whatsappSubtitle']) this.whatsappSubtitle.set(data['whatsappSubtitle']);
+        if (data['whatsappColorStart']) this.whatsappColorStart.set(data['whatsappColorStart']);
+        if (data['whatsappColorEnd']) this.whatsappColorEnd.set(data['whatsappColorEnd']);
         if (data['statsValue']) this.statsValue.set(data['statsValue']);
         if (data['statsLabel']) this.statsLabel.set(data['statsLabel']);
+        if (data['submitText']) {
+          this.formConfig.update(cfg => ({ ...cfg, submitText: data['submitText'] }));
+        }
         if (Array.isArray(data['formFields']) && data['formFields'].length > 0) {
           const inputs: IInput[] = data['formFields'].map((f: any) => ({
             formControl: f.name,
@@ -92,17 +111,8 @@ export class ContactComponent implements OnInit {
                 }))
               : [],
           }));
-          this.formConfig.set({
-            formId: 'contactForm',
-            submitText: 'Enviar consulta',
-            inputs,
-          });
+          this.formConfig.update(cfg => ({ ...cfg, inputs }));
         }
-        this.contactInfo = [
-          { label: this.infoEmailLabel(), value: data.email || '', iconPath: 'M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75' },
-          { label: this.infoLocationLabel(), value: data.address || '', iconPath: 'M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z' },
-          { label: this.infoResponseLabel(), value: this.infoResponseValue(), iconPath: 'M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' },
-        ];
       }
     });
 

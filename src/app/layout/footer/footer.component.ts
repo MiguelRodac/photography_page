@@ -10,6 +10,7 @@ import { environment } from '../../../environments/environment';
 interface SocialLink {
   platform: string;
   url: string;
+  icon?: string;
 }
 
 interface FooterNavLink {
@@ -27,27 +28,29 @@ export class FooterComponent implements OnInit {
   private readonly navService = inject(NAVIGATION_SERVICE, { optional: true });
 
   readonly siteName = signal(environment.siteName);
-  readonly copyrightText = signal(
-    `© ${new Date().getFullYear()} ${environment.siteName}. All Rights Reserved.`
-  );
-  readonly tagline = signal('Capturando momentos únicos con pasión y profesionalismo.');
-  readonly linksTitle = signal('Enlaces');
-  readonly socialTitle = signal('Sígueme');
+  readonly logoUrl = signal('');
+  readonly copyrightText = signal('');
+  readonly tagline = signal('');
+  readonly linksTitle = signal('');
+  readonly socialTitle = signal('');
   readonly navLinks = signal<FooterNavLink[]>([]);
   readonly socialLinks = signal<SocialLink[]>([
-    { platform: 'instagram', url: environment.socialMedia.instagram },
-    { platform: 'whatsapp', url: environment.socialMedia.whatsapp },
+    { platform: 'instagram', url: environment.socialMedia.instagram, icon: 'Ig' },
+    { platform: 'whatsapp', url: environment.socialMedia.whatsapp, icon: 'Wa' },
   ]);
 
   ngOnInit(): void {
     this.contentCache.getSection<Record<string, unknown>>('footer').pipe(take(1)).subscribe(data => {
-      if (data?.['copyrightText']) this.copyrightText.set(data['copyrightText'] as string);
-      if (data?.['tagline']) this.tagline.set(data['tagline'] as string);
-      if (data?.['linksTitle']) this.linksTitle.set(data['linksTitle'] as string);
-      if (data?.['socialTitle']) this.socialTitle.set(data['socialTitle'] as string);
-      if (data?.['socialLinks']) {
-        const links = data['socialLinks'] as SocialLink[];
-        if (links.length > 0) this.socialLinks.set(links);
+      if (data) {
+        if (data['copyrightText']) this.copyrightText.set(data['copyrightText'] as string);
+        if (data['tagline']) this.tagline.set(data['tagline'] as string);
+        if (data['linksTitle']) this.linksTitle.set(data['linksTitle'] as string);
+        if (data['socialTitle']) this.socialTitle.set(data['socialTitle'] as string);
+        if (data['logoUrl']) this.logoUrl.set(data['logoUrl'] as string);
+        if (data['socialLinks']) {
+          const links = data['socialLinks'] as SocialLink[];
+          if (links.length > 0) this.socialLinks.set(links);
+        }
       }
     });
 
@@ -68,9 +71,5 @@ export class FooterComponent implements OnInit {
 
   get footerText(): string {
     return this.copyrightText();
-  }
-
-  getSocialUrl(platform: string): string {
-    return this.socialLinks().find(l => l.platform === platform)?.url || '';
   }
 }

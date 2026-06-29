@@ -29,16 +29,12 @@ interface NavItem {
       <!-- Mobile -->
       <div class="md:hidden">
         <button (click)="toggleMobileMenu()" type="button"
-                class="p-2 rounded-lg text-surface-600 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800"
+                class="p-2 rounded-lg text-surface-600 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800 text-2xl leading-none"
                 aria-controls="mobile-menu"
-                [attr.aria-expanded]="!classMobile">
-          <span class="sr-only">Open main menu</span>
-          <svg [class.hidden]="!classMobile" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-          <svg [class.hidden]="classMobile" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-          </svg>
+                [attr.aria-expanded]="!classMobile"
+                [attr.aria-label]="menuAriaLabel()">
+          <span class="sr-only">{{ menuAriaLabel() }}</span>
+          <span aria-hidden="true">{{ classMobile ? '☰' : '✕' }}</span>
         </button>
       </div>
 
@@ -66,6 +62,7 @@ export class NavBarComponent implements OnInit {
   classMobile = true;
 
   readonly links = signal<NavItem[]>([]);
+  readonly menuAriaLabel = signal('');
 
   ngOnInit(): void {
     if (this.navService) {

@@ -92,10 +92,11 @@ export class PortfolioComponent implements OnInit {
   lightboxIndex = 0;
 
   // Dynamic content from Firebase
-  readonly pageTitle = signal('Portafolio');
-  readonly pageSubtitle = signal('Una selección de mi mejor trabajo en diferentes categorías.');
-  readonly emptyMessage = signal('No hay imágenes en esta categoría aún.');
-  readonly categories = signal<{ key: string; label: string }[]>([{ key: 'all', label: 'Todos' }]);
+  readonly pageTitle = signal('');
+  readonly pageSubtitle = signal('');
+  readonly emptyMessage = signal('');
+  readonly categories = signal<{ key: string; label: string }[]>([]);
+  readonly allCategoriesLabel = signal('');
 
   readonly filteredItems = computed(() => {
     const filter = this.activeFilter();
@@ -110,6 +111,7 @@ export class PortfolioComponent implements OnInit {
         if (data['pageTitle']) this.pageTitle.set(data['pageTitle']);
         if (data['pageSubtitle']) this.pageSubtitle.set(data['pageSubtitle']);
         if (data['emptyMessage']) this.emptyMessage.set(data['emptyMessage']);
+        if (data['allCategoriesLabel']) this.allCategoriesLabel.set(data['allCategoriesLabel']);
       }
     });
 
@@ -119,7 +121,7 @@ export class PortfolioComponent implements OnInit {
         const dynamic = docs
           .sort((a, b) => a.order - b.order)
           .map((d) => ({ key: d.slug, label: d.name }));
-        this.categories.set([{ key: 'all', label: 'Todos' }, ...dynamic]);
+        this.categories.set([{ key: 'all', label: this.allCategoriesLabel() || 'All' }, ...dynamic]);
       });
     }
 

@@ -13,20 +13,20 @@ import { take } from 'rxjs';
 export class AboutMeComponent implements OnInit {
   private readonly contentCache = inject(PublicContentCacheService);
 
-  readonly heroLabel = signal('Sobre mí');
+  readonly heroLabel = signal('');
   readonly aboutTitle = signal('');
   readonly aboutSubtitle = signal('');
   readonly aboutDescription = signal('');
   readonly aboutExtra = signal('');
-  readonly profileImageAlt = signal('Fotógrafo en acción');
+  readonly profileImageAlt = signal('');
   readonly overlayImage = signal('');
-  readonly overlayImageAlt = signal('Cámara profesional');
-  readonly philosophyLabel = signal('Mi filosofía');
+  readonly overlayImageAlt = signal('');
+  readonly philosophyLabel = signal('');
   readonly philosophyQuote = signal('');
   readonly philosophyText = signal('');
   readonly profileImage = signal('');
-  readonly servicesLabel = signal('Servicios');
-  readonly servicesTitle = signal('Lo que ofrezco');
+  readonly servicesLabel = signal('');
+  readonly servicesTitle = signal('');
   readonly aboutSections = signal<PageSectionItem[]>([]);
   readonly aboutCtaTitle = signal('');
   readonly aboutCtaDesc = signal('');
