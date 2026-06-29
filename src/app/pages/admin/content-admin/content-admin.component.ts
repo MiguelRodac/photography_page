@@ -28,7 +28,7 @@ export class ContentAdminComponent implements OnInit {
     { id: 'portfolio-preview', label: 'Portfolio Preview', icon: 'image', fields: ['sectionTitle', 'sectionDescription', 'ctaText'] },
     { id: 'cta', label: 'Call to Action', icon: 'megaphone', fields: ['title', 'description', 'buttonText'] },
     { id: 'about', label: 'About Me', icon: 'user', fields: ['heroLabel', 'title', 'subtitle', 'description', 'extra', 'profileImageAlt', 'overlayImage', 'overlayImageAlt', 'philosophyLabel', 'quote', 'philosophy', 'servicesLabel', 'servicesTitle', 'image'] },
-    { id: 'contact', label: 'Contact', icon: 'envelope', fields: ['heroLabel', 'heroTitle', 'heroTitleAccent', 'heroSubtitle', 'formTitle', 'serviceTypes', 'email', 'phone', 'address', 'mapEmbed'] },
+    { id: 'contact', label: 'Contact', icon: 'envelope', fields: ['heroLabel', 'heroTitle', 'heroTitleAccent', 'heroSubtitle', 'bgImage', 'formTitle', 'formSubtitle', 'serviceTypeLabel', 'serviceTypeError', 'serviceTypes', 'email', 'phone', 'address', 'mapEmbed', 'infoEmailLabel', 'infoLocationLabel', 'infoResponseLabel', 'infoResponseValue', 'whatsappTitle', 'whatsappSubtitle', 'statsValue', 'statsLabel'] },
     { id: 'header', label: 'Header', icon: 'bars', fields: ['siteName', 'logoUrl'] },
     { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText'] },
     { id: 'whatsapp', label: 'WhatsApp', icon: 'chat', fields: ['phoneNumber', 'defaultMessage'] },
