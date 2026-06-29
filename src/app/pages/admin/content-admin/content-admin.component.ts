@@ -27,7 +27,7 @@ export class ContentAdminComponent implements OnInit {
     { id: 'testimonials', label: 'Testimonials', icon: 'star', fields: ['sectionTitle', 'sectionDescription'] },
     { id: 'portfolio-preview', label: 'Portfolio Preview', icon: 'image', fields: ['sectionTitle', 'sectionDescription', 'ctaText'] },
     { id: 'cta', label: 'Call to Action', icon: 'megaphone', fields: ['title', 'description', 'buttonText'] },
-    { id: 'about', label: 'About Me', icon: 'user', fields: ['title', 'subtitle', 'description', 'extra', 'quote', 'philosophy', 'image'] },
+    { id: 'about', label: 'About Me', icon: 'user', fields: ['heroLabel', 'title', 'subtitle', 'description', 'extra', 'profileImageAlt', 'overlayImage', 'overlayImageAlt', 'philosophyLabel', 'quote', 'philosophy', 'servicesLabel', 'servicesTitle', 'image'] },
     { id: 'contact', label: 'Contact', icon: 'envelope', fields: ['heroLabel', 'heroTitle', 'heroTitleAccent', 'heroSubtitle', 'formTitle', 'serviceTypes', 'email', 'phone', 'address', 'mapEmbed'] },
     { id: 'header', label: 'Header', icon: 'bars', fields: ['siteName', 'logoUrl'] },
     { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText'] },
@@ -371,7 +371,7 @@ export class ContentAdminComponent implements OnInit {
   }
 
   getInputType(field: string): string {
-    if (field.includes('Url') || field === 'image' || field === 'bgImage' || field === 'logoUrl' || field === 'mapEmbed') return 'url';
+    if (field.includes('Url') || field === 'image' || field === 'bgImage' || field === 'logoUrl' || field === 'mapEmbed' || field === 'overlayImage') return 'url';
     if (field === 'email') return 'email';
     if (field === 'phone' || field === 'phoneNumber') return 'tel';
     return 'text';

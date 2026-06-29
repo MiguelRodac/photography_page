@@ -13,36 +13,45 @@ import { take } from 'rxjs';
 export class AboutMeComponent implements OnInit {
   private readonly contentCache = inject(PublicContentCacheService);
 
+  readonly heroLabel = signal('Sobre mí');
   readonly aboutTitle = signal('');
   readonly aboutSubtitle = signal('');
   readonly aboutDescription = signal('');
   readonly aboutExtra = signal('');
+  readonly profileImageAlt = signal('Fotógrafo en acción');
+  readonly overlayImage = signal('');
+  readonly overlayImageAlt = signal('Cámara profesional');
+  readonly philosophyLabel = signal('Mi filosofía');
   readonly philosophyQuote = signal('');
   readonly philosophyText = signal('');
   readonly profileImage = signal('');
+  readonly servicesLabel = signal('Servicios');
+  readonly servicesTitle = signal('Lo que ofrezco');
   readonly aboutSections = signal<PageSectionItem[]>([]);
   readonly aboutCtaTitle = signal('');
   readonly aboutCtaDesc = signal('');
   readonly aboutCtaButtonText = signal('');
   readonly aboutServices = signal<{ id: string; title: string; description: string }[]>([]);
-
-  stats = [
-    { value: '500+', label: 'Sesiones' },
-    { value: '150+', label: 'Clientes' },
-    { value: '10', label: 'Años exp.' },
-  ];
+  readonly stats = signal<{ value: string; label: string }[]>([]);
 
   ngOnInit(): void {
     this.contentCache.getSection<any>('about').pipe(take(1)).subscribe((data) => {
       if (data) {
+        if (data.heroLabel) this.heroLabel.set(data.heroLabel);
         this.aboutTitle.set(data.title || '');
         this.aboutSubtitle.set(data.subtitle || '');
         this.aboutDescription.set(data.description || '');
         this.aboutExtra.set(data.extra || '');
+        if (data.profileImageAlt) this.profileImageAlt.set(data.profileImageAlt);
+        if (data.overlayImage) this.overlayImage.set(data.overlayImage);
+        if (data.overlayImageAlt) this.overlayImageAlt.set(data.overlayImageAlt);
+        if (data.philosophyLabel) this.philosophyLabel.set(data.philosophyLabel);
         this.philosophyQuote.set(data.quote || '');
         this.philosophyText.set(data.philosophy || '');
         this.profileImage.set(data.image || '');
-        if (data.stats) this.stats = data.stats;
+        if (data.servicesLabel) this.servicesLabel.set(data.servicesLabel);
+        if (data.servicesTitle) this.servicesTitle.set(data.servicesTitle);
+        if (data.stats) this.stats.set(data.stats);
         if (data.services) this.aboutServices.set(data.services);
       }
     });

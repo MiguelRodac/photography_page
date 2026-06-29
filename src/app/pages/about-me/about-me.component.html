@@ -5,7 +5,7 @@
       <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <p class="text-primary-500 font-medium mb-4 text-sm tracking-widest uppercase">Sobre mí</p>
+            <p class="text-primary-500 font-medium mb-4 text-sm tracking-widest uppercase">{{ heroLabel() }}</p>
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-semibold mb-8">
               {{ aboutTitle() }}<br/>
               <span class="text-primary-500">{{ aboutSubtitle() }}</span>
@@ -18,7 +18,7 @@
             </p>
 
             <div class="grid grid-cols-3 gap-8">
-              @for (stat of stats; track stat.label) {
+              @for (stat of stats(); track stat.label) {
                 <div>
                   <p class="text-3xl font-display font-bold text-primary-500">{{ stat.value }}</p>
                   <p class="text-sm text-surface-500 dark:text-surface-400 mt-1">{{ stat.label }}</p>
@@ -30,13 +30,15 @@
           <div class="relative">
             <div class="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl">
               <img [src]="profileImage()"
-                   alt="Fotógrafo en acción"
+                   [alt]="profileImageAlt()"
                    class="w-full h-full object-cover" />
             </div>
             <div class="absolute -bottom-6 -left-6 w-32 h-32 rounded-2xl overflow-hidden shadow-xl border-4 border-surface-50 dark:border-surface-950">
-              <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=300&q=80"
-                   alt="Cámara profesional"
-                   class="w-full h-full object-cover" />
+              @if (overlayImage()) {
+                <img [src]="overlayImage()"
+                     [alt]="overlayImageAlt()"
+                     class="w-full h-full object-cover" />
+              }
             </div>
           </div>
         </div>
@@ -48,7 +50,7 @@
   @if (isSectionVisible('philosophy')) {
     <section class="py-24 px-6">
       <div class="max-w-4xl mx-auto text-center">
-        <p class="text-primary-500 font-medium mb-4 text-sm tracking-widest uppercase">Mi filosofía</p>
+        <p class="text-primary-500 font-medium mb-4 text-sm tracking-widest uppercase">{{ philosophyLabel() }}</p>
         <blockquote class="text-3xl md:text-4xl font-display font-semibold italic leading-relaxed mb-8">
           {{ philosophyQuote() }}
         </blockquote>
@@ -64,8 +66,8 @@
     <section class="py-24 px-6 bg-surface-100 dark:bg-surface-900">
       <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
-          <p class="text-primary-500 font-medium mb-4 text-sm tracking-widest uppercase">Servicios</p>
-          <h2 class="text-4xl md:text-5xl font-display font-semibold">Lo que ofrezco</h2>
+          <p class="text-primary-500 font-medium mb-4 text-sm tracking-widest uppercase">{{ servicesLabel() }}</p>
+          <h2 class="text-4xl md:text-5xl font-display font-semibold">{{ servicesTitle() }}</h2>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
