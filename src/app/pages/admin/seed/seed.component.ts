@@ -34,6 +34,7 @@ export class SeedComponent {
       await this.seedPortfolio();
       await this.seedServices();
       await this.seedSiteContent();
+      await this.seedPageSections();
       await this.seedNavigation();
       await this.seedCategories();
       await this.seedTheme();
@@ -107,10 +108,10 @@ export class SeedComponent {
         { value: '10', label: 'Años exp.' },
       ],
       services: [
-        { id: 'events', title: 'Bodas y eventos', description: 'Cobertura completa de tu día especial con un enfoque documental que captura cada emoción genuina.' },
-        { id: 'portrait', title: 'Retratos', description: 'Sesiones personalizadas que reflejan tu personalidad, desde retratos profesionales hasta familiares.' },
-        { id: 'commercial', title: 'Comercial', description: 'Fotografía de producto, arquitectura y contenido visual para impulsar tu marca o negocio.' },
-        { id: 'editing', title: 'Edición profesional', description: 'Procesamiento digital avanzado con atención al color, iluminación y detalle en cada imagen.' },
+        { id: 'events', title: 'Bodas y eventos', description: 'Cobertura completa de tu día especial con un enfoque documental que captura cada emoción genuina.', icon: 'https://api.iconify.design/mdi/camera.svg' },
+        { id: 'portrait', title: 'Retratos', description: 'Sesiones personalizadas que reflejan tu personalidad, desde retratos profesionales hasta familiares.', icon: 'https://api.iconify.design/mdi/account.svg' },
+        { id: 'commercial', title: 'Comercial', description: 'Fotografía de producto, arquitectura y contenido visual para impulsar tu marca o negocio.', icon: 'https://api.iconify.design/mdi/briefcase-outline.svg' },
+        { id: 'editing', title: 'Edición profesional', description: 'Procesamiento digital avanzado con atención al color, iluminación y detalle en cada imagen.', icon: 'https://api.iconify.design/mdi/palette-outline.svg' },
       ],
     }, { merge: true });
     this.addLog('content/about', 'success', 'Seeded about content');
@@ -207,6 +208,31 @@ export class SeedComponent {
       footerText: `© ${new Date().getFullYear()} Photography ACAS. All Rights Reserved.`,
     }, { merge: true });
     this.addLog('content/settings', 'success', 'Seeded settings content');
+  }
+
+  private async seedPageSections(): Promise<void> {
+    const homeRef = doc(this.firestore, 'content/home-sections');
+    await setDoc(homeRef, {
+      sections: [
+        { id: 'hero', visible: true, order: 1 },
+        { id: 'services', visible: true, order: 2 },
+        { id: 'portfolio-preview', visible: true, order: 3 },
+        { id: 'testimonials', visible: true, order: 4 },
+        { id: 'cta', visible: true, order: 5 },
+      ],
+    }, { merge: true });
+    this.addLog('content/home-sections', 'success', 'Seeded home page sections config');
+
+    const aboutRef = doc(this.firestore, 'content/about-sections');
+    await setDoc(aboutRef, {
+      sections: [
+        { id: 'hero', visible: true, order: 1 },
+        { id: 'philosophy', visible: true, order: 2 },
+        { id: 'services', visible: true, order: 3 },
+        { id: 'cta', visible: true, order: 4 },
+      ],
+    }, { merge: true });
+    this.addLog('content/about-sections', 'success', 'Seeded about page sections config');
   }
 
   private async seedNavigation(): Promise<void> {

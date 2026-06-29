@@ -80,6 +80,7 @@ export class ContentAdminComponent implements OnInit {
   readonly activeView = signal<'section' | 'page-sections'>('section');
   readonly footerLinks = signal<{ platform: string; url: string }[]>([]);
   readonly servicesItems = signal<{ id: string; title: string; description: string; icon: string }[]>([]);
+
   readonly aboutStats = signal<{ value: string; label: string }[]>([]);
   readonly testimonialsItems = signal<{ name: string; role: string; text: string }[]>([]);
   readonly contactFormFields = signal<{
@@ -479,7 +480,7 @@ export class ContentAdminComponent implements OnInit {
   // --- Services repeater ---
 
   addServiceItem(): void {
-    this.servicesItems.update((items) => [...items, { id: '', title: '', description: '', icon: '📸' }]);
+    this.servicesItems.update((items) => [...items, { id: '', title: '', description: '', icon: '' }]);
   }
 
   removeServiceItem(index: number): void {

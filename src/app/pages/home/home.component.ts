@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
 import { RevealDirective } from '../../shared/directives/reveal.directive';
@@ -34,6 +34,21 @@ export class HomeComponent implements OnInit {
   readonly ctaDesc = signal('');
   readonly ctaButtonText = signal('');
   readonly ctaRoute = signal('');
+
+  readonly orderedHomeSections = computed(() => {
+    const sections = this.homeSections();
+    if (sections.length === 0) {
+      // Default order when no config is loaded
+      return [
+        { id: 'hero', visible: true, order: 1 },
+        { id: 'services', visible: true, order: 2 },
+        { id: 'portfolio-preview', visible: true, order: 3 },
+        { id: 'testimonials', visible: true, order: 4 },
+        { id: 'cta', visible: true, order: 5 },
+      ];
+    }
+    return [...sections].sort((a, b) => a.order - b.order);
+  });
 
   ngOnInit(): void {
     const start = performance.now();
@@ -83,13 +98,6 @@ export class HomeComponent implements OnInit {
         this.homeSections.set(data.sections);
       }
     });
-  }
-
-  isSectionVisible(sectionId: string): boolean {
-    const sections = this.homeSections();
-    if (sections.length === 0) return true; // Default: show all if no config
-    const section = sections.find((s) => s.id === sectionId);
-    return section ? section.visible : true;
   }
 
   getHeroLayout(): string {

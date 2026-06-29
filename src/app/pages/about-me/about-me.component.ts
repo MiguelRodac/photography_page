@@ -32,7 +32,7 @@ export class AboutMeComponent implements OnInit {
   readonly aboutCtaDesc = signal('');
   readonly aboutCtaButtonText = signal('');
   readonly aboutCtaRoute = signal('');
-  readonly aboutServices = signal<{ id: string; title: string; description: string }[]>([]);
+  readonly aboutServices = signal<{ id: string; title: string; description: string; icon?: string }[]>([]);
   readonly stats = signal<{ value: string; label: string }[]>([]);
 
   ngOnInit(): void {
@@ -84,15 +84,5 @@ export class AboutMeComponent implements OnInit {
     if (sections.length === 0) return true;
     const section = sections.find((s) => s.id === sectionId);
     return section ? section.visible : true;
-  }
-
-  getServiceIcon(id: string): string {
-    const icons: Record<string, string> = {
-      events: '📸',
-      portrait: '👤',
-      commercial: '🏢',
-      editing: '🎨',
-    };
-    return icons[id] || '📷';
   }
 }

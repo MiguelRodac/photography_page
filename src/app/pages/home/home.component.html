@@ -1,250 +1,264 @@
 <main class="page-transition">
-  <!-- Hero Section -->
-  @if (isSectionVisible('hero')) {
-    @switch (getHeroLayout()) {
-      @case ('gradient') {
-        <!-- Gradient layout -->
-        <section class="relative min-h-screen flex items-center justify-center overflow-hidden"
-          [style.background]="'linear-gradient(135deg, #18181b 0%, #27272a 40%, ' + (heroData()?.bgColor || '#18181b') + ' 100%)'">
-          <div class="absolute inset-0 opacity-20"
-            [style.background-image]="heroData()?.bgImage ? 'url(' + heroData()?.bgImage + ')' : 'none'"
-            style="background-size: cover; background-position: center; filter: blur(40px);">
-          </div>
-          <div class="relative z-10 text-center px-6 max-w-4xl mx-auto py-32">
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-display text-white mb-6 opacity-0 animate-fade-in">
-              {{ heroData()?.title }}
-            </h1>
-            <p class="text-xl md:text-2xl text-surface-300 mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.3s;">
-              {{ heroData()?.subtitle }}
-            </p>
-            <a [routerLink]="heroData()?.ctaRoute"
-              class="inline-block px-8 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 opacity-0 animate-fade-up"
-              style="animation-delay: 0.6s;">
-              {{ heroData()?.cta }}
-            </a>
-          </div>
-        </section>
-      }
-      @case ('split') {
-        <!-- Split layout -->
-        <section class="relative min-h-screen flex items-center overflow-hidden">
-          <div class="grid grid-cols-1 lg:grid-cols-2 w-full">
-            <div class="relative h-64 lg:h-auto order-2 lg:order-1">
-              <div class="absolute inset-0"
-                [style.background-image]="heroData()?.bgImage ? 'url(' + heroData()?.bgImage + ')' : 'none'"
-                style="background-size: cover; background-position: center;">
-              </div>
+  @for (section of orderedHomeSections(); track section.id) {
+    @if (section.visible) {
+      @switch (section.id) {
+        @case ('hero') {
+          <!-- Hero Section -->
+          @switch (getHeroLayout()) {
+            @case ('gradient') {
+              <!-- Gradient layout -->
+              <section class="relative min-h-screen flex items-center justify-center overflow-hidden"
+                [style.background]="'linear-gradient(135deg, #18181b 0%, #27272a 40%, ' + (heroData()?.bgColor || '#18181b') + ' 100%)'">
+                <div class="absolute inset-0 opacity-20"
+                  [style.background-image]="heroData()?.bgImage ? 'url(' + heroData()?.bgImage + ')' : 'none'"
+                  style="background-size: cover; background-position: center; filter: blur(40px);">
+                </div>
+                <div class="relative z-10 text-center px-6 max-w-4xl mx-auto py-32">
+                  <h1 class="text-5xl md:text-7xl lg:text-8xl font-display text-white mb-6 opacity-0 animate-fade-in">
+                    {{ heroData()?.title }}
+                  </h1>
+                  <p class="text-xl md:text-2xl text-surface-300 mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.3s;">
+                    {{ heroData()?.subtitle }}
+                  </p>
+                  <a [routerLink]="heroData()?.ctaRoute"
+                    class="inline-block px-8 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 opacity-0 animate-fade-up"
+                    style="animation-delay: 0.6s;">
+                    {{ heroData()?.cta }}
+                  </a>
+                </div>
+              </section>
+            }
+            @case ('split') {
+              <!-- Split layout -->
+              <section class="relative min-h-screen flex items-center overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 w-full">
+                  <div class="relative h-64 lg:h-auto order-2 lg:order-1">
+                    <div class="absolute inset-0"
+                      [style.background-image]="heroData()?.bgImage ? 'url(' + heroData()?.bgImage + ')' : 'none'"
+                      style="background-size: cover; background-position: center;">
+                    </div>
+                  </div>
+                  <div class="flex items-center px-8 py-16 lg:px-16 order-1 lg:order-2 bg-surface-950">
+                    <div class="max-w-lg">
+                      <h1 class="text-4xl md:text-5xl lg:text-6xl font-display text-white mb-6">
+                        {{ heroData()?.title }}
+                      </h1>
+                      <p class="text-lg text-surface-300 mb-8">
+                        {{ heroData()?.subtitle }}
+                      </p>
+                      <a [routerLink]="heroData()?.ctaRoute"
+                        class="inline-block px-8 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105">
+                        {{ heroData()?.cta }}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            }
+            @case ('minimal') {
+              <!-- Minimal layout -->
+              <section class="relative min-h-screen flex items-center justify-center bg-surface-950">
+                <div class="text-center px-6 max-w-3xl mx-auto">
+                  <h1 class="text-5xl md:text-7xl font-display text-white mb-6 opacity-0 animate-fade-in">
+                    {{ heroData()?.title }}
+                  </h1>
+                  <p class="text-xl text-surface-400 mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.3s;">
+                    {{ heroData()?.subtitle }}
+                  </p>
+                  <a [routerLink]="heroData()?.ctaRoute"
+                    class="inline-block px-8 py-4 border-2 border-primary-500 text-primary-400 hover:bg-primary-500 hover:text-white rounded-lg text-lg font-medium transition-all duration-300 opacity-0 animate-fade-up"
+                    style="animation-delay: 0.6s;">
+                    {{ heroData()?.cta }}
+                  </a>
+                </div>
+              </section>
+            }
+            @default {
+              <!-- Parallax layout (current default) -->
+              <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+                <div class="absolute inset-0 bg-surface-950">
+                  <div class="absolute inset-0 bg-gradient-to-b from-surface-950/80 via-surface-950/60 to-surface-950/90 z-10"></div>
+                  <div class="absolute inset-0 animate-parallax z-0"
+                    [style.background-image]="heroData()?.bgImage ? 'url(' + heroData()?.bgImage + ')' : 'none'"
+                    style="background-size: cover; background-position: center;">
+                  </div>
+                </div>
+                <div class="relative z-20 text-center px-6 max-w-4xl mx-auto">
+                  <h1 class="text-5xl md:text-7xl lg:text-8xl font-display text-white mb-6 opacity-0 animate-fade-in">
+                    {{ heroData()?.title }}
+                  </h1>
+                  <p class="text-xl md:text-2xl text-surface-300 mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.3s;">
+                    {{ heroData()?.subtitle }}
+                  </p>
+                  <a [routerLink]="heroData()?.ctaRoute"
+                    class="inline-block px-8 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 opacity-0 animate-fade-up"
+                    style="animation-delay: 0.6s;">
+                    {{ heroData()?.cta }}
+                  </a>
+                </div>
+                <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+                  <span class="text-white/60 text-3xl leading-none">↓</span>
+                </div>
+              </section>
+            }
+          }
+        }
+        @case ('services') {
+          <!-- Services Section -->
+          <section class="py-24 px-6 max-w-7xl mx-auto">
+            <div appReveal class="text-center mb-16">
+              <h2 class="text-4xl md:text-5xl font-display mb-4">{{ servicesSectionTitle() }}</h2>
+              <p class="text-surface-500 dark:text-surface-400 text-lg max-w-2xl mx-auto">
+                {{ servicesSectionDesc() }}
+              </p>
             </div>
-            <div class="flex items-center px-8 py-16 lg:px-16 order-1 lg:order-2 bg-surface-950">
-              <div class="max-w-lg">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-display text-white mb-6">
-                  {{ heroData()?.title }}
-                </h1>
-                <p class="text-lg text-surface-300 mb-8">
-                  {{ heroData()?.subtitle }}
+
+            @switch (getServicesLayout()) {
+              @case ('grid-3') {
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  @for (service of (servicesData()?.services || []); track service.id || service.title; let i = $index) {
+                    <div appReveal class="reveal-delay-{{ i + 1 }} group p-8 rounded-2xl bg-surface-100 dark:bg-surface-900 hover:bg-surface-200 dark:hover:bg-surface-800 transition-all duration-300 cursor-default">
+                      <div class="w-14 h-14 bg-primary-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500/20 transition-colors">
+                        @if (service.icon) {
+                          <img [src]="service.icon" [alt]="service.title" class="w-7 h-7 object-contain" />
+                        } @else {
+                          <span class="text-primary-500 font-display font-bold text-xl">{{ service.title?.charAt(0) || 'S' }}</span>
+                        }
+                      </div>
+                      <h3 class="text-xl font-display font-semibold mb-3">{{ service.title }}</h3>
+                      <p class="text-surface-500 dark:text-surface-400 leading-relaxed">{{ service.description }}</p>
+                    </div>
+                  }
+                </div>
+              }
+              @case ('list') {
+                <div class="max-w-3xl mx-auto space-y-4">
+                  @for (service of (servicesData()?.services || []); track service.id || service.title; let i = $index) {
+                    <div appReveal class="reveal-delay-{{ i + 1 }} flex items-start gap-5 p-6 rounded-2xl bg-surface-100 dark:bg-surface-900 hover:bg-surface-200 dark:hover:bg-surface-800 transition-all duration-300">
+                      <div class="w-12 h-12 shrink-0 bg-primary-500/10 rounded-xl flex items-center justify-center">
+                        @if (service.icon) {
+                          <img [src]="service.icon" [alt]="service.title" class="w-6 h-6 object-contain" />
+                        } @else {
+                          <span class="text-primary-500 font-display font-bold text-lg">{{ service.title?.charAt(0) || 'S' }}</span>
+                        }
+                      </div>
+                      <div>
+                        <h3 class="text-lg font-display font-semibold mb-1">{{ service.title }}</h3>
+                        <p class="text-surface-500 dark:text-surface-400 leading-relaxed text-sm">{{ service.description }}</p>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+              @default {
+                <!-- grid-4 (default) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                  @for (service of (servicesData()?.services || []); track service.id || service.title; let i = $index) {
+                    <div appReveal class="reveal-delay-{{ i + 1 }} group p-8 rounded-2xl bg-surface-100 dark:bg-surface-900 hover:bg-surface-200 dark:hover:bg-surface-800 transition-all duration-300 cursor-default">
+                      <div class="w-14 h-14 bg-primary-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500/20 transition-colors">
+                        @if (service.icon) {
+                          <img [src]="service.icon" [alt]="service.title" class="w-7 h-7 object-contain" />
+                        } @else {
+                          <span class="text-primary-500 font-display font-bold text-xl">{{ service.title?.charAt(0) || 'S' }}</span>
+                        }
+                      </div>
+                      <h3 class="text-xl font-display font-semibold mb-3">{{ service.title }}</h3>
+                      <p class="text-surface-500 dark:text-surface-400 leading-relaxed">{{ service.description }}</p>
+                    </div>
+                  }
+                </div>
+              }
+            }
+          </section>
+        }
+        @case ('portfolio-preview') {
+          <!-- Portfolio Preview -->
+          <section class="py-24 px-6 bg-surface-100 dark:bg-surface-900">
+            <div class="max-w-7xl mx-auto">
+              <div appReveal class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-display mb-4">{{ portfolioPreviewTitle() }}</h2>
+                <p class="text-surface-500 dark:text-surface-400 text-lg max-w-2xl mx-auto">
+                  {{ portfolioPreviewDesc() }}
                 </p>
-                <a [routerLink]="heroData()?.ctaRoute"
-                  class="inline-block px-8 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105">
-                  {{ heroData()?.cta }}
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @for (item of portfolioItems(); track item.id || item.title; let i = $index) {
+                  <a [routerLink]="portfolioPreviewCtaRoute()" appReveal class="group relative overflow-hidden rounded-2xl reveal-delay-{{ i + 1 }}">
+                    <img
+                      [src]="item.img"
+                      [alt]="item.title"
+                      class="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-surface-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div class="absolute bottom-0 left-0 right-0 p-6">
+                        <h3 class="text-white text-lg font-semibold">{{ item.title }}</h3>
+                        <p class="text-surface-300 text-sm mt-1">{{ item.description }}</p>
+                      </div>
+                    </div>
+                  </a>
+                }
+              </div>
+
+              <div appReveal class="text-center mt-12">
+                <a [routerLink]="portfolioPreviewCtaRoute()"
+                   class="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-500 hover:text-white rounded-lg font-medium transition-all duration-300">
+                  {{ portfolioPreviewCta() }}
+                  <span class="text-sm">→</span>
                 </a>
               </div>
             </div>
-          </div>
-        </section>
-      }
-      @case ('minimal') {
-        <!-- Minimal layout -->
-        <section class="relative min-h-screen flex items-center justify-center bg-surface-950">
-          <div class="text-center px-6 max-w-3xl mx-auto">
-            <h1 class="text-5xl md:text-7xl font-display text-white mb-6 opacity-0 animate-fade-in">
-              {{ heroData()?.title }}
-            </h1>
-            <p class="text-xl text-surface-400 mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.3s;">
-              {{ heroData()?.subtitle }}
-            </p>
-            <a [routerLink]="heroData()?.ctaRoute"
-              class="inline-block px-8 py-4 border-2 border-primary-500 text-primary-400 hover:bg-primary-500 hover:text-white rounded-lg text-lg font-medium transition-all duration-300 opacity-0 animate-fade-up"
-              style="animation-delay: 0.6s;">
-              {{ heroData()?.cta }}
-            </a>
-          </div>
-        </section>
-      }
-      @default {
-        <!-- Parallax layout (current default) -->
-        <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-          <div class="absolute inset-0 bg-surface-950">
-            <div class="absolute inset-0 bg-gradient-to-b from-surface-950/80 via-surface-950/60 to-surface-950/90 z-10"></div>
-            <div class="absolute inset-0 animate-parallax z-0"
-              [style.background-image]="heroData()?.bgImage ? 'url(' + heroData()?.bgImage + ')' : 'none'"
-              style="background-size: cover; background-position: center;">
+          </section>
+        }
+        @case ('testimonials') {
+          <!-- Testimonials Section -->
+          <section class="py-24 px-6">
+            <div class="max-w-5xl mx-auto">
+              <div appReveal class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-display mb-4">{{ testimonialsTitle() }}</h2>
+                <p class="text-surface-500 dark:text-surface-400 text-lg max-w-2xl mx-auto">
+                  {{ testimonialsDesc() }}
+                </p>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @for (testimonial of testimonials(); track testimonial.name; let i = $index) {
+                  <div appReveal class="p-8 rounded-2xl bg-surface-100 dark:bg-surface-900 border border-surface-200 dark:border-surface-800 reveal-delay-{{ i + 1 }}">
+                    <div class="flex gap-1 mb-4">
+                      <span class="text-yellow-400 text-lg">★★★★★</span>
+                    </div>
+                    <p class="text-surface-600 dark:text-surface-300 mb-6 leading-relaxed">"{{ testimonial.text }}"</p>
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-500 font-semibold text-sm">
+                        {{ testimonial.name.charAt(0) }}
+                      </div>
+                      <div>
+                        <p class="font-medium text-sm">{{ testimonial.name }}</p>
+                        <p class="text-xs text-surface-400">{{ testimonial.role }}</p>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
             </div>
-          </div>
-          <div class="relative z-20 text-center px-6 max-w-4xl mx-auto">
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-display text-white mb-6 opacity-0 animate-fade-in">
-              {{ heroData()?.title }}
-            </h1>
-            <p class="text-xl md:text-2xl text-surface-300 mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.3s;">
-              {{ heroData()?.subtitle }}
-            </p>
-            <a [routerLink]="heroData()?.ctaRoute"
-              class="inline-block px-8 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 opacity-0 animate-fade-up"
-              style="animation-delay: 0.6s;">
-              {{ heroData()?.cta }}
-            </a>
-          </div>
-          <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
-            <span class="text-white/60 text-3xl leading-none">↓</span>
-          </div>
-        </section>
+          </section>
+        }
+        @case ('cta') {
+          <!-- CTA Section -->
+          <section class="py-24 px-6">
+            <div appReveal class="max-w-3xl mx-auto text-center">
+              <h2 class="text-4xl md:text-5xl font-display mb-6">{{ ctaTitle() }}</h2>
+              <p class="text-surface-500 dark:text-surface-400 text-lg mb-10 max-w-xl mx-auto">
+                {{ ctaDesc() }}
+              </p>
+              <a [routerLink]="ctaRoute()"
+                 class="inline-block px-10 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary-500/25">
+                {{ ctaButtonText() }}
+              </a>
+            </div>
+          </section>
+        }
       }
     }
-  }
-
-  <!-- Services Section -->
-  @if (isSectionVisible('services')) {
-    <section class="py-24 px-6 max-w-7xl mx-auto">
-      <div appReveal class="text-center mb-16">
-        <h2 class="text-4xl md:text-5xl font-display mb-4">{{ servicesSectionTitle() }}</h2>
-        <p class="text-surface-500 dark:text-surface-400 text-lg max-w-2xl mx-auto">
-          {{ servicesSectionDesc() }}
-        </p>
-      </div>
-
-      @switch (getServicesLayout()) {
-        @case ('grid-3') {
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @for (service of (servicesData()?.services || []); track service.id || service.title; let i = $index) {
-              <div appReveal class="reveal-delay-{{ i + 1 }} group p-8 rounded-2xl bg-surface-100 dark:bg-surface-900 hover:bg-surface-200 dark:hover:bg-surface-800 transition-all duration-300 cursor-default">
-                <div class="w-14 h-14 bg-primary-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500/20 transition-colors">
-                  <span class="text-2xl">{{ service.icon || '📷' }}</span>
-                </div>
-                <h3 class="text-xl font-display font-semibold mb-3">{{ service.title }}</h3>
-                <p class="text-surface-500 dark:text-surface-400 leading-relaxed">{{ service.description }}</p>
-              </div>
-            }
-          </div>
-        }
-        @case ('list') {
-          <div class="max-w-3xl mx-auto space-y-4">
-            @for (service of (servicesData()?.services || []); track service.id || service.title; let i = $index) {
-              <div appReveal class="reveal-delay-{{ i + 1 }} flex items-start gap-5 p-6 rounded-2xl bg-surface-100 dark:bg-surface-900 hover:bg-surface-200 dark:hover:bg-surface-800 transition-all duration-300">
-                <div class="w-12 h-12 shrink-0 bg-primary-500/10 rounded-xl flex items-center justify-center">
-                  <span class="text-xl">{{ service.icon || '📷' }}</span>
-                </div>
-                <div>
-                  <h3 class="text-lg font-display font-semibold mb-1">{{ service.title }}</h3>
-                  <p class="text-surface-500 dark:text-surface-400 leading-relaxed text-sm">{{ service.description }}</p>
-                </div>
-              </div>
-            }
-          </div>
-        }
-        @default {
-          <!-- grid-4 (default) -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            @for (service of (servicesData()?.services || []); track service.id || service.title; let i = $index) {
-              <div appReveal class="reveal-delay-{{ i + 1 }} group p-8 rounded-2xl bg-surface-100 dark:bg-surface-900 hover:bg-surface-200 dark:hover:bg-surface-800 transition-all duration-300 cursor-default">
-                <div class="w-14 h-14 bg-primary-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500/20 transition-colors">
-                  <span class="text-2xl">{{ service.icon || '📷' }}</span>
-                </div>
-                <h3 class="text-xl font-display font-semibold mb-3">{{ service.title }}</h3>
-                <p class="text-surface-500 dark:text-surface-400 leading-relaxed">{{ service.description }}</p>
-              </div>
-            }
-          </div>
-        }
-      }
-    </section>
-  }
-
-  <!-- Portfolio Preview -->
-  @if (isSectionVisible('portfolio-preview')) {
-    <section class="py-24 px-6 bg-surface-100 dark:bg-surface-900">
-      <div class="max-w-7xl mx-auto">
-        <div appReveal class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-display mb-4">{{ portfolioPreviewTitle() }}</h2>
-          <p class="text-surface-500 dark:text-surface-400 text-lg max-w-2xl mx-auto">
-            {{ portfolioPreviewDesc() }}
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          @for (item of portfolioItems(); track item.id || item.title; let i = $index) {
-            <a [routerLink]="portfolioPreviewCtaRoute()" appReveal class="group relative overflow-hidden rounded-2xl reveal-delay-{{ i + 1 }}">
-              <img
-                [src]="item.img"
-                [alt]="item.title"
-                class="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-surface-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div class="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 class="text-white text-lg font-semibold">{{ item.title }}</h3>
-                  <p class="text-surface-300 text-sm mt-1">{{ item.description }}</p>
-                </div>
-              </div>
-            </a>
-          }
-        </div>
-
-        <div appReveal class="text-center mt-12">
-          <a [routerLink]="portfolioPreviewCtaRoute()"
-             class="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-500 hover:text-white rounded-lg font-medium transition-all duration-300">
-            {{ portfolioPreviewCta() }}
-            <span class="text-sm">→</span>
-          </a>
-        </div>
-      </div>
-    </section>
-  }
-
-  <!-- Testimonials Section -->
-  @if (isSectionVisible('testimonials')) {
-    <section class="py-24 px-6">
-      <div class="max-w-5xl mx-auto">
-        <div appReveal class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-display mb-4">{{ testimonialsTitle() }}</h2>
-          <p class="text-surface-500 dark:text-surface-400 text-lg max-w-2xl mx-auto">
-            {{ testimonialsDesc() }}
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          @for (testimonial of testimonials(); track testimonial.name; let i = $index) {
-            <div appReveal class="p-8 rounded-2xl bg-surface-100 dark:bg-surface-900 border border-surface-200 dark:border-surface-800 reveal-delay-{{ i + 1 }}">
-              <div class="flex gap-1 mb-4">
-                <span class="text-yellow-400 text-lg">★★★★★</span>
-              </div>
-              <p class="text-surface-600 dark:text-surface-300 mb-6 leading-relaxed">"{{ testimonial.text }}"</p>
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-500 font-semibold text-sm">
-                  {{ testimonial.name.charAt(0) }}
-                </div>
-                <div>
-                  <p class="font-medium text-sm">{{ testimonial.name }}</p>
-                  <p class="text-xs text-surface-400">{{ testimonial.role }}</p>
-                </div>
-              </div>
-            </div>
-          }
-        </div>
-      </div>
-    </section>
-  }
-
-  <!-- CTA Section -->
-  @if (isSectionVisible('cta')) {
-    <section class="py-24 px-6">
-      <div appReveal class="max-w-3xl mx-auto text-center">
-        <h2 class="text-4xl md:text-5xl font-display mb-6">{{ ctaTitle() }}</h2>
-        <p class="text-surface-500 dark:text-surface-400 text-lg mb-10 max-w-xl mx-auto">
-          {{ ctaDesc() }}
-        </p>
-        <a [routerLink]="ctaRoute()"
-           class="inline-block px-10 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary-500/25">
-          {{ ctaButtonText() }}
-        </a>
-      </div>
-    </section>
   }
 </main>

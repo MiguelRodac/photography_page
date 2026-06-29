@@ -41,8 +41,18 @@ export class ThemeLoaderService {
     const root = document.documentElement;
     this.renderer.setStyle(root, '--primary', t.primaryColor);
     this.renderer.setStyle(root, '--primary-hover', t.primaryHover);
+    this.renderer.setStyle(root, '--primary-rgb', this.hexToRgb(t.primaryColor));
     this.renderer.setStyle(root, '--font-display', t.displayFont);
     this.renderer.setStyle(root, '--font-body', t.bodyFont);
     this.renderer.setStyle(root, '--radius', t.borderRadius);
+  }
+
+  private hexToRgb(hex: string): string {
+    const cleaned = hex.replace('#', '');
+    const bigint = parseInt(cleaned, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `${r}, ${g}, ${b}`;
   }
 }
