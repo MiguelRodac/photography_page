@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, NgZone } from '@angular/core';
 import {
   Firestore,
   collection,
@@ -9,10 +9,10 @@ import {
   updateDoc,
   query,
   where,
-  orderBy,
 } from '@angular/fire/firestore';
 import { Storage, ref, uploadBytesResumable, getDownloadURL } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { IPortfolioService, PortfolioCreate, PortfolioUpdate } from '../../core/interfaces/portfolio-service.interface';
 import { PortfolioDoc } from '../../core/interfaces/firestore-models';
 
@@ -20,11 +20,20 @@ import { PortfolioDoc } from '../../core/interfaces/firestore-models';
 export class FirebasePortfolioService implements IPortfolioService {
   private readonly firestore = inject(Firestore);
   private readonly storage = inject(Storage);
+  private readonly zone = inject(NgZone);
   private readonly collectionName = 'portfolio';
 
   getAll(): Observable<PortfolioDoc[]> {
-    const q = this.createQuery(this.collectionName, where('deleted', '==', false), orderBy('createdAt', 'desc'));
-    return this.getCollectionData<PortfolioDoc[]>(q);
+    const q = this.createQuery(this.collectionName, where('deleted', '==', false));
+    return this.getCollectionData<PortfolioDoc[]>(q).pipe(
+      map((items) =>
+        items.sort((a, b) => {
+          const aTime = (a as any)['createdAt']?.toMillis?.() ?? (a as any)['createdAt']?.getTime?.() ?? 0;
+          const bTime = (b as any)['createdAt']?.toMillis?.() ?? (b as any)['createdAt']?.getTime?.() ?? 0;
+          return bTime - aTime;
+        }),
+      ),
+    );
   }
 
   getById(id: string): Observable<PortfolioDoc | null> {
@@ -88,11 +97,25 @@ export class FirebasePortfolioService implements IPortfolioService {
   }
 
   protected getCollectionData<T>(queryRef: any): Observable<T> {
-    return collectionData(queryRef, { idField: 'id' }) as Observable<T>;
+    return new Observable<T>((subscriber) => {
+      const sub = (collectionData(queryRef, { idField: 'id' }) as Observable<T>).subscribe({
+        next: (val) => this.zone.run(() => subscriber.next(val)),
+        error: (err) => this.zone.run(() => subscriber.error(err)),
+        complete: () => this.zone.run(() => subscriber.complete()),
+      });
+      return () => sub.unsubscribe();
+    });
   }
 
   protected observeDocData<T>(docRef: any): Observable<T> {
-    return docData(docRef, { idField: 'id' as any }) as Observable<T>;
+    return new Observable<T>((subscriber) => {
+      const sub = (docData(docRef, { idField: 'id' as any }) as Observable<T>).subscribe({
+        next: (val) => this.zone.run(() => subscriber.next(val)),
+        error: (err) => this.zone.run(() => subscriber.error(err)),
+        complete: () => this.zone.run(() => subscriber.complete()),
+      });
+      return () => sub.unsubscribe();
+    });
   }
 
   protected async addDocument(colRef: any, data: any): Promise<string> {

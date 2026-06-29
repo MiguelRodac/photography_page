@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, NgZone } from '@angular/core';
 import {
   Firestore,
   collection,
@@ -9,25 +9,29 @@ import {
   updateDoc,
   query,
   where,
-  orderBy,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { IPackageService, PackageCreate, PackageUpdate } from '../../core/interfaces/package-service.interface';
 import { PackageDoc } from '../../core/interfaces/firestore-models';
 
 @Injectable({ providedIn: 'root' })
 export class FirebasePackageService implements IPackageService {
   private readonly firestore = inject(Firestore);
+  private readonly zone = inject(NgZone);
   private readonly collectionName = 'packages';
 
   getAll(): Observable<PackageDoc[]> {
-    const q = this.createQuery(
-      this.collectionName,
-      where('deleted', '==', false),
-      orderBy('category', 'asc'),
-      orderBy('price', 'asc'),
+    const q = this.createQuery(this.collectionName, where('deleted', '==', false));
+    return this.getCollectionData<PackageDoc[]>(q).pipe(
+      map((pkgs) =>
+        pkgs.sort((a, b) => {
+          const catCmp = (a.category || '').localeCompare(b.category || '');
+          if (catCmp !== 0) return catCmp;
+          return (a.price || 0) - (b.price || 0);
+        }),
+      ),
     );
-    return this.getCollectionData<PackageDoc[]>(q);
   }
 
   getById(id: string): Observable<PackageDoc | null> {
@@ -68,11 +72,25 @@ export class FirebasePackageService implements IPackageService {
   }
 
   protected getCollectionData<T>(queryRef: any): Observable<T> {
-    return collectionData(queryRef, { idField: 'id' }) as Observable<T>;
+    return new Observable<T>((subscriber) => {
+      const sub = (collectionData(queryRef, { idField: 'id' }) as Observable<T>).subscribe({
+        next: (val) => this.zone.run(() => subscriber.next(val)),
+        error: (err) => this.zone.run(() => subscriber.error(err)),
+        complete: () => this.zone.run(() => subscriber.complete()),
+      });
+      return () => sub.unsubscribe();
+    });
   }
 
   protected observeDocData<T>(docRef: any): Observable<T> {
-    return docData(docRef, { idField: 'id' as any }) as Observable<T>;
+    return new Observable<T>((subscriber) => {
+      const sub = (docData(docRef, { idField: 'id' as any }) as Observable<T>).subscribe({
+        next: (val) => this.zone.run(() => subscriber.next(val)),
+        error: (err) => this.zone.run(() => subscriber.error(err)),
+        complete: () => this.zone.run(() => subscriber.complete()),
+      });
+      return () => sub.unsubscribe();
+    });
   }
 
   protected async addDocument(colRef: any, data: any): Promise<string> {

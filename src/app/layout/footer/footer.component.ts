@@ -40,13 +40,20 @@ export class FooterComponent implements OnInit {
   ]);
 
   ngOnInit(): void {
+    // Load site name and logo from header content
+    this.contentCache.getSection<Record<string, unknown>>('header').pipe(take(1)).subscribe(data => {
+      if (data) {
+        if (data['siteName']) this.siteName.set(data['siteName'] as string);
+        if (data['logoUrl']) this.logoUrl.set(data['logoUrl'] as string);
+      }
+    });
+
     this.contentCache.getSection<Record<string, unknown>>('footer').pipe(take(1)).subscribe(data => {
       if (data) {
         if (data['copyrightText']) this.copyrightText.set(data['copyrightText'] as string);
         if (data['tagline']) this.tagline.set(data['tagline'] as string);
         if (data['linksTitle']) this.linksTitle.set(data['linksTitle'] as string);
         if (data['socialTitle']) this.socialTitle.set(data['socialTitle'] as string);
-        if (data['logoUrl']) this.logoUrl.set(data['logoUrl'] as string);
         if (data['socialLinks']) {
           const links = data['socialLinks'] as SocialLink[];
           if (links.length > 0) this.socialLinks.set(links);
