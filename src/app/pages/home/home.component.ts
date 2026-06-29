@@ -27,11 +27,13 @@ export class HomeComponent implements OnInit {
   readonly portfolioPreviewTitle = signal('');
   readonly portfolioPreviewDesc = signal('');
   readonly portfolioPreviewCta = signal('');
+  readonly portfolioPreviewCtaRoute = signal('');
   readonly testimonialsTitle = signal('');
   readonly testimonialsDesc = signal('');
   readonly ctaTitle = signal('');
   readonly ctaDesc = signal('');
   readonly ctaButtonText = signal('');
+  readonly ctaRoute = signal('');
 
   ngOnInit(): void {
     const start = performance.now();
@@ -62,6 +64,7 @@ export class HomeComponent implements OnInit {
         if (data['sectionTitle']) this.portfolioPreviewTitle.set(data['sectionTitle']);
         if (data['sectionDescription']) this.portfolioPreviewDesc.set(data['sectionDescription']);
         if (data['ctaText']) this.portfolioPreviewCta.set(data['ctaText']);
+        if (data['ctaRoute']) this.portfolioPreviewCtaRoute.set(data['ctaRoute']);
         if (data['items']) this.portfolioItems.set(data['items']);
       }
     });
@@ -71,6 +74,7 @@ export class HomeComponent implements OnInit {
         if (data['title']) this.ctaTitle.set(data['title']);
         if (data['description']) this.ctaDesc.set(data['description']);
         if (data['buttonText']) this.ctaButtonText.set(data['buttonText']);
+        if (data['ctaRoute']) this.ctaRoute.set(data['ctaRoute']);
       }
     });
 

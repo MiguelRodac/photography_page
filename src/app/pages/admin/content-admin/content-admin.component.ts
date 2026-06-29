@@ -11,6 +11,18 @@ interface SectionConfig {
   fields: string[];
 }
 
+interface RouteOption {
+  value: string;
+  label: string;
+}
+
+const AVAILABLE_ROUTES: RouteOption[] = [
+  { value: '/', label: 'Home' },
+  { value: '/portfolio', label: 'Portfolio' },
+  { value: '/about-me', label: 'About Me' },
+  { value: '/contact', label: 'Contact' },
+];
+
 @Component({
   selector: 'app-content-admin',
   standalone: true,
@@ -22,12 +34,12 @@ export class ContentAdminComponent implements OnInit {
   private readonly contentService = inject(CONTENT_SERVICE);
 
   readonly sections: SectionConfig[] = [
-    { id: 'hero', label: 'Home Hero', icon: 'bolt', fields: ['title', 'subtitle', 'cta', 'bgImage'] },
+    { id: 'hero', label: 'Home Hero', icon: 'bolt', fields: ['title', 'subtitle', 'cta', 'ctaRoute', 'bgImage'] },
     { id: 'services', label: 'Home Services', icon: 'briefcase', fields: ['sectionTitle', 'sectionDescription'] },
     { id: 'testimonials', label: 'Testimonials', icon: 'star', fields: ['sectionTitle', 'sectionDescription'] },
-    { id: 'portfolio-preview', label: 'Portfolio Preview', icon: 'image', fields: ['sectionTitle', 'sectionDescription', 'ctaText'] },
-    { id: 'cta', label: 'Call to Action', icon: 'megaphone', fields: ['title', 'description', 'buttonText'] },
-    { id: 'about', label: 'About Me', icon: 'user', fields: ['heroLabel', 'title', 'subtitle', 'description', 'extra', 'profileImageAlt', 'overlayImage', 'overlayImageAlt', 'philosophyLabel', 'quote', 'philosophy', 'servicesLabel', 'servicesTitle', 'image'] },
+    { id: 'portfolio-preview', label: 'Portfolio Preview', icon: 'image', fields: ['sectionTitle', 'sectionDescription', 'ctaText', 'ctaRoute'] },
+    { id: 'cta', label: 'Call to Action', icon: 'megaphone', fields: ['title', 'description', 'buttonText', 'ctaRoute'] },
+    { id: 'about', label: 'About Me', icon: 'user', fields: ['heroLabel', 'title', 'subtitle', 'description', 'extra', 'profileImageAlt', 'overlayImage', 'overlayImageAlt', 'philosophyLabel', 'quote', 'philosophy', 'servicesLabel', 'servicesTitle', 'image', 'ctaRoute'] },
     { id: 'contact', label: 'Contact', icon: 'envelope', fields: ['heroLabel', 'heroTitle', 'heroTitleAccent', 'heroSubtitle', 'bgImage', 'formTitle', 'formSubtitle', 'serviceTypeLabel', 'serviceTypeError', 'serviceTypes', 'email', 'phone', 'address', 'mapEmbed', 'infoEmailLabel', 'infoLocationLabel', 'infoResponseLabel', 'infoResponseValue', 'whatsappTitle', 'whatsappSubtitle', 'statsValue', 'statsLabel'] },
     { id: 'header', label: 'Header', icon: 'bars', fields: ['siteName', 'logoUrl'] },
     { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText', 'tagline', 'linksTitle', 'socialTitle'] },
@@ -376,6 +388,14 @@ export class ContentAdminComponent implements OnInit {
     if (field === 'email') return 'email';
     if (field === 'phone' || field === 'phoneNumber') return 'tel';
     return 'text';
+  }
+
+  isRouteField(field: string): boolean {
+    return field.endsWith('Route');
+  }
+
+  getRouteOptions(): RouteOption[] {
+    return AVAILABLE_ROUTES;
   }
 
   // --- Footer social links repeater ---

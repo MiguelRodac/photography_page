@@ -31,6 +31,7 @@ export class AboutMeComponent implements OnInit {
   readonly aboutCtaTitle = signal('');
   readonly aboutCtaDesc = signal('');
   readonly aboutCtaButtonText = signal('');
+  readonly aboutCtaRoute = signal('');
   readonly aboutServices = signal<{ id: string; title: string; description: string }[]>([]);
   readonly stats = signal<{ value: string; label: string }[]>([]);
 
@@ -73,6 +74,7 @@ export class AboutMeComponent implements OnInit {
         if (data['title']) this.aboutCtaTitle.set(data['title']);
         if (data['description']) this.aboutCtaDesc.set(data['description']);
         if (data['buttonText']) this.aboutCtaButtonText.set(data['buttonText']);
+        if (data['ctaRoute']) this.aboutCtaRoute.set(data['ctaRoute']);
       }
     });
   }

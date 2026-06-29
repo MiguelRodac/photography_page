@@ -17,7 +17,7 @@
             <p class="text-xl md:text-2xl text-surface-300 mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.3s;">
               {{ heroData()?.subtitle }}
             </p>
-            <a routerLink="/portfolio"
+            <a [routerLink]="heroData()?.ctaRoute"
               class="inline-block px-8 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 opacity-0 animate-fade-up"
               style="animation-delay: 0.6s;">
               {{ heroData()?.cta }}
@@ -43,7 +43,7 @@
                 <p class="text-lg text-surface-300 mb-8">
                   {{ heroData()?.subtitle }}
                 </p>
-                <a routerLink="/portfolio"
+                <a [routerLink]="heroData()?.ctaRoute"
                   class="inline-block px-8 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105">
                   {{ heroData()?.cta }}
                 </a>
@@ -62,7 +62,7 @@
             <p class="text-xl text-surface-400 mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.3s;">
               {{ heroData()?.subtitle }}
             </p>
-            <a routerLink="/portfolio"
+            <a [routerLink]="heroData()?.ctaRoute"
               class="inline-block px-8 py-4 border-2 border-primary-500 text-primary-400 hover:bg-primary-500 hover:text-white rounded-lg text-lg font-medium transition-all duration-300 opacity-0 animate-fade-up"
               style="animation-delay: 0.6s;">
               {{ heroData()?.cta }}
@@ -87,7 +87,7 @@
             <p class="text-xl md:text-2xl text-surface-300 mb-10 opacity-0 animate-fade-up" style="animation-delay: 0.3s;">
               {{ heroData()?.subtitle }}
             </p>
-            <a routerLink="/portfolio"
+            <a [routerLink]="heroData()?.ctaRoute"
               class="inline-block px-8 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 opacity-0 animate-fade-up"
               style="animation-delay: 0.6s;">
               {{ heroData()?.cta }}
@@ -188,7 +188,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           @for (item of portfolioItems(); track item.id || item.title; let i = $index) {
-            <a routerLink="/portfolio" appReveal class="group relative overflow-hidden rounded-2xl reveal-delay-{{ i + 1 }}">
+            <a [routerLink]="portfolioPreviewCtaRoute()" appReveal class="group relative overflow-hidden rounded-2xl reveal-delay-{{ i + 1 }}">
               <img
                 [src]="item.img"
                 [alt]="item.title"
@@ -205,7 +205,7 @@
         </div>
 
         <div appReveal class="text-center mt-12">
-          <a routerLink="/portfolio"
+          <a [routerLink]="portfolioPreviewCtaRoute()"
              class="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-500 hover:text-white rounded-lg font-medium transition-all duration-300">
             {{ portfolioPreviewCta() }}
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -263,7 +263,7 @@
         <p class="text-surface-500 dark:text-surface-400 text-lg mb-10 max-w-xl mx-auto">
           {{ ctaDesc() }}
         </p>
-        <a routerLink="/contact"
+        <a [routerLink]="ctaRoute()"
            class="inline-block px-10 py-4 bg-primary-500 hover:bg-primary-400 text-white rounded-lg text-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary-500/25">
           {{ ctaButtonText() }}
         </a>
