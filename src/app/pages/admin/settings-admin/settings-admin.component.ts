@@ -120,7 +120,17 @@ export class SettingsAdminComponent implements OnInit {
     };
 
     try {
+      // Save to settings doc
       await this.contentService.updateSection('settings', data);
+      // Also update header for site name / logo
+      await this.contentService.updateSection('header', {
+        siteName: data.siteName,
+        logoUrl: data.logoUrl,
+      });
+      // Also update footer for copyright
+      await this.contentService.updateSection('footer', {
+        copyrightText: data.footerText,
+      });
       this.form.markAsPristine();
       this.successMessage.set('Settings saved successfully');
     } catch (err: any) {
