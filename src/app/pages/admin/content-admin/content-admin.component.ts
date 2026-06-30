@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { IContentService } from '../../../core/interfaces/content-service.interface';
@@ -515,8 +515,13 @@ export class ContentAdminComponent implements OnInit {
     return 'https://...';
   }
 
+  readonly enabledPlatforms = computed(() => {
+    const links = this.footerLinks();
+    return new Set(links.filter((l) => l.enabled).map((l) => l.platform));
+  });
+
   isPlatformEnabled(platformId: string): boolean {
-    return this.footerLinks().some((l) => l.platform === platformId && l.enabled);
+    return this.enabledPlatforms().has(platformId);
   }
 
   getPlatformUrl(platformId: string): string {
