@@ -329,50 +329,79 @@
                       </div>
                     }
 
-                    <!-- Social Links Repeater (Footer only) -->
+                    <!-- Social Links — Predefined Platforms (Footer only) -->
                     @if (section.id === 'footer') {
                       <div class="space-y-3">
                         <label class="block text-sm font-medium text-surface-300">Social Links</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          @for (platform of getSocialPlatforms(); track platform.id) {
+                            <div class="p-3 bg-surface-900/50 border border-surface-600 rounded-lg">
+                              <div class="flex items-center gap-3">
+                                <span class="iconify w-5 h-5 text-surface-300 shrink-0" [attr.data-icon]="platform.icon"></span>
+                                <span class="flex-1 text-sm text-surface-200">{{ platform.name }}</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                  <input type="checkbox" class="sr-only peer" [checked]="isPlatformEnabled(platform.id)" (change)="togglePlatform(platform.id)" />
+                                  <div class="w-9 h-5 bg-surface-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-500/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-300 after:border-surface-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-600"></div>
+                                </label>
+                              </div>
+                              @if (isPlatformEnabled(platform.id)) {
+                                <input
+                                  type="url"
+                                  [value]="getPlatformUrl(platform.id)"
+                                  (input)="updatePlatformUrl(platform.id, $any($event.target).value)"
+                                  placeholder="https://..."
+                                  class="w-full mt-2 px-3 py-2 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm"
+                                />
+                              }
+                            </div>
+                          }
+                        </div>
+
+                        <!-- Custom social links -->
                         @for (link of footerLinks(); track $index) {
-                          <div class="flex items-start gap-3">
-                            <input
-                              type="text"
-                              [value]="link.platform"
-                              (input)="updateFooterLink($index, 'platform', $any($event.target).value)"
-                              placeholder="Platform (e.g. Instagram)"
-                              class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all text-sm"
-                            />
-                            <input
-                              type="url"
-                              [value]="link.url"
-                              (input)="updateFooterLink($index, 'url', $any($event.target).value)"
-                              placeholder="https://..."
-                              class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all text-sm"
-                            />
-                            <button
-                              type="button"
-                              (click)="removeFooterLink($index)"
-                              class="px-2.5 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
-                            >
-                              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                              </svg>
-                            </button>
-                          </div>
-                        } @empty {
-                          <p class="text-surface-500 text-sm">No social links added yet.</p>
+                          @if (isCustomSocialLink(link)) {
+                            <div class="flex items-center gap-3 p-3 bg-surface-900/50 border border-surface-600 rounded-lg">
+                              <span class="flex-1 text-sm text-surface-200">{{ link.platform }}</span>
+                              <span class="text-xs text-surface-500">{{ link.url }}</span>
+                              <button type="button" (click)="removeFooterLink($index)"
+                                class="px-2 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                              </button>
+                            </div>
+                          }
                         }
-                        <button
-                          type="button"
-                          (click)="addFooterLink()"
-                          class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors"
-                        >
-                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                          </svg>
-                          Add Link
+
+                        <button type="button" (click)="openCustomSocialModal()"
+                          class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors">
+                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                          Add Custom
                         </button>
                       </div>
+
+                      <!-- Custom Social Modal -->
+                      @if (showCustomSocialModal()) {
+                        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60" (click)="closeCustomSocialModal()">
+                          <div class="bg-surface-800 border border-surface-700 rounded-xl p-6 w-full max-w-sm space-y-4" (click)="$event.stopPropagation()">
+                            <h3 class="text-lg font-display font-semibold text-surface-100">Add Custom Social Link</h3>
+                            <div>
+                              <label class="block text-sm font-medium text-surface-300 mb-1">Platform Name</label>
+                              <input type="text" [value]="customSocialName()" (input)="updateCustomSocialName($any($event.target).value)"
+                                placeholder="e.g. Mastodon" class="w-full px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                            </div>
+                            <div>
+                              <label class="block text-sm font-medium text-surface-300 mb-1">URL</label>
+                              <input type="url" [value]="customSocialUrl()" (input)="updateCustomSocialUrl($any($event.target).value)"
+                                placeholder="https://..." class="w-full px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                            </div>
+                            <div class="flex justify-end gap-2 pt-2">
+                              <button type="button" (click)="closeCustomSocialModal()"
+                                class="px-3 py-2 text-sm text-surface-400 hover:text-surface-200 transition-colors">Cancel</button>
+                              <button type="button" (click)="addCustomSocial()"
+                                class="px-4 py-2 text-sm bg-primary-600 hover:bg-primary-500 text-white rounded-lg transition-colors">Add</button>
+                            </div>
+                          </div>
+                        </div>
+                      }
                     }
 
                     <!-- Layout Selector (Hero & Services) -->

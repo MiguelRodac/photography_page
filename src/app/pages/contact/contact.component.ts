@@ -56,9 +56,9 @@ export class ContactComponent implements OnInit {
     const address = this.infoAddress();
     const responseTime = this.infoResponseTime();
     const items: ContactInfoItem[] = [];
-    if (email) items.push({ label: this.infoEmailLabel(), value: email, icon: '✉️' });
-    if (address) items.push({ label: this.infoLocationLabel(), value: address, icon: '📍' });
-    if (responseTime) items.push({ label: this.infoResponseLabel(), value: responseTime, icon: '⏱️' });
+    if (email) items.push({ label: this.infoEmailLabel(), value: email, icon: 'mdi:email' });
+    if (address) items.push({ label: this.infoLocationLabel(), value: address, icon: 'mdi:map-marker' });
+    if (responseTime) items.push({ label: this.infoResponseLabel(), value: responseTime, icon: 'mdi:clock-outline' });
     return items;
   });
 

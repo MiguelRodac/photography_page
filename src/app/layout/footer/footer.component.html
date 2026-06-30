@@ -29,13 +29,17 @@
 
       @if (showSocialLinks()) {
       <div>
-        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">{{ socialTitle() || 'Sígueme' }}</h3>
-        <div class="flex gap-3">
+        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">{{ socialTitle() || 'Follow Me' }}</h3>
+        <div class="flex flex-wrap gap-3">
           @for (link of socialLinks(); track link.url) {
             <a [href]="link.url" target="_blank" rel="noopener noreferrer"
                class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-200 dark:bg-surface-800 hover:bg-primary-500/20 text-surface-600 dark:text-surface-300 hover:text-primary-500 transition-all"
                [attr.aria-label]="link.platform">
-              <span class="text-sm font-semibold uppercase">{{ link.icon || link.platform.slice(0, 2) }}</span>
+              @if (link.icon) {
+                <span class="iconify text-xl" [attr.data-icon]="link.icon"></span>
+              } @else {
+                <span class="text-sm font-semibold uppercase">{{ link.platform.slice(0, 2) }}</span>
+              }
             </a>
           }
         </div>

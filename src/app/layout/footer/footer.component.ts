@@ -22,7 +22,6 @@ export class FooterComponent implements OnInit {
   readonly logoUrl = signal('');
   readonly copyrightText = signal('');
   readonly tagline = signal('');
-  readonly linksTitle = signal('');
   readonly showLinks = signal(true);
   readonly showSocialLinks = signal(true);
   readonly socialTitle = signal('');
@@ -41,7 +40,6 @@ export class FooterComponent implements OnInit {
       if (data) {
         if (data['copyrightText']) this.copyrightText.set(data['copyrightText'] as string);
         if (data['tagline']) this.tagline.set(data['tagline'] as string);
-        if (data['linksTitle']) this.linksTitle.set(data['linksTitle'] as string);
         if (data['socialTitle']) this.socialTitle.set(data['socialTitle'] as string);
         if (typeof data['showLinks'] === 'boolean') this.showLinks.set(data['showLinks']);
         if (typeof data['showSocialLinks'] === 'boolean') this.showSocialLinks.set(data['showSocialLinks']);

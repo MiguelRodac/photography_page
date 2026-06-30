@@ -29,7 +29,7 @@
           <div class="bg-white dark:bg-surface-900 rounded-3xl p-8 md:p-10 border border-surface-200/80 dark:border-surface-800 shadow-2xl shadow-surface-200/40 dark:shadow-none">
             <div class="flex items-center gap-3 mb-8">
               <div class="w-10 h-10 rounded-xl bg-primary-500/10 flex items-center justify-center">
-                <span class="text-xl">✉️</span>
+                <span class="iconify text-xl text-primary-600 dark:text-primary-400" data-icon="mdi:email"></span>
               </div>
               <div>
                 <h2 class="text-xl font-display font-semibold">{{ contactFormTitle() }}</h2>
@@ -95,7 +95,7 @@
             @for (info of contactInfo(); track info.label) {
               <div class="flex items-center gap-4 p-5 rounded-2xl bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-800 hover:border-primary-500/30 transition-colors duration-300">
                 <div class="w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center flex-shrink-0">
-                  <span class="text-2xl">{{ info.icon }}</span>
+                  <span class="iconify text-2xl text-primary-600 dark:text-primary-400" [attr.data-icon]="info.icon"></span>
                 </div>
                 <div>
                   <p class="font-medium text-sm text-surface-900 dark:text-white">{{ info.label }}</p>
@@ -110,7 +110,7 @@
              [style.background]="'linear-gradient(to bottom right, ' + whatsappColorStart() + ', ' + whatsappColorEnd() + ')'">
             <div class="flex items-center gap-4 mb-3">
               <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                <span class="text-2xl">💬</span>
+                <span class="iconify text-2xl text-white" data-icon="mdi:whatsapp"></span>
               </div>
               <div>
                 <p class="font-semibold">{{ whatsappTitle() }}</p>

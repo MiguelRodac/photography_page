@@ -25,6 +25,22 @@ const AVAILABLE_ROUTES: RouteOption[] = [
   { value: '/contact', label: 'Contact' },
 ];
 
+const SOCIAL_PLATFORMS = [
+  { id: 'instagram', name: 'Instagram', icon: 'mdi:instagram' },
+  { id: 'facebook', name: 'Facebook', icon: 'mdi:facebook' },
+  { id: 'whatsapp', name: 'WhatsApp', icon: 'mdi:whatsapp' },
+  { id: 'linkedin', name: 'LinkedIn', icon: 'mdi:linkedin' },
+  { id: 'github', name: 'GitHub', icon: 'mdi:github' },
+  { id: 'tiktok', name: 'TikTok', icon: 'mdi:tiktok' },
+  { id: 'snapchat', name: 'Snapchat', icon: 'mdi:snapchat' },
+  { id: 'telegram', name: 'Telegram', icon: 'mdi:telegram' },
+  { id: 'youtube', name: 'YouTube', icon: 'mdi:youtube' },
+  { id: 'x', name: 'X / Twitter', icon: 'mdi:twitter' },
+  { id: 'pinterest', name: 'Pinterest', icon: 'mdi:pinterest' },
+  { id: 'discord', name: 'Discord', icon: 'mdi:discord' },
+  { id: 'email', name: 'Email', icon: 'mdi:email' },
+];
+
 @Component({
   selector: 'app-content-admin',
   standalone: true,
@@ -45,7 +61,7 @@ export class ContentAdminComponent implements OnInit {
     { id: 'about', label: 'About Me', icon: 'user', fields: ['heroLabel', 'title', 'subtitle', 'description', 'extra', 'profileImageAlt', 'overlayImage', 'overlayImageAlt', 'philosophyLabel', 'quote', 'philosophy', 'servicesLabel', 'servicesTitle', 'image', 'ctaRoute'] },
     { id: 'contact', label: 'Contact', icon: 'envelope', fields: ['heroLabel', 'heroTitle', 'heroTitleAccent', 'heroSubtitle', 'bgImage', 'formTitle', 'formSubtitle', 'serviceTypeLabel', 'serviceTypeError', 'serviceTypes', 'email', 'phone', 'address', 'mapEmbed', 'infoEmailLabel', 'infoLocationLabel', 'infoResponseLabel', 'infoResponseValue', 'whatsappTitle', 'whatsappSubtitle', 'statsValue', 'statsLabel'] },
     { id: 'header', label: 'Header', icon: 'bars', fields: ['siteName', 'logoUrl'] },
-    { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText', 'tagline', 'linksTitle', 'showLinks', 'socialTitle', 'showSocialLinks'] },
+    { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText', 'tagline', 'showLinks', 'socialTitle', 'showSocialLinks'] },
     { id: 'portfolio', label: 'Portfolio Page', icon: 'image', fields: ['pageTitle', 'pageSubtitle', 'emptyMessage'] },
     { id: 'whatsapp', label: 'WhatsApp', icon: 'chat', fields: ['phoneNumber', 'defaultMessage', 'buttonTooltip', 'buttonAriaLabel'] },
   ];
@@ -80,7 +96,10 @@ export class ContentAdminComponent implements OnInit {
   readonly activeSection = signal<string>('hero');
   readonly loadedSections = signal<Set<string>>(new Set());
   readonly activeView = signal<'section' | 'page-sections'>('section');
-  readonly footerLinks = signal<{ platform: string; url: string }[]>([]);
+  readonly footerLinks = signal<{ platform: string; url: string; icon?: string; enabled?: boolean }[]>([]);
+  readonly showCustomSocialModal = signal(false);
+  readonly customSocialName = signal('');
+  readonly customSocialUrl = signal('');
   readonly servicesItems = signal<{ id: string; title: string; description: string; icon: string }[]>([]);
 
   readonly aboutStats = signal<{ value: string; label: string }[]>([]);
@@ -369,7 +388,9 @@ export class ContentAdminComponent implements OnInit {
 
     // Add social links for footer
     if (sectionId === 'footer') {
-      data['socialLinks'] = this.footerLinks().filter((l) => l.platform && l.url);
+      data['socialLinks'] = this.footerLinks()
+        .filter((l) => l.enabled && l.url)
+        .map((l) => ({ platform: l.platform, url: l.url, icon: l.icon || '' }));
     }
 
     // Add services items
@@ -457,20 +478,89 @@ export class ContentAdminComponent implements OnInit {
     return AVAILABLE_ROUTES;
   }
 
-  // --- Footer social links repeater ---
+  // --- Footer social links ---
 
-  addFooterLink(): void {
-    this.footerLinks.update((links) => [...links, { platform: '', url: '' }]);
+  getSocialPlatforms() {
+    return SOCIAL_PLATFORMS;
+  }
+
+  isPlatformEnabled(platformId: string): boolean {
+    return this.footerLinks().some((l) => l.platform === platformId && l.enabled);
+  }
+
+  getPlatformUrl(platformId: string): string {
+    return this.footerLinks().find((l) => l.platform === platformId)?.url || '';
+  }
+
+  getPlatformIcon(platformId: string): string {
+    return this.footerLinks().find((l) => l.platform === platformId)?.icon || '';
+  }
+
+  togglePlatform(platformId: string): void {
+    const platform = SOCIAL_PLATFORMS.find((p) => p.id === platformId);
+    if (!platform) return;
+
+    this.footerLinks.update((links) => {
+      const existing = links.find((l) => l.platform === platformId);
+      if (existing) {
+        return links.map((l) =>
+          l.platform === platformId ? { ...l, enabled: !l.enabled } : l,
+        );
+      }
+      return [...links, { platform: platformId, url: '', icon: platform.icon, enabled: true }];
+    });
+    this.clearSuccessOnEdit('footer');
+  }
+
+  updatePlatformUrl(platformId: string, url: string): void {
+    this.footerLinks.update((links) => {
+      const existing = links.find((l) => l.platform === platformId);
+      if (existing) {
+        return links.map((l) => (l.platform === platformId ? { ...l, url } : l));
+      }
+      const platform = SOCIAL_PLATFORMS.find((p) => p.id === platformId);
+      return [...links, { platform: platformId, url, icon: platform?.icon || '', enabled: true }];
+    });
+    this.clearSuccessOnEdit('footer');
+  }
+
+  openCustomSocialModal(): void {
+    this.customSocialName.set('');
+    this.customSocialUrl.set('');
+    this.showCustomSocialModal.set(true);
+  }
+
+  closeCustomSocialModal(): void {
+    this.showCustomSocialModal.set(false);
+  }
+
+  updateCustomSocialName(value: string): void {
+    this.customSocialName.set(value);
+  }
+
+  updateCustomSocialUrl(value: string): void {
+    this.customSocialUrl.set(value);
+  }
+
+  addCustomSocial(): void {
+    const name = this.customSocialName().trim();
+    const url = this.customSocialUrl().trim();
+    if (!name || !url) return;
+
+    this.footerLinks.update((links) => [
+      ...links,
+      { platform: name, url, icon: '', enabled: true },
+    ]);
+    this.showCustomSocialModal.set(false);
+    this.clearSuccessOnEdit('footer');
+  }
+
+  isCustomSocialLink(link: { platform: string; url: string; icon?: string; enabled?: boolean }): boolean {
+    return !SOCIAL_PLATFORMS.some((p) => p.id === link.platform);
   }
 
   removeFooterLink(index: number): void {
     this.footerLinks.update((links) => links.filter((_, i) => i !== index));
-  }
-
-  updateFooterLink(index: number, key: 'platform' | 'url', value: string): void {
-    this.footerLinks.update((links) =>
-      links.map((link, i) => (i === index ? { ...link, [key]: value } : link)),
-    );
     this.clearSuccessOnEdit('footer');
   }
 

@@ -195,7 +195,9 @@ export class SettingsAdminComponent implements OnInit {
     const link = document.createElement('link');
     link.id = id;
     link.rel = 'stylesheet';
-    link.href = `https://fonts.googleapis.com/css2?family=${name.replace(/\s+/g, '+')}&display=swap`;
+    link.href = `https://fonts.googleapis.com/css2?family=${name.replace(/\s+/g, '+')}:wght@400;700&display=swap`;
     document.head.appendChild(link);
+    // Force font load
+    document.fonts.load(`1em ${name}`);
   }
 }
