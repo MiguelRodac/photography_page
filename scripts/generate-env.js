@@ -12,6 +12,7 @@ catch {
 }
 
 const vars = {};
+// Read from .env file first
 envContent.split('\n').forEach(line => {
   const t = line.trim();
   if (!t || t.startsWith('#')) return;
@@ -19,6 +20,9 @@ envContent.split('\n').forEach(line => {
   if (i === -1) return;
   vars[t.substring(0, i).trim()] = t.substring(i + 1).trim();
 });
+// Override with process.env (Vercel, CI, etc.)
+const envKeys = ['FIREBASE_API_KEY', 'FIREBASE_AUTH_DOMAIN', 'FIREBASE_PROJECT_ID', 'FIREBASE_STORAGE_BUCKET', 'FIREBASE_MESSAGING_SENDER_ID', 'FIREBASE_APP_ID', 'FIREBASE_MEASUREMENT_ID', 'EMAILJS_PUBLIC_KEY', 'EMAILJS_SERVICE_ID', 'EMAILJS_TEMPLATE_ID'];
+envKeys.forEach(k => { if (process.env[k]) vars[k] = process.env[k]; });
 
 const template = (prod) => `// Auto-generated from .env — DO NOT EDIT
 export const environment = {
