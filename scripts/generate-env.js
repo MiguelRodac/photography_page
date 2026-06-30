@@ -41,6 +41,7 @@ export const environment = {
 `;
 
 const envDir = path.resolve(__dirname, '..', 'src', 'environments');
+fs.mkdirSync(envDir, { recursive: true });
 fs.writeFileSync(path.join(envDir, 'environment.ts'), template(false));
 fs.writeFileSync(path.join(envDir, 'environment.prod.ts'), template(true));
 console.log('✅ Generated environment.ts and environment.prod.ts');
