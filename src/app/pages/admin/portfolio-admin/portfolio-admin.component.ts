@@ -51,6 +51,8 @@ export class PortfolioAdminComponent implements OnInit {
     category: ['', [Validators.required]],
     img: ['', [Validators.required]],
     imageSource: ['url' as 'upload' | 'url', [Validators.required]],
+    link: [''],
+    showLink: [false],
   });
 
   ngOnInit(): void {
@@ -85,6 +87,8 @@ export class PortfolioAdminComponent implements OnInit {
       category: item.category,
       img: item.img,
       imageSource: item.imageSource,
+      link: item.link || '',
+      showLink: item.showLink || false,
     });
     this.showForm.set(true);
   }
@@ -111,6 +115,8 @@ export class PortfolioAdminComponent implements OnInit {
       category: formValue.category!,
       img: formValue.img!,
       imageSource: formValue.imageSource as 'upload' | 'url',
+      link: formValue.link || undefined,
+      showLink: formValue.showLink || false,
     };
 
     try {

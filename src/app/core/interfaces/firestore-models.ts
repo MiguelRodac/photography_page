@@ -5,6 +5,8 @@ export interface PortfolioDoc {
   category: string;
   img: string;
   imageSource: 'upload' | 'url';
+  link?: string;
+  showLink?: boolean;
   storagePath?: string;
   deleted: boolean;
   deletedAt?: Date;

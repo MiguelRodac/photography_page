@@ -14,6 +14,8 @@ interface PortfolioItem {
   category: string;
   img: string;
   description: string;
+  link?: string;
+  showLink?: boolean;
 }
 
 @Component({
@@ -57,10 +59,28 @@ interface PortfolioItem {
                   <div class="relative overflow-hidden rounded-2xl">
                     <img [src]="item.img" [alt]="item.title"
                          class="w-full h-auto transition-transform duration-700 group-hover:scale-105" />
+                    @if (item.link && item.showLink) {
+                      <span class="absolute top-3 right-3 z-10 flex items-center gap-1 px-2 py-1 bg-primary-500/90 text-white text-xs font-medium rounded-md backdrop-blur-sm">
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                        </svg>
+                        Link
+                      </span>
+                    }
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div class="absolute bottom-0 left-0 right-0 p-5">
                         <span class="text-xs font-medium text-primary-400 uppercase tracking-wider">{{ getCategoryLabel(item.category) }}</span>
                         <h3 class="text-white text-lg font-display font-semibold mt-1">{{ item.title }}</h3>
+                        @if (item.link && item.showLink) {
+                          <a [href]="item.link" target="_blank" rel="noopener noreferrer"
+                             (click)="$event.stopPropagation()"
+                             class="inline-flex items-center gap-1 mt-2 px-3 py-1 bg-primary-500 hover:bg-primary-400 text-white text-xs font-medium rounded-md transition-colors">
+                            View Project
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                            </svg>
+                          </a>
+                        }
                       </div>
                     </div>
                   </div>
@@ -135,6 +155,8 @@ export class PortfolioComponent implements OnInit {
             category: d.category,
             img: d.img,
             description: d.description,
+            link: d.link,
+            showLink: d.showLink,
           }));
         if (mapped.length > 0) {
           this.portfolioItems.set(mapped);
