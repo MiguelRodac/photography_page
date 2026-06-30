@@ -4,6 +4,7 @@ import { PortfolioDoc } from '../../../core/interfaces/firestore-models';
 import { IPortfolioService, PortfolioCreate } from '../../../core/interfaces/portfolio-service.interface';
 import { PORTFOLIO_SERVICE } from '../../../core/tokens/portfolio-service.token';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-portfolio-admin',
@@ -14,6 +15,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 export class PortfolioAdminComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly portfolioService = inject(PORTFOLIO_SERVICE);
+  private readonly toast = inject(ToastService);
 
   readonly items = signal<PortfolioDoc[]>([]);
   readonly loading = signal(true);
@@ -101,7 +103,6 @@ export class PortfolioAdminComponent implements OnInit {
       return;
     }
 
-    this.errorMessage.set(null);
     const formValue = this.form.value;
 
     const data: PortfolioCreate = {
@@ -115,13 +116,15 @@ export class PortfolioAdminComponent implements OnInit {
     try {
       if (this.editingId()) {
         await this.portfolioService.update(this.editingId()!, data);
+        this.toast.success('Item updated');
       } else {
         await this.portfolioService.create(data);
+        this.toast.success('Item created');
       }
       this.cancelForm();
       this.loadItems();
     } catch (err: any) {
-      this.errorMessage.set(err?.message || 'Operation failed');
+      this.toast.error('Save failed: ' + (err?.message || 'Unknown error'));
     }
   }
 
@@ -144,8 +147,9 @@ export class PortfolioAdminComponent implements OnInit {
       this.showDeleteConfirm.set(false);
       this.itemToDelete.set(null);
       this.loadItems();
+      this.toast.success('Item deleted');
     } catch (err: any) {
-      this.errorMessage.set(err?.message || 'Delete failed');
+      this.toast.error('Delete failed: ' + (err?.message || 'Unknown error'));
     }
   }
 
@@ -168,8 +172,9 @@ export class PortfolioAdminComponent implements OnInit {
         this.uploadProgress.set(pct);
       });
       this.form.controls['img'].setValue(url);
+      this.toast.success('Image uploaded');
     } catch (err: any) {
-      this.errorMessage.set(err?.message || 'Upload failed');
+      this.toast.error('Upload failed: ' + (err?.message || 'Unknown error'));
     } finally {
       this.uploading.set(false);
     }

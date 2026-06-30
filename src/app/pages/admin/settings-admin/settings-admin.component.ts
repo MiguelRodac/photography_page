@@ -4,6 +4,7 @@ import { IContentService } from '../../../core/interfaces/content-service.interf
 import { CONTENT_SERVICE } from '../../../core/tokens/content-service.token';
 import { ThemeLoaderService } from '../../../services/theme-loader.service';
 import { ThemeSettings } from '../../../core/interfaces/firestore-models';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-settings-admin',
@@ -15,6 +16,7 @@ export class SettingsAdminComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly contentService = inject(CONTENT_SERVICE);
   private readonly themeLoader = inject(ThemeLoaderService);
+  private readonly toast = inject(ToastService);
 
   readonly loading = signal(true);
   readonly saving = signal(false);
@@ -110,8 +112,6 @@ export class SettingsAdminComponent implements OnInit {
 
   async save(): Promise<void> {
     this.saving.set(true);
-    this.errorMessage.set(null);
-    this.successMessage.set(null);
 
     const data = {
       siteName: this.form.value.siteName || '',
@@ -132,9 +132,9 @@ export class SettingsAdminComponent implements OnInit {
         copyrightText: data.footerText,
       });
       this.form.markAsPristine();
-      this.successMessage.set('Settings saved successfully');
+      this.toast.success('Settings saved');
     } catch (err: any) {
-      this.errorMessage.set(err?.message || 'Save failed');
+      this.toast.error('Save failed: ' + (err?.message || 'Unknown error'));
     } finally {
       this.saving.set(false);
     }
@@ -142,8 +142,6 @@ export class SettingsAdminComponent implements OnInit {
 
   async saveTheme(): Promise<void> {
     this.themeSaving.set(true);
-    this.themeError.set(null);
-    this.themeSuccess.set(null);
 
     const radius = this.themeForm.value.borderRadius || '12';
     const data: ThemeSettings = {
@@ -160,9 +158,9 @@ export class SettingsAdminComponent implements OnInit {
       this.themeLoader.applyTheme(data);
       this.themeLoader.theme.set(data);
       this.themeForm.markAsPristine();
-      this.themeSuccess.set('Theme saved and applied');
+      this.toast.success('Theme saved and applied');
     } catch (err: any) {
-      this.themeError.set(err?.message || 'Theme save failed');
+      this.toast.error('Save failed: ' + (err?.message || 'Unknown error'));
     } finally {
       this.themeSaving.set(false);
     }

@@ -60,9 +60,7 @@
                 <!-- Label -->
                 <span class="flex-1 truncate">{{ section.label }}</span>
                 <!-- Status indicators -->
-                @if (isSectionSuccess(section.id)) {
-                  <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
-                } @else if (isSectionDirty(section.id)) {
+                @if (isSectionDirty(section.id)) {
                   <span class="w-2 h-2 rounded-full bg-yellow-400 shrink-0"></span>
                 }
               </button>
@@ -105,20 +103,7 @@
                       Loading...
                     </div>
                   }
-                  @if (isSuccess(section.id)) {
-                    <span class="inline-flex items-center gap-1 text-sm text-green-400">
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
-                      Saved
-                    </span>
-                  }
                 </div>
-
-                <!-- Error -->
-                @if (getSectionError(section.id); as errMsg) {
-                  <div class="mx-6 mt-4 bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-2 rounded-lg text-sm">
-                    {{ errMsg }}
-                  </div>
-                }
 
                 <!-- Form -->
                 @if (!isLoading(section.id)) {
@@ -459,9 +444,6 @@
                     {{ sectionsConfigSaving() === 'home' ? 'Saving...' : 'Save' }}
                   </button>
                 </div>
-                @if (sectionsConfigSuccess() === 'home') {
-                  <p class="text-xs text-green-400 mb-2">Saved!</p>
-                }
                 <div class="space-y-2">
                   @for (section of homeSections(); track section.id; let i = $index) {
                     <div class="flex items-center gap-2 p-2.5 bg-surface-900/50 border border-surface-700 rounded-lg">
@@ -516,9 +498,6 @@
                     {{ sectionsConfigSaving() === 'about' ? 'Saving...' : 'Save' }}
                   </button>
                 </div>
-                @if (sectionsConfigSuccess() === 'about') {
-                  <p class="text-xs text-green-400 mb-2">Saved!</p>
-                }
                 <div class="space-y-2">
                   @for (section of aboutSections(); track section.id; let i = $index) {
                     <div class="flex items-center gap-2 p-2.5 bg-surface-900/50 border border-surface-700 rounded-lg">

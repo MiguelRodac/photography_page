@@ -4,6 +4,7 @@ import { CategoryDoc } from '../../../core/interfaces/firestore-models';
 import { ICategoriesService, CategoryCreate } from '../../../core/interfaces/categories-service.interface';
 import { CATEGORIES_SERVICE } from '../../../core/tokens/categories-service.token';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-categories-admin',
@@ -14,6 +15,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 export class CategoriesAdminComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly categoriesService = inject(CATEGORIES_SERVICE);
+  private readonly toast = inject(ToastService);
 
   readonly categories = signal<CategoryDoc[]>([]);
   readonly loading = signal(true);
@@ -76,7 +78,6 @@ export class CategoriesAdminComponent implements OnInit {
       return;
     }
 
-    this.errorMessage.set(null);
     const formValue = this.form.value;
 
     const data: CategoryCreate = {
@@ -88,13 +89,15 @@ export class CategoriesAdminComponent implements OnInit {
     try {
       if (this.editingId()) {
         await this.categoriesService.update(this.editingId()!, data);
+        this.toast.success('Category updated');
       } else {
         await this.categoriesService.create(data);
+        this.toast.success('Category created');
       }
       this.cancelForm();
       this.loadCategories();
     } catch (err: any) {
-      this.errorMessage.set(err?.message || 'Operation failed');
+      this.toast.error('Save failed: ' + (err?.message || 'Unknown error'));
     }
   }
 
@@ -117,8 +120,9 @@ export class CategoriesAdminComponent implements OnInit {
       this.showDeleteConfirm.set(false);
       this.itemToDelete.set(null);
       this.loadCategories();
+      this.toast.success('Category deleted');
     } catch (err: any) {
-      this.errorMessage.set(err?.message || 'Delete failed');
+      this.toast.error('Delete failed: ' + (err?.message || 'Unknown error'));
     }
   }
 }

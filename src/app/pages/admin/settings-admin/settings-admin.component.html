@@ -44,26 +44,6 @@
           </div>
         </div>
 
-        <!-- Messages -->
-        <div class="px-6 pt-4">
-          @if (successMessage()) {
-            <div class="bg-green-500/10 border border-green-500/20 text-green-300 px-4 py-3 rounded-xl mb-4 flex items-center gap-2 text-sm">
-              <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              {{ successMessage() }}
-            </div>
-          }
-          @if (errorMessage()) {
-            <div class="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-xl mb-4 flex items-center gap-2 text-sm">
-              <svg class="w-4 h-4 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-              </svg>
-              {{ errorMessage() }}
-            </div>
-          }
-        </div>
-
         <!-- Form -->
         <form [formGroup]="form" (ngSubmit)="$event.preventDefault()" class="p-6 space-y-5">
           <div>
@@ -134,26 +114,6 @@
         }
 
         @if (!themeLoading()) {
-          <!-- Messages -->
-          <div class="px-6 pt-4">
-            @if (themeSuccess()) {
-              <div class="bg-green-500/10 border border-green-500/20 text-green-300 px-4 py-3 rounded-xl mb-4 flex items-center gap-2 text-sm">
-                <svg class="w-4 h-4 text-green-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                {{ themeSuccess() }}
-              </div>
-            }
-            @if (themeError()) {
-              <div class="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-xl mb-4 flex items-center gap-2 text-sm">
-                <svg class="w-4 h-4 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                </svg>
-                {{ themeError() }}
-              </div>
-            }
-          </div>
-
           <form [formGroup]="themeForm" (ngSubmit)="$event.preventDefault()" class="p-6 space-y-5">
             <!-- Colors -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">

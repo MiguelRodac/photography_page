@@ -4,6 +4,7 @@ import { NavLinkDoc } from '../../../core/interfaces/firestore-models';
 import { INavigationService, NavLinkCreate } from '../../../core/interfaces/navigation-service.interface';
 import { NAVIGATION_SERVICE } from '../../../core/tokens/navigation-service.token';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ToastService } from '../../../services/toast.service';
 
 interface RouteOption {
   path: string;
@@ -28,6 +29,7 @@ export class NavigationAdminComponent implements OnInit {
   readonly ALL_ROUTES = AVAILABLE_ROUTES;
   private readonly fb = inject(FormBuilder);
   private readonly navigationService = inject(NAVIGATION_SERVICE);
+  private readonly toast = inject(ToastService);
 
   readonly links = signal<NavLinkDoc[]>([]);
   readonly loading = signal(true);
@@ -119,7 +121,6 @@ export class NavigationAdminComponent implements OnInit {
       return;
     }
 
-    this.errorMessage.set(null);
     const formValue = this.form.value;
 
     const data: NavLinkCreate = {
@@ -132,13 +133,15 @@ export class NavigationAdminComponent implements OnInit {
     try {
       if (this.editingId()) {
         await this.navigationService.update(this.editingId()!, data);
+        this.toast.success('Link updated');
       } else {
         await this.navigationService.create(data);
+        this.toast.success('Link created');
       }
       this.cancelForm();
       this.loadLinks();
     } catch (err: any) {
-      this.errorMessage.set(err?.message || 'Operation failed');
+      this.toast.error('Save failed: ' + (err?.message || 'Unknown error'));
     }
   }
 
@@ -147,7 +150,7 @@ export class NavigationAdminComponent implements OnInit {
       await this.navigationService.update(link.id, { visible: !link.visible });
       this.loadLinks();
     } catch (err: any) {
-      this.errorMessage.set(err?.message || 'Update failed');
+      this.toast.error('Update failed: ' + (err?.message || 'Unknown error'));
     }
   }
 
@@ -170,8 +173,9 @@ export class NavigationAdminComponent implements OnInit {
       this.showDeleteConfirm.set(false);
       this.itemToDelete.set(null);
       this.loadLinks();
+      this.toast.success('Link deleted');
     } catch (err: any) {
-      this.errorMessage.set(err?.message || 'Delete failed');
+      this.toast.error('Delete failed: ' + (err?.message || 'Unknown error'));
     }
   }
 }

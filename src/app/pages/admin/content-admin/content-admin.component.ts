@@ -4,6 +4,7 @@ import { NgClass } from '@angular/common';
 import { IContentService } from '../../../core/interfaces/content-service.interface';
 import { CONTENT_SERVICE } from '../../../core/tokens/content-service.token';
 import { PageSectionItem, PageSectionsConfig } from '../../../core/interfaces/firestore-models';
+import { ToastService } from '../../../services/toast.service';
 
 interface SectionConfig {
   id: string;
@@ -33,6 +34,7 @@ const AVAILABLE_ROUTES: RouteOption[] = [
 export class ContentAdminComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly contentService = inject(CONTENT_SERVICE);
+  private readonly toast = inject(ToastService);
 
   readonly sections: SectionConfig[] = [
     { id: 'hero', label: 'Home Hero', icon: 'bolt', fields: ['title', 'subtitle', 'cta', 'ctaRoute', 'bgImage'] },
@@ -242,10 +244,10 @@ export class ContentAdminComponent implements OnInit {
 
     try {
       await this.contentService.updateSection(sectionId, { sections: data });
-      this.sectionsConfigSuccess.set(page);
-      setTimeout(() => this.sectionsConfigSuccess.set(null), 3000);
+      this.toast.success('Sections config saved');
     } catch (err: any) {
       console.error('Failed to save sections config:', err);
+      this.toast.error('Save failed: ' + (err?.message || 'Unknown error'));
     } finally {
       this.sectionsConfigSaving.set(null);
     }
@@ -353,9 +355,7 @@ export class ContentAdminComponent implements OnInit {
           try {
             data[field] = JSON.parse(val);
           } catch {
-            const errs = new Map(this.errorSections());
-            errs.set(sectionId, `Invalid JSON for ${field}`);
-            this.errorSections.set(errs);
+            this.toast.error('Invalid JSON for ' + field);
             this.savingSection.set(null);
             return;
           }
@@ -399,18 +399,9 @@ export class ContentAdminComponent implements OnInit {
     try {
       await this.contentService.updateSection(sectionId, data);
       form.markAsPristine();
-      const success = new Set(this.successSections());
-      success.add(sectionId);
-      this.successSections.set(success);
-      setTimeout(() => {
-        const s = new Set(this.successSections());
-        s.delete(sectionId);
-        this.successSections.set(s);
-      }, 3000);
+      this.toast.success('Section saved');
     } catch (err: any) {
-      const errs = new Map(this.errorSections());
-      errs.set(sectionId, err?.message || 'Save failed');
-      this.errorSections.set(errs);
+      this.toast.error('Save failed: ' + (err?.message || 'Unknown error'));
     } finally {
       this.savingSection.set(null);
     }
