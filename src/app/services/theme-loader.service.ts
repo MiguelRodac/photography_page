@@ -36,21 +36,48 @@ export class ThemeLoaderService {
     const root = document.documentElement;
     const primary = t.primaryColor;
     const rgb = this.hexToRgb(primary);
+    const textColor = this.getContrastColor(primary);
 
     // Set CSS custom properties
     this.renderer.setStyle(root, '--primary', primary);
     this.renderer.setStyle(root, '--primary-hover', t.primaryHover);
     this.renderer.setStyle(root, '--primary-rgb', rgb);
+    this.renderer.setStyle(root, '--primary-text', textColor);
     this.renderer.setStyle(root, '--font-display', t.displayFont);
     this.renderer.setStyle(root, '--font-body', t.bodyFont);
     this.renderer.setStyle(root, '--radius', t.borderRadius);
 
+    // Load Google Fonts if needed
+    this.loadFont(t.displayFont);
+    this.loadFont(t.bodyFont);
+
     // Generate dynamic <style> tag to override ALL primary color uses
-    this.injectStyleTag(primary, t.primaryHover, rgb);
+    this.injectStyleTag(primary, t.primaryHover, rgb, textColor);
   }
 
-  private injectStyleTag(primary: string, hover: string, rgb: string): void {
-    // Remove previous style tag if exists
+  private loadFont(fontFamily: string): void {
+    const name = fontFamily.replace(/['"]/g, '');
+    if (!name || name === 'Inter' || name === 'system-ui') return; // system fonts don't need loading
+    const id = `gf-${name.replace(/\s+/g, '-').toLowerCase()}`;
+    if (document.getElementById(id)) return; // already loaded
+    const link = this.renderer.createElement('link');
+    link.setAttribute('id', id);
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('href', `https://fonts.googleapis.com/css2?family=${name.replace(/\s+/g, '+')}&display=swap`);
+    this.renderer.appendChild(document.head, link);
+  }
+
+  private getContrastColor(hex: string): string {
+    const cleaned = hex.replace('#', '');
+    const r = parseInt(cleaned.substring(0, 2), 16);
+    const g = parseInt(cleaned.substring(2, 4), 16);
+    const b = parseInt(cleaned.substring(4, 6), 16);
+    // W3C relative luminance
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.5 ? '#111111' : '#ffffff';
+  }
+
+  private injectStyleTag(primary: string, hover: string, rgb: string, textColor: string): void {
     if (this.styleElement) {
       this.renderer.removeChild(document.head, this.styleElement);
     }
@@ -59,10 +86,12 @@ export class ThemeLoaderService {
       /* Auto-generated theme overrides */
       .bg-primary-400, .bg-primary-500, .bg-primary-600, .bg-primary-700 {
         background-color: ${primary} !important;
+        color: ${textColor} !important;
       }
       .hover\\:bg-primary-400:hover, .hover\\:bg-primary-500:hover,
       .hover\\:bg-primary-600:hover, .hover\\:bg-primary-700:hover {
         background-color: ${hover} !important;
+        color: ${textColor} !important;
       }
       .text-primary-300, .text-primary-400, .text-primary-500, .text-primary-600, .text-primary-700 {
         color: ${primary} !important;
