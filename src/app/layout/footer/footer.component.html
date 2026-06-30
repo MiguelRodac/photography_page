@@ -17,14 +17,16 @@
         </p>
       </div>
 
+      @if (showLinks()) {
       <div>
-        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">{{ linksTitle() }}</h3>
+        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">{{ linksTitle() || 'Links' }}</h3>
         <nav class="space-y-2">
           @for (link of navLinks(); track link.path) {
             <a [routerLink]="link.path" class="block text-sm text-surface-500 dark:text-surface-400 hover:text-primary-500 transition-colors">{{ link.label }}</a>
           }
         </nav>
       </div>
+      }
 
       @if (showSocialLinks()) {
       <div>

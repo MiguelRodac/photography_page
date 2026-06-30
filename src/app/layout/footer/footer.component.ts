@@ -24,6 +24,7 @@ export class FooterComponent implements OnInit {
   readonly tagline = signal('');
   readonly linksTitle = signal('');
   readonly showSocialLinks = signal(true);
+  readonly showLinks = signal(true);
   readonly navLinks = signal<FooterNavLink[]>([]);
 
   ngOnInit(): void {
@@ -40,6 +41,7 @@ export class FooterComponent implements OnInit {
         if (data['tagline']) this.tagline.set(data['tagline'] as string);
         if (data['linksTitle']) this.linksTitle.set(data['linksTitle'] as string);
         if (typeof data['showSocialLinks'] === 'boolean') this.showSocialLinks.set(data['showSocialLinks']);
+        if (typeof data['showLinks'] === 'boolean') this.showLinks.set(data['showLinks']);
       }
     });
 

@@ -125,6 +125,9 @@ export class ThemeLoaderService {
       .hover\\:bg-primary-500\\/20:hover { background-color: rgba(${rgb}, 0.2) !important; }
       .hover\\:bg-primary-500\\/10:hover { background-color: rgba(${rgb}, 0.1) !important; }
       .hover\\:text-primary-300:hover { color: ${hover} !important; }
+      /* Typography */
+      body, html { font-family: ${this.theme().bodyFont.replace(/"/g, '')}, system-ui, sans-serif !important; }
+      .font-display, h1, h2, h3, h4, h5, h6 { font-family: ${this.theme().displayFont.replace(/"/g, '')}, Georgia, serif !important; }
     `;
 
     this.styleElement = this.renderer.createElement('style');
