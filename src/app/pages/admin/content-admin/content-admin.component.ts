@@ -31,14 +31,14 @@ const SOCIAL_PLATFORMS = [
   { id: 'whatsapp', name: 'WhatsApp', icon: 'mdi:whatsapp' },
   { id: 'linkedin', name: 'LinkedIn', icon: 'mdi:linkedin' },
   { id: 'github', name: 'GitHub', icon: 'mdi:github' },
-  { id: 'tiktok', name: 'TikTok', icon: 'mdi:tiktok' },
+  { id: 'tiktok', name: 'TikTok', icon: 'ic:baseline-tiktok' },
   { id: 'snapchat', name: 'Snapchat', icon: 'mdi:snapchat' },
   { id: 'telegram', name: 'Telegram', icon: 'mdi:telegram' },
   { id: 'youtube', name: 'YouTube', icon: 'mdi:youtube' },
-  { id: 'x', name: 'X / Twitter', icon: 'mdi:twitter' },
+  { id: 'x', name: 'X / Twitter', icon: 'ri:twitter-x-fill' },
   { id: 'pinterest', name: 'Pinterest', icon: 'mdi:pinterest' },
   { id: 'discord', name: 'Discord', icon: 'mdi:discord' },
-  { id: 'email', name: 'Email', icon: 'mdi:email' },
+  { id: 'email', name: 'Email', icon: 'mdi:email-outline' },
 ];
 
 @Component({
