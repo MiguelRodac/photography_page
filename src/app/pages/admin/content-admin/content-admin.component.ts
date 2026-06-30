@@ -503,6 +503,18 @@ export class ContentAdminComponent implements OnInit {
     return SOCIAL_PLATFORMS;
   }
 
+  getPlatformInputType(platformId: string): string {
+    if (platformId === 'whatsapp' || platformId === 'telegram') return 'tel';
+    if (platformId === 'email') return 'email';
+    return 'url';
+  }
+
+  getPlatformPlaceholder(platformId: string): string {
+    if (platformId === 'whatsapp' || platformId === 'telegram') return '5491112345678 (digits only)';
+    if (platformId === 'email') return 'you@example.com';
+    return 'https://...';
+  }
+
   isPlatformEnabled(platformId: string): boolean {
     return this.footerLinks().some((l) => l.platform === platformId && l.enabled);
   }
