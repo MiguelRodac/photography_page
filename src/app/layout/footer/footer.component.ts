@@ -24,7 +24,10 @@ export class FooterComponent implements OnInit {
   readonly tagline = signal('');
   readonly linksTitle = signal('');
   readonly showLinks = signal(true);
+  readonly showSocialLinks = signal(true);
+  readonly socialTitle = signal('');
   readonly navLinks = signal<FooterNavLink[]>([]);
+  readonly socialLinks = signal<{ platform: string; url: string; icon?: string }[]>([]);
 
   ngOnInit(): void {
     this.contentCache.getSection<Record<string, unknown>>('header').pipe(take(1)).subscribe(data => {
@@ -39,7 +42,10 @@ export class FooterComponent implements OnInit {
         if (data['copyrightText']) this.copyrightText.set(data['copyrightText'] as string);
         if (data['tagline']) this.tagline.set(data['tagline'] as string);
         if (data['linksTitle']) this.linksTitle.set(data['linksTitle'] as string);
+        if (data['socialTitle']) this.socialTitle.set(data['socialTitle'] as string);
         if (typeof data['showLinks'] === 'boolean') this.showLinks.set(data['showLinks']);
+        if (typeof data['showSocialLinks'] === 'boolean') this.showSocialLinks.set(data['showSocialLinks']);
+        if (data['socialLinks']) this.socialLinks.set(data['socialLinks'] as any[]);
       }
     });
 
