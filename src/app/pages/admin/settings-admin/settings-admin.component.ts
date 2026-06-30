@@ -181,4 +181,21 @@ export class SettingsAdminComponent implements OnInit {
   previewFontFamily(fontValue: string): string {
     return fontValue.replace(/"/g, '');
   }
+
+  onFontChange(fontValue: string): void {
+    this.clearThemeSuccessOnEdit();
+    this.loadGoogleFont(fontValue);
+  }
+
+  private loadGoogleFont(fontFamily: string): void {
+    const name = fontFamily.replace(/['"]/g, '');
+    if (!name || name === 'Inter' || name === 'system-ui') return;
+    const id = `gf-preview-${name.replace(/\s+/g, '-').toLowerCase()}`;
+    if (document.getElementById(id)) return;
+    const link = document.createElement('link');
+    link.id = id;
+    link.rel = 'stylesheet';
+    link.href = `https://fonts.googleapis.com/css2?family=${name.replace(/\s+/g, '+')}&display=swap`;
+    document.head.appendChild(link);
+  }
 }
