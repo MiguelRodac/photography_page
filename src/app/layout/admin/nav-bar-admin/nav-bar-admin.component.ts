@@ -25,6 +25,7 @@ export class NavBarAdminComponent {
     { label: 'Content', link: '/admin-page/content', icon: 'document' },
     { label: 'Navigation', link: '/admin-page/navigation', icon: 'link' },
     { label: 'Settings', link: '/admin-page/settings', icon: 'cog' },
+    { label: 'Data', link: '/admin-page/data', icon: 'database' },
   ];
 
   toggleMobileMenu(): void {
