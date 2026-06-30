@@ -350,8 +350,8 @@ export class ContentAdminComponent implements OnInit {
     const data: any = {};
     for (const field of section.fields) {
       const val = form.controls[field]?.value;
-      if (val !== null && val !== undefined && val !== '') {
-        if (field === 'services' || field === 'stats') {
+      if (field === 'services' || field === 'stats') {
+        if (val && val.trim()) {
           try {
             data[field] = JSON.parse(val);
           } catch {
@@ -360,8 +360,10 @@ export class ContentAdminComponent implements OnInit {
             return;
           }
         } else {
-          data[field] = val;
+          data[field] = null; // Clear the field
         }
+      } else {
+        data[field] = val ?? ''; // Always include, empty string clears Firestore value
       }
     }
 
