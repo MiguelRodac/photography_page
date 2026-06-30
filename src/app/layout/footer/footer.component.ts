@@ -1,17 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { take } from 'rxjs';
-import { GlobalResourceService } from '../../services/global-resource.service';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
 import { NAVIGATION_SERVICE } from '../../core/tokens/navigation-service.token';
 import { NavLinkDoc } from '../../core/interfaces/firestore-models';
-import { environment } from '../../../environments/environment';
-
-interface SocialLink {
-  platform: string;
-  url: string;
-  icon?: string;
-}
 
 interface FooterNavLink {
   path: string;
@@ -23,7 +15,6 @@ interface FooterNavLink {
   imports: [RouterLink],
   templateUrl: './footer.component.html' })
 export class FooterComponent implements OnInit {
-  private readonly resource = inject(GlobalResourceService);
   private readonly contentCache = inject(PublicContentCacheService);
   private readonly navService = inject(NAVIGATION_SERVICE, { optional: true });
 
@@ -32,15 +23,10 @@ export class FooterComponent implements OnInit {
   readonly copyrightText = signal('');
   readonly tagline = signal('');
   readonly linksTitle = signal('');
-  readonly socialTitle = signal('');
+  readonly showSocialLinks = signal(true);
   readonly navLinks = signal<FooterNavLink[]>([]);
-  readonly socialLinks = signal<SocialLink[]>([
-    { platform: 'instagram', url: environment.socialMedia.instagram, icon: 'Ig' },
-    { platform: 'whatsapp', url: environment.socialMedia.whatsapp, icon: 'Wa' },
-  ]);
 
   ngOnInit(): void {
-    // Load site name and logo from header content
     this.contentCache.getSection<Record<string, unknown>>('header').pipe(take(1)).subscribe(data => {
       if (data) {
         if (data['siteName']) this.siteName.set(data['siteName'] as string);
@@ -53,11 +39,7 @@ export class FooterComponent implements OnInit {
         if (data['copyrightText']) this.copyrightText.set(data['copyrightText'] as string);
         if (data['tagline']) this.tagline.set(data['tagline'] as string);
         if (data['linksTitle']) this.linksTitle.set(data['linksTitle'] as string);
-        if (data['socialTitle']) this.socialTitle.set(data['socialTitle'] as string);
-        if (data['socialLinks']) {
-          const links = data['socialLinks'] as SocialLink[];
-          if (links.length > 0) this.socialLinks.set(links);
-        }
+        if (typeof data['showSocialLinks'] === 'boolean') this.showSocialLinks.set(data['showSocialLinks']);
       }
     });
 

@@ -26,18 +26,18 @@
         </nav>
       </div>
 
+      @if (showSocialLinks()) {
       <div>
-        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">{{ socialTitle() }}</h3>
-        <div class="flex gap-3">
-          @for (link of socialLinks(); track link.platform) {
-            <a [href]="link.url" target="_blank" rel="noopener noreferrer"
-               class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-200 dark:bg-surface-800 hover:bg-primary-500/20 text-surface-600 dark:text-surface-300 hover:text-primary-500 transition-all"
-               [attr.aria-label]="link.platform">
-              <span class="text-sm font-semibold uppercase">{{ link.icon || link.platform.slice(0, 2) }}</span>
+        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">Links</h3>
+        <div class="space-y-2">
+          @for (link of navLinks(); track link.path) {
+            <a [routerLink]="link.path" class="flex items-center gap-2 text-sm text-surface-500 dark:text-surface-400 hover:text-primary-500 transition-colors">
+              <span>→</span> {{ link.label }}
             </a>
           }
         </div>
       </div>
+      }
     </div>
 
     <hr class="border-surface-200 dark:border-surface-800 mb-6" />

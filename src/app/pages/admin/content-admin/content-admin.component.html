@@ -147,6 +147,13 @@
                               <option [value]="opt.value">{{ opt.label }} ({{ opt.value }})</option>
                             }
                           </select>
+                        } @else if (isToggleField(field)) {
+                          <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" [formControlName]="field"
+                              (change)="clearSuccessOnEdit(section.id)"
+                              class="w-4 h-4 rounded border-surface-600 bg-surface-900 text-primary-500 focus:ring-primary-500/50" />
+                            <span class="text-sm text-surface-300">Show social links section</span>
+                          </label>
                         } @else if (isLongTextField(field)) {
                           <textarea
                             [formControlName]="field"

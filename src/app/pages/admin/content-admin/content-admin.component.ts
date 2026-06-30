@@ -43,7 +43,7 @@ export class ContentAdminComponent implements OnInit {
     { id: 'about', label: 'About Me', icon: 'user', fields: ['heroLabel', 'title', 'subtitle', 'description', 'extra', 'profileImageAlt', 'overlayImage', 'overlayImageAlt', 'philosophyLabel', 'quote', 'philosophy', 'servicesLabel', 'servicesTitle', 'image', 'ctaRoute'] },
     { id: 'contact', label: 'Contact', icon: 'envelope', fields: ['heroLabel', 'heroTitle', 'heroTitleAccent', 'heroSubtitle', 'bgImage', 'formTitle', 'formSubtitle', 'serviceTypeLabel', 'serviceTypeError', 'serviceTypes', 'email', 'phone', 'address', 'mapEmbed', 'infoEmailLabel', 'infoLocationLabel', 'infoResponseLabel', 'infoResponseValue', 'whatsappTitle', 'whatsappSubtitle', 'statsValue', 'statsLabel'] },
     { id: 'header', label: 'Header', icon: 'bars', fields: ['siteName', 'logoUrl'] },
-    { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText', 'tagline', 'linksTitle', 'socialTitle'] },
+    { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText', 'tagline', 'linksTitle', 'showSocialLinks'] },
     { id: 'portfolio', label: 'Portfolio Page', icon: 'image', fields: ['pageTitle', 'pageSubtitle', 'emptyMessage'] },
     { id: 'whatsapp', label: 'WhatsApp', icon: 'chat', fields: ['phoneNumber', 'defaultMessage', 'buttonTooltip', 'buttonAriaLabel'] },
   ];
@@ -454,6 +454,10 @@ export class ContentAdminComponent implements OnInit {
 
   isRouteField(field: string): boolean {
     return field.endsWith('Route');
+  }
+
+  isToggleField(field: string): boolean {
+    return field === 'showSocialLinks';
   }
 
   getRouteOptions(): RouteOption[] {
