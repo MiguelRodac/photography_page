@@ -37,6 +37,11 @@ export class WhatsAppButtonComponent implements OnInit {
         if (data['buttonTooltip']) this.tooltip.set(data['buttonTooltip'] as string);
         if (data['buttonAriaLabel']) this.ariaLabel.set(data['buttonAriaLabel'] as string);
         if (data['buttonColor']) this.bgColor.set(data['buttonColor'] as string);
+        if (data['phoneNumber']) {
+          const phone = String(data['phoneNumber']).replace(/\D/g, '');
+          const msg = data['defaultMessage'] ? `?text=${encodeURIComponent(String(data['defaultMessage']))}` : '';
+          this.whatsappLink = `https://wa.me/${phone}${msg}`;
+        }
       }
     });
   }

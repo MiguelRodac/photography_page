@@ -152,7 +152,11 @@
                             [formControlName]="field"
                             (input)="clearSuccessOnEdit(section.id)"
                             class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
+                            [placeholder]="getFieldPlaceholder(field)"
                           />
+                          @if (field === 'phoneNumber') {
+                            <p class="text-xs text-surface-500 mt-1">Enter the phone number with country code (digits only). Non-digit characters are stripped automatically.</p>
+                          }
                         }
                       </div>
                     }

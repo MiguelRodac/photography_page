@@ -299,7 +299,9 @@ export class ContentAdminComponent implements OnInit {
             const patchData: any = {};
             for (const key of Object.keys(data)) {
               if (key === 'socialLinks' && sectionId === 'footer') {
-                this.footerLinks.set(Array.isArray(data[key]) ? data[key] : []);
+                const raw = Array.isArray(data[key]) ? data[key] : [];
+                // Saved entries are always enabled (save filters by enabled && url)
+                this.footerLinks.set(raw.map((l: any) => ({ ...l, enabled: true })));
                 continue;
               }
               if (key === 'services' && sectionId === 'services') {
@@ -413,6 +415,11 @@ export class ContentAdminComponent implements OnInit {
       data['formFields'] = this.contactFormFields().filter((f) => f.name);
     }
 
+    // Sanitize WhatsApp phone number — digits only
+    if (sectionId === 'whatsapp' && data['phoneNumber']) {
+      data['phoneNumber'] = String(data['phoneNumber']).replace(/\D/g, '');
+    }
+
     // Add layout field for sections that support it
     const layout = this.sectionLayouts().get(sectionId);
     if (layout) {
@@ -444,7 +451,19 @@ export class ContentAdminComponent implements OnInit {
   }
 
   formatFieldName(field: string): string {
+    // Custom labels for specific fields
+    const customLabels: Record<string, string> = {
+      phoneNumber: 'WhatsApp Phone Number',
+    };
+    if (customLabels[field]) return customLabels[field];
     return field.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase());
+  }
+
+  getFieldPlaceholder(field: string): string {
+    const placeholders: Record<string, string> = {
+      phoneNumber: 'e.g. 5491112345678 (digits only, include country code)',
+    };
+    return placeholders[field] || '';
   }
 
   isJsonField(field: string): boolean {
