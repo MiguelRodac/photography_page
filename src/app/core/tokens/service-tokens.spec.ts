@@ -2,7 +2,6 @@ import { InjectionToken } from '@angular/core';
 import { AUTH_SERVICE } from './auth-service.token';
 import { PORTFOLIO_SERVICE } from './portfolio-service.token';
 import { CONTENT_SERVICE } from './content-service.token';
-import { PACKAGE_SERVICE } from './package-service.token';
 import { CATEGORIES_SERVICE } from './categories-service.token';
 
 describe('DI Injection Tokens', () => {
@@ -24,12 +23,6 @@ describe('DI Injection Tokens', () => {
     expect(CONTENT_SERVICE.toString()).toContain('IContentService');
   });
 
-  it('should create PACKAGE_SERVICE as an InjectionToken', () => {
-    expect(PACKAGE_SERVICE).toBeDefined();
-    expect(PACKAGE_SERVICE).toBeInstanceOf(InjectionToken);
-    expect(PACKAGE_SERVICE.toString()).toContain('IPackageService');
-  });
-
   it('should create CATEGORIES_SERVICE as an InjectionToken', () => {
     expect(CATEGORIES_SERVICE).toBeDefined();
     expect(CATEGORIES_SERVICE).toBeInstanceOf(InjectionToken);
@@ -37,8 +30,8 @@ describe('DI Injection Tokens', () => {
   });
 
   it('should have unique token instances for each service', () => {
-    const tokens = [AUTH_SERVICE, PORTFOLIO_SERVICE, CONTENT_SERVICE, PACKAGE_SERVICE, CATEGORIES_SERVICE];
+    const tokens = [AUTH_SERVICE, PORTFOLIO_SERVICE, CONTENT_SERVICE, CATEGORIES_SERVICE];
     const uniqueTokens = new Set(tokens);
-    expect(uniqueTokens.size).toBe(5);
+    expect(uniqueTokens.size).toBe(4);
   });
 });

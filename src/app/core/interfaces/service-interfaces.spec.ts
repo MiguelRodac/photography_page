@@ -2,8 +2,7 @@ import { Observable, of } from 'rxjs';
 import { IAuthService, AuthUser } from './auth-service.interface';
 import { IPortfolioService } from './portfolio-service.interface';
 import { IContentService } from './content-service.interface';
-import { IPackageService } from './package-service.interface';
-import { PortfolioDoc, PackageDoc } from './firestore-models';
+import { PortfolioDoc } from './firestore-models';
 
 describe('Service Interfaces', () => {
   describe('IAuthService', () => {
@@ -94,38 +93,6 @@ describe('Service Interfaces', () => {
       expect(typeof mock.getSection).toBe('function');
       expect(typeof mock.updateSection).toBe('function');
       expect(mock.getSection<HeroContent>('hero')).toBeInstanceOf(Observable);
-    });
-  });
-
-  describe('IPackageService', () => {
-    it('should allow a mock implementation with all required methods', () => {
-      const mockDoc: PackageDoc = {
-        id: 'pkg-1',
-        name: 'Basic',
-        category: 'wedding',
-        price: 500,
-        currency: 'USD',
-        features: ['Feature 1'],
-        active: true,
-        deleted: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const mock: IPackageService = {
-        getAll: () => of([mockDoc]),
-        getById: (id: string) => of(mockDoc),
-        create: (pkg: any) => Promise.resolve('new-id'),
-        update: (id: string, pkg: any) => Promise.resolve(),
-        deactivate: (id: string) => Promise.resolve(),
-      };
-
-      expect(typeof mock.getAll).toBe('function');
-      expect(typeof mock.getById).toBe('function');
-      expect(typeof mock.create).toBe('function');
-      expect(typeof mock.update).toBe('function');
-      expect(typeof mock.deactivate).toBe('function');
-      expect(mock.deactivate('pkg-1')).toBeInstanceOf(Promise);
     });
   });
 });

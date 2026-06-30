@@ -27,7 +27,6 @@ export const routes: Routes = [
       { path: '', loadComponent: () => import('./pages/admin/home-admin/home-admin.component').then(m => m.HomeAdminComponent) },
       { path: 'portfolio', loadComponent: () => import('./pages/admin/portfolio-admin/portfolio-admin.component').then(m => m.PortfolioAdminComponent) },
       { path: 'content', loadComponent: () => import('./pages/admin/content-admin/content-admin.component').then(m => m.ContentAdminComponent) },
-      { path: 'packages', loadComponent: () => import('./pages/admin/packages-admin/packages-admin.component').then(m => m.PackagesAdminComponent) },
       { path: 'categories', loadComponent: () => import('./pages/admin/categories-admin/categories-admin.component').then(m => m.CategoriesAdminComponent) },
       { path: 'settings', loadComponent: () => import('./pages/admin/settings-admin/settings-admin.component').then(m => m.SettingsAdminComponent) },
       { path: 'navigation', loadComponent: () => import('./pages/admin/navigation-admin/navigation-admin.component').then(m => m.NavigationAdminComponent) },
