@@ -1,40 +1,19 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import portfolioData from '../../data/portfolio.json';
-import servicesData from '../../data/services.json';
-import siteContent from '../../data/site-content.json';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class GlobalResourceService {
 
-  getSiteName(): string {
-    return environment.siteName;
-  }
+  getSiteName(): string { return ''; }
 
-  getFooterText(): string {
-    return `© ${new Date().getFullYear()} ${environment.siteName}. All Rights Reserved.`;
-  }
+  getFooterText(): string { return ''; }
 
-  getSocialMediaLinks(social: string): string {
-    const links: Record<string, string> = environment.socialMedia;
-    return links[social] || '';
-  }
+  getSocialMediaLinks(social: string): string { return ''; }
 
-  getWhatsAppLink(): string {
-    return environment.socialMedia.whatsapp;
-  }
+  getWhatsAppLink(): string { return 'https://wa.me/'; }
 
-  getPortfolioItems(): typeof portfolioData {
-    return portfolioData;
-  }
+  getPortfolioItems(): any[] { return []; }
 
-  getServices(): typeof servicesData {
-    return servicesData;
-  }
+  getServices(): any[] { return []; }
 
-  getSiteContent(): typeof siteContent {
-    return siteContent;
-  }
+  getSiteContent(): any { return {}; }
 }

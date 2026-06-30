@@ -3,8 +3,8 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">Portfolio</h1>
-        <p class="text-surface-400 text-sm mt-1">Manage your photography portfolio items</p>
+        <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">{{ i18n.t('PORTFOLIO.TITLE') }}</h1>
+        <p class="text-surface-400 text-sm mt-1">{{ i18n.t('PORTFOLIO.SUBTITLE') }}</p>
       </div>
       <button
         (click)="showAddForm()"
@@ -13,7 +13,7 @@
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
-        Add New
+        {{ i18n.t('PORTFOLIO.ADD_NEW') }}
       </button>
     </div>
 
@@ -24,12 +24,12 @@
         <div class="relative bg-surface-800 border border-surface-700 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
           <div class="sticky top-0 bg-surface-800 border-b border-surface-700 px-6 py-4 rounded-t-2xl">
             <h2 class="text-xl font-display font-semibold text-surface-100">
-              {{ editingId() ? 'Edit Item' : 'New Portfolio Item' }}
+              {{ editingId() ? i18n.t('PORTFOLIO.EDIT_ITEM') : i18n.t('PORTFOLIO.NEW_ITEM') }}
             </h2>
           </div>
           <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-6 space-y-4">
             <div>
-              <label for="title" class="block text-sm font-medium text-surface-300 mb-1.5">Title</label>
+              <label for="title" class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('COMMON.TITLE_FIELD') }}</label>
               <input
                 id="title"
                 type="text"
@@ -43,7 +43,7 @@
             </div>
 
             <div>
-              <label for="description" class="block text-sm font-medium text-surface-300 mb-1.5">Description</label>
+              <label for="description" class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('COMMON.DESCRIPTION') }}</label>
               <textarea
                 id="description"
                 formControlName="description"
@@ -57,7 +57,7 @@
             </div>
 
             <div>
-              <label for="category" class="block text-sm font-medium text-surface-300 mb-1.5">Category</label>
+              <label for="category" class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('COMMON.CATEGORY') }}</label>
               <input
                 id="category"
                 type="text"
@@ -71,7 +71,7 @@
             </div>
 
             <div>
-              <label for="img" class="block text-sm font-medium text-surface-300 mb-1.5">Image URL</label>
+              <label for="img" class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('COMMON.IMAGE_URL') }}</label>
               <input
                 id="img"
                 type="url"
@@ -85,7 +85,7 @@
             </div>
 
             <div>
-              <label for="link" class="block text-sm font-medium text-surface-300 mb-1.5">External Link (optional)</label>
+              <label for="link" class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('COMMON.EXTERNAL_LINK') }}</label>
               <input
                 id="link"
                 type="url"
@@ -102,7 +102,7 @@
                 formControlName="showLink"
                 class="w-4 h-4 rounded border-surface-600 bg-surface-900/50 text-primary-500 focus:ring-primary-500/50 focus:ring-2"
               />
-              <label for="showLink" class="text-sm text-surface-300">Show link button on public page</label>
+              <label for="showLink" class="text-sm text-surface-300">{{ i18n.t('COMMON.SHOW_LINK') }}</label>
             </div>
 
             <div class="flex gap-3 pt-2">
@@ -110,14 +110,14 @@
                 type="submit"
                 class="flex-1 px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-primary-600/20"
               >
-                {{ editingId() ? 'Update' : 'Create' }}
+                {{ editingId() ? i18n.t('COMMON.UPDATE') : i18n.t('COMMON.CREATE') }}
               </button>
               <button
                 type="button"
                 (click)="cancelForm()"
                 class="flex-1 px-4 py-2.5 bg-surface-700 hover:bg-surface-600 text-surface-200 font-medium rounded-lg transition-colors border border-surface-600"
               >
-                Cancel
+                {{ i18n.t('COMMON.CANCEL') }}
               </button>
             </div>
           </form>
@@ -132,7 +132,7 @@
           (click)="selectedCategory.set('')"
           [class]="!selectedCategory() ? 'px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 border bg-primary-600/15 text-primary-400 border-primary-500/30' : 'px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 border bg-surface-800 text-surface-400 border-surface-700 hover:bg-surface-700'"
         >
-          All
+          {{ i18n.t('COMMON.ALL') }}
           <span class="ml-1 text-xs opacity-70">({{ items().length }})</span>
         </button>
         @for (cat of categories(); track cat) {
@@ -151,7 +151,7 @@
     @if (loading()) {
       <div class="flex flex-col items-center justify-center py-16">
         <div class="w-10 h-10 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mb-4"></div>
-        <p class="text-surface-400 text-sm">Loading portfolio items...</p>
+        <p class="text-surface-400 text-sm">{{ i18n.t('PORTFOLIO.LOADING') }}</p>
       </div>
     }
 
@@ -175,7 +175,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
           </svg>
         </div>
-        <p class="text-surface-400 mb-4">No portfolio items yet. Create one to get started.</p>
+        <p class="text-surface-400 mb-4">{{ i18n.t('PORTFOLIO.EMPTY') }}</p>
         <button
           (click)="showAddForm()"
           class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all duration-200 text-sm"
@@ -183,7 +183,7 @@
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
-          Create your first portfolio item
+          {{ i18n.t('PORTFOLIO.CREATE_FIRST') }}
         </button>
       </div>
     }
@@ -243,10 +243,10 @@
     <!-- Delete Confirmation Dialog -->
     @if (showDeleteConfirm() && itemToDelete()) {
       <app-confirm-dialog
-        title="Delete Portfolio Item"
-        [message]="'Are you sure you want to delete \'' + itemToDelete()!.title + '\'? This action cannot be undone.'"
-        confirmText="Delete"
-        cancelText="Cancel"
+        [title]="i18n.t('PORTFOLIO.DELETE_TITLE')"
+        [message]="i18n.t('PORTFOLIO.DELETE_MSG') + itemToDelete()!.title + i18n.t('PORTFOLIO.DELETE_MSG_END')"
+        [confirmText]="i18n.t('COMMON.DELETE')"
+        [cancelText]="i18n.t('COMMON.CANCEL')"
         (confirm)="onConfirmDelete()"
         (cancel)="onCancelDelete()"
       />

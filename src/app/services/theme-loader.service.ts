@@ -128,6 +128,10 @@ export class ThemeLoaderService {
       /* Typography */
       body, html { font-family: ${this.theme().bodyFont.replace(/"/g, '')}, system-ui, sans-serif !important; }
       .font-display, h1, h2, h3, h4, h5, h6 { font-family: ${this.theme().displayFont.replace(/"/g, '')}, Georgia, serif !important; }
+      /* Border radius */
+      button, .btn, .rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl, [class*="rounded"] {
+        border-radius: var(--radius) !important;
+      }
     `;
 
     this.styleElement = this.renderer.createElement('style');

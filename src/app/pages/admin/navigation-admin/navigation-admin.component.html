@@ -3,19 +3,19 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">Navigation</h1>
-        <p class="text-surface-400 text-sm mt-1">Manage public site navigation links</p>
+        <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">{{ i18n.t('NAVIGATION.TITLE') }}</h1>
+        <p class="text-surface-400 text-sm mt-1">{{ i18n.t('NAVIGATION.SUBTITLE') }}</p>
       </div>
       <button
         (click)="showAddForm()"
         [disabled]="!canAddMore()"
         class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-500 disabled:bg-surface-700 disabled:text-surface-500 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-primary-600/20 hover:shadow-primary-500/30 text-sm"
-        [title]="canAddMore() ? 'Add navigation link' : 'All available routes are already linked'"
+        [title]="canAddMore() ? i18n.t('NAVIGATION.ADD') : 'All available routes are already linked'"
       >
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
-        Add Link
+        {{ i18n.t('NAVIGATION.ADD') }}
       </button>
     </div>
 
@@ -26,18 +26,18 @@
         <div class="relative bg-surface-800 border border-surface-700 rounded-2xl shadow-2xl w-full max-w-lg">
           <div class="sticky top-0 bg-surface-800 border-b border-surface-700 px-6 py-4 rounded-t-2xl">
             <h2 class="text-xl font-display font-semibold text-surface-100">
-              {{ editingId() ? 'Edit Link' : 'New Navigation Link' }}
+              {{ editingId() ? i18n.t('NAVIGATION.EDIT') : i18n.t('NAVIGATION.NEW') }}
             </h2>
           </div>
           <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-6 space-y-4">
             <div>
-              <label class="block text-sm font-medium text-surface-300 mb-1.5">Label</label>
+              <label class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('COMMON.LABEL') }}</label>
               <input type="text" formControlName="label"
                 class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all"
                 placeholder="e.g. Home" />
             </div>
             <div>
-              <label class="block text-sm font-medium text-surface-300 mb-1.5">Route</label>
+              <label class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('COMMON.ROUTE') }}</label>
               <select formControlName="path"
                 (change)="onPathChange($any($event.target).value)"
                 class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all">
@@ -54,7 +54,7 @@
             </div>
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-surface-300 mb-1.5">Order</label>
+                <label class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('COMMON.ORDER') }}</label>
                 <input type="number" formControlName="order"
                   class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all" />
               </div>
@@ -62,18 +62,18 @@
                 <label class="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" formControlName="visible"
                     class="w-4 h-4 rounded border-surface-600 bg-surface-900 text-primary-500 focus:ring-primary-500/50" />
-                  <span class="text-sm text-surface-300">Visible</span>
+                  <span class="text-sm text-surface-300">{{ i18n.t('COMMON.VISIBLE') }}</span>
                 </label>
               </div>
             </div>
             <div class="flex gap-3 pt-2">
               <button type="submit"
                 class="flex-1 px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all">
-                {{ editingId() ? 'Update' : 'Create' }}
+                {{ editingId() ? i18n.t('COMMON.UPDATE') : i18n.t('COMMON.CREATE') }}
               </button>
               <button type="button" (click)="cancelForm()"
                 class="flex-1 px-4 py-2.5 bg-surface-700 hover:bg-surface-600 text-surface-200 font-medium rounded-lg border border-surface-600 transition-colors">
-                Cancel
+                {{ i18n.t('COMMON.CANCEL') }}
               </button>
             </div>
           </form>
@@ -85,17 +85,17 @@
     @if (loading()) {
       <div class="flex flex-col items-center justify-center py-16">
         <div class="w-10 h-10 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mb-4"></div>
-        <p class="text-surface-400 text-sm">Loading navigation links...</p>
+        <p class="text-surface-400 text-sm">{{ i18n.t('NAVIGATION.LOADING') }}</p>
       </div>
     }
 
     <!-- Empty State -->
     @if (!loading() && !error() && links().length === 0) {
       <div class="text-center py-16 bg-surface-800 border border-surface-700 rounded-xl">
-        <p class="text-surface-400 mb-4">No navigation links yet.</p>
+        <p class="text-surface-400 mb-4">{{ i18n.t('NAVIGATION.EMPTY') }}</p>
         <button (click)="showAddForm()"
           class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg text-sm">
-          Add your first link
+          {{ i18n.t('NAVIGATION.ADD_FIRST') }}
         </button>
       </div>
     }
@@ -106,11 +106,11 @@
         <table class="w-full">
           <thead>
             <tr class="border-b border-surface-700">
-              <th class="text-left px-6 py-3 text-xs font-semibold text-surface-500 uppercase">Order</th>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-surface-500 uppercase">Label</th>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-surface-500 uppercase">Path</th>
-              <th class="text-center px-6 py-3 text-xs font-semibold text-surface-500 uppercase">Visible</th>
-              <th class="text-right px-6 py-3 text-xs font-semibold text-surface-500 uppercase">Actions</th>
+              <th class="text-left px-6 py-3 text-xs font-semibold text-surface-500 uppercase">{{ i18n.t('COMMON.ORDER') }}</th>
+              <th class="text-left px-6 py-3 text-xs font-semibold text-surface-500 uppercase">{{ i18n.t('COMMON.LABEL') }}</th>
+              <th class="text-left px-6 py-3 text-xs font-semibold text-surface-500 uppercase">{{ i18n.t('COMMON.ROUTE') }}</th>
+              <th class="text-center px-6 py-3 text-xs font-semibold text-surface-500 uppercase">{{ i18n.t('COMMON.VISIBLE') }}</th>
+              <th class="text-right px-6 py-3 text-xs font-semibold text-surface-500 uppercase">{{ i18n.t('COMMON.ACTIONS') }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-surface-700">
@@ -161,10 +161,10 @@
     <!-- Delete Confirmation -->
     @if (showDeleteConfirm() && itemToDelete()) {
       <app-confirm-dialog
-        title="Delete Link"
-        [message]="'Delete navigation link \'' + itemToDelete()!.label + '\'?'"
-        confirmText="Delete"
-        cancelText="Cancel"
+        [title]="i18n.t('NAVIGATION.DELETE_TITLE')"
+        [message]="i18n.t('NAVIGATION.DELETE_MSG') + itemToDelete()!.label + i18n.t('NAVIGATION.DELETE_MSG_END')"
+        [confirmText]="i18n.t('COMMON.DELETE')"
+        [cancelText]="i18n.t('COMMON.CANCEL')"
         (confirm)="onConfirmDelete()"
         (cancel)="onCancelDelete()"
       />

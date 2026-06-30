@@ -2,15 +2,15 @@
   <div class="max-w-3xl mx-auto">
     <!-- Header -->
     <div class="mb-6">
-      <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">Settings</h1>
-      <p class="text-surface-400 text-sm mt-1">Manage site branding, theme, and general settings</p>
+      <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">{{ i18n.t('SETTINGS.TITLE') }}</h1>
+      <p class="text-surface-400 text-sm mt-1">{{ i18n.t('SETTINGS.SUBTITLE') }}</p>
     </div>
 
     <!-- Loading State -->
     @if (loading()) {
       <div class="flex flex-col items-center justify-center py-16">
         <div class="w-10 h-10 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mb-4"></div>
-        <p class="text-surface-400 text-sm">Loading settings...</p>
+        <p class="text-surface-400 text-sm">{{ i18n.t('SETTINGS.LOADING') }}</p>
       </div>
     }
 
@@ -26,7 +26,7 @@
       <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden mb-6">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-surface-700">
-          <h2 class="text-xl font-display font-semibold text-surface-100">Site Branding</h2>
+          <h2 class="text-xl font-display font-semibold text-surface-100">{{ i18n.t('SETTINGS.SITE_BRANDING') }}</h2>
           <div class="flex gap-2">
             <button
               (click)="save()"
@@ -39,7 +39,7 @@
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                 </svg>
               }
-              {{ saving() ? 'Saving...' : 'Save' }}
+              {{ saving() ? i18n.t('COMMON.SAVING') : i18n.t('COMMON.SAVE') }}
             </button>
           </div>
         </div>
@@ -47,7 +47,7 @@
         <!-- Form -->
         <form [formGroup]="form" (ngSubmit)="$event.preventDefault()" class="p-6 space-y-5">
           <div>
-            <label for="siteName" class="block text-sm font-medium text-surface-300 mb-1.5">Site Name</label>
+            <label for="siteName" class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('SETTINGS.SITE_NAME') }}</label>
             <input
               id="siteName"
               type="text"
@@ -60,7 +60,7 @@
           </div>
 
           <div>
-            <label for="logoUrl" class="block text-sm font-medium text-surface-300 mb-1.5">Logo URL</label>
+            <label for="logoUrl" class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('SETTINGS.LOGO_URL') }}</label>
             <input
               id="logoUrl"
               type="url"
@@ -73,7 +73,7 @@
           </div>
 
           <div>
-            <label for="footerText" class="block text-sm font-medium text-surface-300 mb-1.5">Footer Text</label>
+            <label for="footerText" class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('SETTINGS.FOOTER_TEXT') }}</label>
             <input
               id="footerText"
               type="text"
@@ -90,7 +90,7 @@
       <!-- Theme Editor -->
       <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden">
         <div class="flex items-center justify-between px-6 py-4 border-b border-surface-700">
-          <h2 class="text-xl font-display font-semibold text-surface-100">Theme</h2>
+          <h2 class="text-xl font-display font-semibold text-surface-100">{{ i18n.t('SETTINGS.THEME') }}</h2>
           <button
             (click)="saveTheme()"
             [disabled]="themeSaving()"
@@ -102,7 +102,7 @@
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
               </svg>
             }
-            {{ themeSaving() ? 'Saving...' : 'Save Theme' }}
+            {{ themeSaving() ? i18n.t('COMMON.SAVING') : i18n.t('SETTINGS.SAVE_THEME') }}
           </button>
         </div>
 
@@ -118,7 +118,7 @@
             <!-- Colors -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label class="block text-sm font-medium text-surface-300 mb-1.5">Primary Color</label>
+                <label class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('SETTINGS.PRIMARY_COLOR') }}</label>
                 <div class="flex items-center gap-3">
                   <input
                     type="color"
@@ -136,7 +136,7 @@
                 </div>
               </div>
               <div>
-                <label class="block text-sm font-medium text-surface-300 mb-1.5">Primary Hover</label>
+                <label class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('SETTINGS.PRIMARY_HOVER') }}</label>
                 <div class="flex items-center gap-3">
                   <input
                     type="color"
@@ -158,7 +158,7 @@
             <!-- Fonts -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label class="block text-sm font-medium text-surface-300 mb-1.5">Display Font</label>
+                <label class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('SETTINGS.DISPLAY_FONT') }}</label>
                 <select
                   formControlName="displayFont"
                   (change)="onFontChange($any($event.target).value)"
@@ -170,7 +170,7 @@
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium text-surface-300 mb-1.5">Body Font</label>
+                <label class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('SETTINGS.BODY_FONT') }}</label>
                 <select
                   formControlName="bodyFont"
                   (change)="onFontChange($any($event.target).value)"
@@ -186,7 +186,7 @@
             <!-- Border Radius -->
             <div>
               <label class="block text-sm font-medium text-surface-300 mb-1.5">
-                Border Radius: {{ themeForm.value.borderRadius || '12' }}px
+                {{ i18n.t('SETTINGS.BORDER_RADIUS') }}: {{ themeForm.value.borderRadius || '12' }}px
               </label>
               <input
                 type="range"
@@ -204,7 +204,7 @@
 
             <!-- Live Preview -->
             <div class="border border-surface-700 rounded-xl p-5 bg-surface-900/50">
-              <p class="text-xs text-surface-500 uppercase tracking-wider mb-3 font-medium">Live Preview</p>
+              <p class="text-xs text-surface-500 uppercase tracking-wider mb-3 font-medium">{{ i18n.t('SETTINGS.LIVE_PREVIEW') }}</p>
               <div
                 class="space-y-3"
                 [style.--preview-primary]="themeForm.value.primaryColor || '#d4892e'"
@@ -214,13 +214,13 @@
                 <h3
                   class="text-2xl font-bold text-surface-100"
                   [style]="'font-family: ' + previewFontFamily(themeForm.value.displayFont || '')">
-                  Heading Preview
+                  {{ i18n.t('SETTINGS.HEADING_PREVIEW') }}
                 </h3>
                 <p
                   class="text-surface-400 text-sm"
                   [style.font-family]="previewFontFamily(themeForm.value.bodyFont || '')"
                 >
-                  Body text preview — The quick brown fox jumps over the lazy dog. This is how your content will look with the selected fonts and colors.
+                  {{ i18n.t('SETTINGS.BODY_PREVIEW') }}
                 </p>
                 <div class="flex gap-3 pt-1">
                   <button
@@ -229,7 +229,7 @@
                     [style.background-color]="themeForm.value.primaryColor || '#d4892e'"
                     [style.border-radius]="(themeForm.value.borderRadius || '12') + 'px'"
                   >
-                    Primary Button
+                    {{ i18n.t('SETTINGS.PRIMARY_BUTTON') }}
                   </button>
                   <button
                     type="button"
@@ -238,14 +238,14 @@
                     [style.color]="themeForm.value.primaryColor || '#d4892e'"
                     [style.border-radius]="(themeForm.value.borderRadius || '12') + 'px'"
                   >
-                    Secondary Button
+                    {{ i18n.t('SETTINGS.SECONDARY_BUTTON') }}
                   </button>
                 </div>
                 <div
                   class="p-4 border border-surface-600 bg-surface-800"
                   [style.border-radius]="(themeForm.value.borderRadius || '12') + 'px'"
                 >
-                  <p class="text-xs text-surface-400">Card with current border radius</p>
+                  <p class="text-xs text-surface-400">{{ i18n.t('SETTINGS.CARD_PREVIEW') }}</p>
                 </div>
               </div>
             </div>

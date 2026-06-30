@@ -1,0 +1,103 @@
+{
+  "DASHBOARD": {
+    "TITLE": "Dashboard",
+    "WELCOME": "Welcome back",
+    "LOGOUT": "Logout",
+    "QUICK_ACCESS": "Quick Access",
+    "NAVIGATE": "Navigate to management sections",
+    "OPEN": "Open",
+    "PORTFOLIO": "Portfolio",
+    "CONTENT": "Content",
+    "CATEGORIES": "Categories",
+    "NAVIGATION": "Navigation",
+    "SETTINGS": "Settings",
+    "DATA": "Data",
+    "MANAGE": "Manage",
+    "EDIT": "Edit",
+    "CONFIGURE": "Configure"
+  },
+  "NAV": {
+    "DASHBOARD": "Dashboard",
+    "PORTFOLIO": "Portfolio",
+    "CONTENT": "Content",
+    "CATEGORIES": "Categories",
+    "NAVIGATION": "Navigation",
+    "SETTINGS": "Settings",
+    "DATA": "Data",
+    "LOGOUT": "Logout",
+    "ADMIN_PANEL": "Admin Panel"
+  },
+  "COMMON": {
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "CREATE": "Create",
+    "ADD": "Add",
+    "SAVING": "Saving...",
+    "SAVED": "Saved",
+    "LOADING": "Loading...",
+    "CONFIRM": "Confirm"
+  },
+  "LOGIN": {
+    "TITLE": "Admin Login",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "LOGIN": "Sign In",
+    "LOGGING_IN": "Signing in...",
+    "FORGOT_PASSWORD": "Forgot password?",
+    "RESET_SENT": "Check your email for reset link",
+    "BACK_TO_LOGIN": "Back to login"
+  },
+  "SETTINGS": {
+    "SITE_BRANDING": "Site Branding",
+    "SITE_NAME": "Site Name",
+    "LOGO_URL": "Logo URL",
+    "FOOTER_TEXT": "Footer Text",
+    "SAVED": "Settings saved",
+    "THEME": "Theme",
+    "PRIMARY_COLOR": "Primary Color",
+    "PRIMARY_HOVER": "Primary Hover",
+    "DISPLAY_FONT": "Display Font",
+    "BODY_FONT": "Body Font",
+    "BORDER_RADIUS": "Border Radius",
+    "THEME_SAVED": "Theme saved and applied"
+  },
+  "CONTENT": {
+    "TITLE": "Content Editor",
+    "EDIT_SECTIONS": "Edit site content sections",
+    "SECTION_VISIBILITY": "Section Visibility & Order",
+    "SAVE_SECTION_ORDER": "Save Section Order",
+    "SOCIAL_LINKS": "Social Links",
+    "ADD_LINK": "Add Link",
+    "ADD_CUSTOM": "Add Custom",
+    "PLATFORM": "Platform",
+    "URL": "URL"
+  },
+  "PORTFOLIO": {
+    "TITLE": "Portfolio Manager",
+    "ADD_ITEM": "Add Item",
+    "EDIT_ITEM": "Edit Item",
+    "IMAGE_URL": "Image URL",
+    "TITLE": "Title",
+    "DESCRIPTION": "Description",
+    "CATEGORY": "Category",
+    "EXTERNAL_LINK": "External Link",
+    "SHOW_LINK": "Show link button"
+  },
+  "DATA": {
+    "TITLE": "Data Manager",
+    "EXPORT_ALL": "Export All Data",
+    "IMPORT_DATA": "Import Data",
+    "TEMPLATES": "Templates & Sample Data",
+    "GO_TO_SEED": "Go to Seed Manager",
+    "SEED_DESC": "Seed your Firestore with example content"
+  },
+  "SEED": {
+    "TITLE": "Seed Manager",
+    "SEED_ALL": "Seed All Data",
+    "SECTION_SEEDS": "Seed Individual Sections",
+    "CLEAR_ALL": "Clear All Data",
+    "DANGER_ZONE": "Danger Zone"
+  }
+}

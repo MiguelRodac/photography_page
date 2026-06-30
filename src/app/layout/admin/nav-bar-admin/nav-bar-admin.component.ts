@@ -4,6 +4,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AUTH_SERVICE } from '../../../core/tokens/auth-service.token';
 import { IAuthService, AuthUser } from '../../../core/interfaces/auth-service.interface';
+import { I18nService } from '../../../services/i18n.service';
 
 @Component({
   selector: 'app-nav-bar-admin',
@@ -14,18 +15,19 @@ import { IAuthService, AuthUser } from '../../../core/interfaces/auth-service.in
 export class NavBarAdminComponent {
   private readonly authService = inject<IAuthService>(AUTH_SERVICE);
   private readonly router = inject(Router);
+  readonly i18n = inject(I18nService);
 
   readonly mobileMenuOpen = signal(false);
   readonly user$: Observable<AuthUser | null> = this.authService.authState$;
 
   readonly navLinks = [
-    { label: 'Dashboard', link: '/admin-page', icon: 'home' },
-    { label: 'Portfolio', link: '/admin-page/portfolio', icon: 'photo' },
-    { label: 'Categories', link: '/admin-page/categories', icon: 'tag' },
-    { label: 'Content', link: '/admin-page/content', icon: 'document' },
-    { label: 'Navigation', link: '/admin-page/navigation', icon: 'link' },
-    { label: 'Settings', link: '/admin-page/settings', icon: 'cog' },
-    { label: 'Data', link: '/admin-page/data', icon: 'database' },
+    { label: () => this.i18n.t('NAV.DASHBOARD'), link: '/admin-page', icon: 'home' },
+    { label: () => this.i18n.t('NAV.PORTFOLIO'), link: '/admin-page/portfolio', icon: 'photo' },
+    { label: () => this.i18n.t('NAV.CATEGORIES'), link: '/admin-page/categories', icon: 'tag' },
+    { label: () => this.i18n.t('NAV.CONTENT'), link: '/admin-page/content', icon: 'document' },
+    { label: () => this.i18n.t('NAV.NAVIGATION'), link: '/admin-page/navigation', icon: 'link' },
+    { label: () => this.i18n.t('NAV.SETTINGS'), link: '/admin-page/settings', icon: 'cog' },
+    { label: () => this.i18n.t('NAV.DATA'), link: '/admin-page/data', icon: 'database' },
   ];
 
   toggleMobileMenu(): void {

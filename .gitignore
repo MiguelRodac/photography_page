@@ -50,3 +50,8 @@ openspec
 environment.ts
 environment.prod.ts
 environment.spec.ts
+
+.env
+.env.local
+.env.*.local
+firestore.rules

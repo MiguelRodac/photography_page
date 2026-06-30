@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   Firestore,
   collection,
@@ -7,6 +8,7 @@ import {
   setDoc,
 } from '@angular/fire/firestore';
 import { ToastService } from '../../../services/toast.service';
+import { I18nService } from '../../../services/i18n.service';
 
 interface ExportData {
   content: Record<string, any>;
@@ -26,12 +28,13 @@ interface ImportPreview {
 @Component({
   selector: 'app-data-manager',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './data-manager.component.html',
 })
 export class DataManagerComponent {
   private readonly firestore = inject(Firestore);
   private readonly toast = inject(ToastService);
+  readonly i18n = inject(I18nService);
 
   readonly exporting = signal(false);
   readonly importing = signal(false);

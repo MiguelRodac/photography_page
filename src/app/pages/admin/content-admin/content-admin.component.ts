@@ -5,10 +5,11 @@ import { IContentService } from '../../../core/interfaces/content-service.interf
 import { CONTENT_SERVICE } from '../../../core/tokens/content-service.token';
 import { PageSectionItem, PageSectionsConfig } from '../../../core/interfaces/firestore-models';
 import { ToastService } from '../../../services/toast.service';
+import { I18nService } from '../../../services/i18n.service';
 
 interface SectionConfig {
   id: string;
-  label: string;
+  label: () => string;
   icon: string;
   fields: string[];
 }
@@ -51,19 +52,20 @@ export class ContentAdminComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly contentService = inject(CONTENT_SERVICE);
   private readonly toast = inject(ToastService);
+  readonly i18n = inject(I18nService);
 
   readonly sections: SectionConfig[] = [
-    { id: 'hero', label: 'Home Hero', icon: 'bolt', fields: ['title', 'subtitle', 'cta', 'ctaRoute', 'bgImage'] },
-    { id: 'services', label: 'Home Services', icon: 'briefcase', fields: ['sectionTitle', 'sectionDescription'] },
-    { id: 'testimonials', label: 'Testimonials', icon: 'star', fields: ['sectionTitle', 'sectionDescription'] },
-    { id: 'portfolio-preview', label: 'Portfolio Preview', icon: 'image', fields: ['sectionTitle', 'sectionDescription', 'ctaText', 'ctaRoute'] },
-    { id: 'cta', label: 'Call to Action', icon: 'megaphone', fields: ['title', 'description', 'buttonText', 'ctaRoute'] },
-    { id: 'about', label: 'About Me', icon: 'user', fields: ['heroLabel', 'title', 'subtitle', 'description', 'extra', 'profileImageAlt', 'overlayImage', 'overlayImageAlt', 'philosophyLabel', 'quote', 'philosophy', 'servicesLabel', 'servicesTitle', 'image', 'ctaRoute'] },
-    { id: 'contact', label: 'Contact', icon: 'envelope', fields: ['heroLabel', 'heroTitle', 'heroTitleAccent', 'heroSubtitle', 'bgImage', 'formTitle', 'formSubtitle', 'serviceTypeLabel', 'serviceTypeError', 'serviceTypes', 'email', 'phone', 'address', 'mapEmbed', 'infoEmailLabel', 'infoLocationLabel', 'infoResponseLabel', 'infoResponseValue', 'whatsappTitle', 'whatsappSubtitle', 'statsValue', 'statsLabel'] },
-    { id: 'header', label: 'Header', icon: 'bars', fields: ['siteName', 'logoUrl'] },
-    { id: 'footer', label: 'Footer', icon: 'document', fields: ['copyrightText', 'tagline', 'showLinks', 'socialTitle', 'showSocialLinks'] },
-    { id: 'portfolio', label: 'Portfolio Page', icon: 'image', fields: ['pageTitle', 'pageSubtitle', 'emptyMessage'] },
-    { id: 'whatsapp', label: 'WhatsApp', icon: 'chat', fields: ['phoneNumber', 'defaultMessage', 'buttonTooltip', 'buttonAriaLabel'] },
+    { id: 'hero', label: () => this.i18n.t('CONTENT.HERO'), icon: 'bolt', fields: ['title', 'subtitle', 'cta', 'ctaRoute', 'bgImage'] },
+    { id: 'services', label: () => this.i18n.t('CONTENT.SERVICES'), icon: 'briefcase', fields: ['sectionTitle', 'sectionDescription'] },
+    { id: 'testimonials', label: () => this.i18n.t('CONTENT.TESTIMONIALS'), icon: 'star', fields: ['sectionTitle', 'sectionDescription'] },
+    { id: 'portfolio-preview', label: () => this.i18n.t('CONTENT.PORTFOLIO_PREVIEW'), icon: 'image', fields: ['sectionTitle', 'sectionDescription', 'ctaText', 'ctaRoute'] },
+    { id: 'cta', label: () => this.i18n.t('CONTENT.CTA'), icon: 'megaphone', fields: ['title', 'description', 'buttonText', 'ctaRoute'] },
+    { id: 'about', label: () => this.i18n.t('CONTENT.ABOUT'), icon: 'user', fields: ['heroLabel', 'title', 'subtitle', 'description', 'extra', 'profileImageAlt', 'overlayImage', 'overlayImageAlt', 'philosophyLabel', 'quote', 'philosophy', 'servicesLabel', 'servicesTitle', 'image', 'ctaRoute'] },
+    { id: 'contact', label: () => this.i18n.t('CONTENT.CONTACT'), icon: 'envelope', fields: ['heroLabel', 'heroTitle', 'heroTitleAccent', 'heroSubtitle', 'bgImage', 'formTitle', 'formSubtitle', 'serviceTypeLabel', 'serviceTypeError', 'serviceTypes', 'email', 'phone', 'address', 'mapEmbed', 'infoEmailLabel', 'infoLocationLabel', 'infoResponseLabel', 'infoResponseValue', 'whatsappTitle', 'whatsappSubtitle', 'statsValue', 'statsLabel'] },
+    { id: 'header', label: () => this.i18n.t('CONTENT.HEADER'), icon: 'bars', fields: ['siteName', 'logoUrl'] },
+    { id: 'footer', label: () => this.i18n.t('CONTENT.FOOTER'), icon: 'document', fields: ['copyrightText', 'tagline', 'showLinks', 'socialTitle', 'showSocialLinks'] },
+    { id: 'portfolio', label: () => this.i18n.t('CONTENT.PORTFOLIO_PAGE'), icon: 'image', fields: ['pageTitle', 'pageSubtitle', 'emptyMessage'] },
+    { id: 'whatsapp', label: () => this.i18n.t('CONTENT.WHATSAPP'), icon: 'chat', fields: ['phoneNumber', 'defaultMessage', 'buttonTooltip', 'buttonAriaLabel'] },
   ];
 
   readonly heroLayouts = [
@@ -451,11 +453,67 @@ export class ContentAdminComponent implements OnInit {
   }
 
   formatFieldName(field: string): string {
-    // Custom labels for specific fields
-    const customLabels: Record<string, string> = {
-      phoneNumber: 'WhatsApp Phone Number',
+    const fieldKeyMap: Record<string, string> = {
+      siteName: 'FIELD.SITE_NAME',
+      logoUrl: 'FIELD.LOGO_URL',
+      copyrightText: 'FIELD.COPYRIGHT',
+      title: 'FIELD.TITLE',
+      subtitle: 'FIELD.SUBTITLE',
+      description: 'FIELD.DESCRIPTION',
+      cta: 'FIELD.CTA',
+      ctaText: 'FIELD.CTA_TEXT',
+      ctaRoute: 'FIELD.CTA_ROUTE',
+      bgImage: 'FIELD.BG_IMAGE',
+      phone: 'FIELD.PHONE',
+      email: 'FIELD.EMAIL',
+      address: 'FIELD.ADDRESS',
+      phoneNumber: 'FIELD.PHONE_NUMBER',
+      defaultMessage: 'FIELD.DEFAULT_MESSAGE',
+      buttonTooltip: 'FIELD.BUTTON_TOOLTIP',
+      buttonAriaLabel: 'FIELD.BUTTON_ARIA_LABEL',
+      buttonText: 'FIELD.BUTTON_TEXT',
+      tagline: 'FIELD.TAGLINE',
+      socialTitle: 'FIELD.SOCIAL_TITLE',
+      sectionTitle: 'FIELD.SECTION_TITLE',
+      sectionDescription: 'FIELD.SECTION_DESCRIPTION',
+      heroLabel: 'FIELD.HERO_LABEL',
+      heroTitle: 'FIELD.HERO_TITLE',
+      heroTitleAccent: 'FIELD.HERO_TITLE_ACCENT',
+      heroSubtitle: 'FIELD.HERO_SUBTITLE',
+      formTitle: 'FIELD.FORM_TITLE',
+      formSubtitle: 'FIELD.FORM_SUBTITLE',
+      serviceTypeLabel: 'FIELD.SERVICE_TYPE_LABEL',
+      serviceTypeError: 'FIELD.SERVICE_TYPE_ERROR',
+      serviceTypes: 'FIELD.SERVICE_TYPES',
+      mapEmbed: 'FIELD.MAP_EMBED',
+      infoEmailLabel: 'FIELD.INFO_EMAIL_LABEL',
+      infoLocationLabel: 'FIELD.INFO_LOCATION_LABEL',
+      infoResponseLabel: 'FIELD.INFO_RESPONSE_LABEL',
+      infoResponseValue: 'FIELD.INFO_RESPONSE_VALUE',
+      whatsappTitle: 'FIELD.WHATSAPP_TITLE',
+      whatsappSubtitle: 'FIELD.WHATSAPP_SUBTITLE',
+      statsValue: 'FIELD.STATS_VALUE',
+      statsLabel: 'FIELD.STATS_LABEL',
+      extra: 'FIELD.EXTRA',
+      profileImageAlt: 'FIELD.PROFILE_IMAGE_ALT',
+      overlayImage: 'FIELD.OVERLAY_IMAGE',
+      overlayImageAlt: 'FIELD.OVERLAY_IMAGE_ALT',
+      philosophyLabel: 'FIELD.PHILOSOPHY_LABEL',
+      quote: 'FIELD.QUOTE',
+      philosophy: 'FIELD.PHILOSOPHY',
+      servicesLabel: 'FIELD.SERVICES_LABEL',
+      servicesTitle: 'FIELD.SERVICES_TITLE',
+      image: 'FIELD.IMAGE',
+      showLinks: 'FIELD.SHOW_LINKS',
+      showSocialLinks: 'FIELD.SHOW_SOCIAL_LINKS',
+      pageTitle: 'FIELD.PAGE_TITLE',
+      pageSubtitle: 'FIELD.PAGE_SUBTITLE',
+      emptyMessage: 'FIELD.EMPTY_MESSAGE',
     };
-    if (customLabels[field]) return customLabels[field];
+    const i18nKey = fieldKeyMap[field];
+    if (i18nKey) {
+      return this.i18n.t(i18nKey);
+    }
     return field.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase());
   }
 

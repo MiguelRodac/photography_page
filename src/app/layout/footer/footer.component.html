@@ -2,16 +2,18 @@
   <div class="max-w-7xl mx-auto px-6 py-12">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
       <div>
+        @if (siteName() || logoUrl()) {
         <a routerLink="/" class="flex items-center gap-3 mb-4">
           @if (logoUrl()) {
             <img [src]="logoUrl()" [alt]="siteName()" class="h-8 w-8 rounded-full object-cover" />
           } @else {
             <span class="h-8 w-8 rounded-full bg-primary-500/15 flex items-center justify-center text-primary-600 dark:text-primary-400 font-display font-bold text-sm">
-              {{ siteName().charAt(0) || 'P' }}
+              {{ siteName().charAt(0) }}
             </span>
           }
           <span class="text-lg font-display font-semibold">{{ siteName() }}</span>
         </a>
+        }
         <p class="text-sm text-surface-500 dark:text-surface-400">
           {{ tagline() }}
         </p>
@@ -29,7 +31,7 @@
 
       @if (showSocialLinks()) {
       <div>
-        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">{{ socialTitle() || 'Follow Me' }}</h3>
+        <h3 class="font-display font-semibold mb-4 text-surface-900 dark:text-white">{{ socialTitle() }}</h3>
         <div class="flex flex-wrap gap-3">
           @for (link of socialLinks(); track link.url) {
             <a [href]="link.url" target="_blank" rel="noopener noreferrer"

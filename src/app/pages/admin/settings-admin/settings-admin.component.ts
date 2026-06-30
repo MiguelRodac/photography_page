@@ -5,6 +5,7 @@ import { CONTENT_SERVICE } from '../../../core/tokens/content-service.token';
 import { ThemeLoaderService } from '../../../services/theme-loader.service';
 import { ThemeSettings } from '../../../core/interfaces/firestore-models';
 import { ToastService } from '../../../services/toast.service';
+import { I18nService } from '../../../services/i18n.service';
 
 @Component({
   selector: 'app-settings-admin',
@@ -17,6 +18,7 @@ export class SettingsAdminComponent implements OnInit {
   private readonly contentService = inject(CONTENT_SERVICE);
   private readonly themeLoader = inject(ThemeLoaderService);
   private readonly toast = inject(ToastService);
+  readonly i18n = inject(I18nService);
 
   readonly loading = signal(true);
   readonly saving = signal(false);

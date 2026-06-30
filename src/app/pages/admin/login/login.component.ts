@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AUTH_SERVICE } from '../../../core/tokens/auth-service.token';
 import { IAuthService } from '../../../core/interfaces/auth-service.interface';
+import { I18nService } from '../../../services/i18n.service';
 import { take, Subscription } from 'rxjs';
 
 @Component({
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AUTH_SERVICE);
   private readonly router = inject(Router);
+  readonly i18n = inject(I18nService);
   private sub: Subscription | null = null;
 
   readonly loading = signal(false);

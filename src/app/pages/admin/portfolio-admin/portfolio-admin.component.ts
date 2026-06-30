@@ -5,6 +5,7 @@ import { IPortfolioService, PortfolioCreate } from '../../../core/interfaces/por
 import { PORTFOLIO_SERVICE } from '../../../core/tokens/portfolio-service.token';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ToastService } from '../../../services/toast.service';
+import { I18nService } from '../../../services/i18n.service';
 
 @Component({
   selector: 'app-portfolio-admin',
@@ -16,6 +17,7 @@ export class PortfolioAdminComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly portfolioService = inject(PORTFOLIO_SERVICE);
   private readonly toast = inject(ToastService);
+  readonly i18n = inject(I18nService);
 
   readonly items = signal<PortfolioDoc[]>([]);
   readonly loading = signal(true);

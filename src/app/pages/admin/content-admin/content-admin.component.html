@@ -2,8 +2,8 @@
   <div class="max-w-7xl mx-auto">
     <!-- Header -->
     <div class="mb-6">
-      <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">Content Editor</h1>
-      <p class="text-surface-400 text-sm mt-1">Select a section to edit its content</p>
+      <h1 class="text-2xl sm:text-3xl font-display font-bold text-surface-100">{{ i18n.t('CONTENT.TITLE') }}</h1>
+      <p class="text-surface-400 text-sm mt-1">{{ i18n.t('CONTENT.SUBTITLE') }}</p>
     </div>
 
     <!-- Sidebar + Content Layout -->
@@ -12,7 +12,7 @@
       <nav class="w-60 shrink-0 sticky top-6">
         <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden">
           <div class="p-3 border-b border-surface-700">
-            <span class="text-xs font-semibold text-surface-500 uppercase tracking-wider">Sections</span>
+            <span class="text-xs font-semibold text-surface-500 uppercase tracking-wider">{{ i18n.t('CONTENT.SECTIONS') }}</span>
           </div>
           <div class="p-2 space-y-0.5">
             @for (section of sections; track section.id) {
@@ -58,7 +58,7 @@
                   }
                 </span>
                 <!-- Label -->
-                <span class="flex-1 truncate">{{ section.label }}</span>
+                <span class="flex-1 truncate">{{ section.label() }}</span>
                 <!-- Status indicators -->
                 @if (isSectionDirty(section.id)) {
                   <span class="w-2 h-2 rounded-full bg-yellow-400 shrink-0"></span>
@@ -81,7 +81,7 @@
               <span class="w-5 h-5 flex items-center justify-center shrink-0" [class.text-primary-300]="isActivePageSections()" [class.text-primary-400]="!isActivePageSections()">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" /></svg>
               </span>
-              <span class="flex-1 truncate">Page Sections</span>
+              <span class="flex-1 truncate">{{ i18n.t('CONTENT.PAGE_SECTIONS') }}</span>
             </button>
           </div>
         </div>
@@ -96,11 +96,11 @@
               <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden">
                 <!-- Section Title Bar -->
                 <div class="px-6 py-4 border-b border-surface-700 flex items-center justify-between">
-                  <h2 class="text-lg font-display font-semibold text-surface-100">{{ section.label }}</h2>
+                  <h2 class="text-lg font-display font-semibold text-surface-100">{{ section.label() }}</h2>
                   @if (isLoading(section.id)) {
                     <div class="flex items-center gap-2 text-surface-400 text-sm">
                       <div class="w-4 h-4 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
-                      Loading...
+                      {{ i18n.t('COMMON.LOADING') }}
                     </div>
                   }
                 </div>
@@ -121,7 +121,7 @@
                             class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 transition-all font-mono text-sm resize-none"
                             [placeholder]="getJsonPlaceholder(field)"
                           ></textarea>
-                          <p class="text-xs text-surface-500 mt-1">JSON format</p>
+                          <p class="text-xs text-surface-500 mt-1">{{ i18n.t('CONTENT.JSON_FORMAT') }}</p>
                         } @else if (isRouteField(field)) {
                           <select
                             [formControlName]="field"
@@ -164,7 +164,7 @@
                     <!-- Services Items Repeater -->
                     @if (section.id === 'services') {
                       <div class="space-y-3">
-                        <label class="block text-sm font-medium text-surface-300">Services</label>
+                        <label class="block text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.SERVICES') }}</label>
                         @for (item of servicesItems(); track $index) {
                           <div class="p-4 bg-surface-900/50 border border-surface-600 rounded-lg space-y-3">
                             <div class="flex gap-3">
@@ -184,12 +184,12 @@
                               class="w-full px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm resize-none"></textarea>
                           </div>
                         } @empty {
-                          <p class="text-surface-500 text-sm">No services added yet.</p>
+                          <p class="text-surface-500 text-sm">{{ i18n.t('CONTENT.NO_SERVICES') }}</p>
                         }
                         <button type="button" (click)="addServiceItem()"
                           class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors">
-                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                          Add Service
+                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7. 5-7.5h-15" /></svg>
+                          {{ i18n.t('CONTENT.ADD_SERVICE') }}
                         </button>
                       </div>
                     }
@@ -197,7 +197,7 @@
                     <!-- Stats Repeater (About Me) -->
                     @if (section.id === 'about') {
                       <div class="space-y-3">
-                        <label class="block text-sm font-medium text-surface-300">Stats</label>
+                        <label class="block text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.STATS') }}</label>
                         @for (stat of aboutStats(); track $index) {
                           <div class="flex items-start gap-3">
                             <input type="text" [value]="stat.value" (input)="updateStatItem($index, 'value', $any($event.target).value)"
@@ -210,12 +210,12 @@
                             </button>
                           </div>
                         } @empty {
-                          <p class="text-surface-500 text-sm">No stats added yet.</p>
+                          <p class="text-surface-500 text-sm">{{ i18n.t('CONTENT.NO_STATS') }}</p>
                         }
                         <button type="button" (click)="addStatItem()"
                           class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                          Add Stat
+                          {{ i18n.t('CONTENT.ADD_STAT') }}
                         </button>
                       </div>
                     }
@@ -223,7 +223,7 @@
                     <!-- Testimonials Repeater -->
                     @if (section.id === 'testimonials') {
                       <div class="space-y-3">
-                        <label class="block text-sm font-medium text-surface-300">Testimonials</label>
+                        <label class="block text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.TESTIMONIALS') }}</label>
                         @for (item of testimonialsItems(); track $index) {
                           <div class="p-4 bg-surface-900/50 border border-surface-600 rounded-lg space-y-3">
                             <div class="flex gap-3">
@@ -241,12 +241,12 @@
                               class="w-full px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm resize-none"></textarea>
                           </div>
                         } @empty {
-                          <p class="text-surface-500 text-sm">No testimonials added yet.</p>
+                          <p class="text-surface-500 text-sm">{{ i18n.t('CONTENT.NO_TESTIMONIALS') }}</p>
                         }
                         <button type="button" (click)="addTestimonialItem()"
                           class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                          Add Testimonial
+                          {{ i18n.t('CONTENT.ADD_TESTIMONIAL') }}
                         </button>
                       </div>
                     }
@@ -254,7 +254,7 @@
                     <!-- Contact Form Fields Repeater -->
                     @if (section.id === 'contact') {
                       <div class="space-y-3">
-                        <label class="block text-sm font-medium text-surface-300">Form Fields</label>
+                        <label class="block text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.FORM_FIELDS') }}</label>
                         @for (field of contactFormFields(); track $index; let fieldIdx = $index) {
                           <div class="p-4 bg-surface-900/50 border border-surface-600 rounded-lg space-y-3">
                             <div class="flex items-center gap-2">
@@ -296,7 +296,7 @@
                               <div class="flex items-center justify-between">
                                 <span class="text-xs text-surface-500">Validators</span>
                                 <button type="button" (click)="addFormFieldValidator(fieldIdx)"
-                                  class="text-xs text-primary-400 hover:text-primary-300 transition-colors">+ Add validator</button>
+                                  class="text-xs text-primary-400 hover:text-primary-300 transition-colors">{{ i18n.t('CONTENT.ADD_VALIDATOR') }}</button>
                               </div>
                               @for (v of field.validators; track $index) {
                                 <div class="flex items-center gap-2 pl-2">
@@ -323,12 +323,12 @@
                             </div>
                           </div>
                         } @empty {
-                          <p class="text-surface-500 text-sm">No form fields added yet.</p>
+                          <p class="text-surface-500 text-sm">{{ i18n.t('CONTENT.NO_FORM_FIELDS') }}</p>
                         }
                         <button type="button" (click)="addFormField()"
                           class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                          Add Field
+                          {{ i18n.t('CONTENT.ADD_FIELD') }}
                         </button>
                       </div>
                     }
@@ -336,7 +336,7 @@
                     <!-- Social Links — Predefined Platforms (Footer only) -->
                     @if (section.id === 'footer') {
                       <div class="space-y-3">
-                        <label class="block text-sm font-medium text-surface-300">Social Links</label>
+                        <label class="block text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.SOCIAL_LINKS') }}</label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           @for (platform of getSocialPlatforms(); track platform.id) {
                             <div class="p-3 bg-surface-900/50 border border-surface-600 rounded-lg">
@@ -379,7 +379,7 @@
                         <button type="button" (click)="openCustomSocialModal()"
                           class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                          Add Custom
+                          {{ i18n.t('CONTENT.ADD_CUSTOM') }}
                         </button>
                       </div>
 
@@ -387,22 +387,22 @@
                       @if (showCustomSocialModal()) {
                         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60" (click)="closeCustomSocialModal()">
                           <div class="bg-surface-800 border border-surface-700 rounded-xl p-6 w-full max-w-sm space-y-4" (click)="$event.stopPropagation()">
-                            <h3 class="text-lg font-display font-semibold text-surface-100">Add Custom Social Link</h3>
+                            <h3 class="text-lg font-display font-semibold text-surface-100">{{ i18n.t('CONTENT.ADD_CUSTOM_SOCIAL') }}</h3>
                             <div>
-                              <label class="block text-sm font-medium text-surface-300 mb-1">Platform Name</label>
+                              <label class="block text-sm font-medium text-surface-300 mb-1">{{ i18n.t('CONTENT.PLATFORM_NAME') }}</label>
                               <input type="text" [value]="customSocialName()" (input)="updateCustomSocialName($any($event.target).value)"
                                 placeholder="e.g. Mastodon" class="w-full px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
                             </div>
                             <div>
-                              <label class="block text-sm font-medium text-surface-300 mb-1">URL</label>
+                              <label class="block text-sm font-medium text-surface-300 mb-1">{{ i18n.t('CONTENT.URL') }}</label>
                               <input type="url" [value]="customSocialUrl()" (input)="updateCustomSocialUrl($any($event.target).value)"
                                 placeholder="https://..." class="w-full px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
                             </div>
                             <div class="flex justify-end gap-2 pt-2">
                               <button type="button" (click)="closeCustomSocialModal()"
-                                class="px-3 py-2 text-sm text-surface-400 hover:text-surface-200 transition-colors">Cancel</button>
+                                class="px-3 py-2 text-sm text-surface-400 hover:text-surface-200 transition-colors">{{ i18n.t('COMMON.CANCEL') }}</button>
                               <button type="button" (click)="addCustomSocial()"
-                                class="px-4 py-2 text-sm bg-primary-600 hover:bg-primary-500 text-white rounded-lg transition-colors">Add</button>
+                                class="px-4 py-2 text-sm bg-primary-600 hover:bg-primary-500 text-white rounded-lg transition-colors">{{ i18n.t('COMMON.ADD') }}</button>
                             </div>
                           </div>
                         </div>
@@ -412,7 +412,7 @@
                     <!-- Layout Selector (Hero & Services) -->
                     @if (hasLayoutOptions(section.id)) {
                       <div>
-                        <label class="block text-sm font-medium text-surface-300 mb-1.5">Layout Preset</label>
+                        <label class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('CONTENT.LAYOUT_PRESET') }}</label>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                           @for (opt of getLayoutOptions(section.id); track opt.value) {
                             <button
@@ -441,7 +441,7 @@
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                           </svg>
                         }
-                        {{ savingSection() === section.id ? 'Saving...' : 'Save' }}
+                        {{ savingSection() === section.id ? i18n.t('COMMON.SAVING') : i18n.t('COMMON.SAVE') }}
                       </button>
                     </div>
                   </form>
@@ -455,15 +455,15 @@
         @if (activeView() === 'page-sections') {
           <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden">
             <div class="px-6 py-4 border-b border-surface-700">
-              <h2 class="text-lg font-display font-semibold text-surface-100">Page Sections</h2>
-              <p class="text-surface-500 text-xs mt-1">Control visibility and order of sections on each page</p>
+              <h2 class="text-lg font-display font-semibold text-surface-100">{{ i18n.t('CONTENT.PAGE_SECTIONS') }}</h2>
+              <p class="text-surface-500 text-xs mt-1">{{ i18n.t('CONTENT.PAGE_SECTIONS_DESC') }}</p>
             </div>
 
             <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
               <!-- Home Page Sections -->
               <div>
                 <div class="flex items-center justify-between mb-3">
-                  <h3 class="text-sm font-medium text-surface-300">Home Page</h3>
+                  <h3 class="text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.HOME_PAGE') }}</h3>
                   <button
                     (click)="saveSectionsConfig('home')"
                     [disabled]="sectionsConfigSaving() === 'home'"
@@ -475,7 +475,7 @@
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                       </svg>
                     }
-                    {{ sectionsConfigSaving() === 'home' ? 'Saving...' : 'Save' }}
+                    {{ sectionsConfigSaving() === 'home' ? i18n.t('COMMON.SAVING') : i18n.t('COMMON.SAVE') }}
                   </button>
                 </div>
                 <div class="space-y-2">
@@ -517,7 +517,7 @@
               <!-- About Page Sections -->
               <div>
                 <div class="flex items-center justify-between mb-3">
-                  <h3 class="text-sm font-medium text-surface-300">About Page</h3>
+                  <h3 class="text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.ABOUT_PAGE') }}</h3>
                   <button
                     (click)="saveSectionsConfig('about')"
                     [disabled]="sectionsConfigSaving() === 'about'"
@@ -529,7 +529,7 @@
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                       </svg>
                     }
-                    {{ sectionsConfigSaving() === 'about' ? 'Saving...' : 'Save' }}
+                    {{ sectionsConfigSaving() === 'about' ? i18n.t('COMMON.SAVING') : i18n.t('COMMON.SAVE') }}
                   </button>
                 </div>
                 <div class="space-y-2">

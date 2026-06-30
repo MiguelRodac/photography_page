@@ -27,15 +27,25 @@ export class AppComponent implements OnInit {
         if (data?.siteName) {
           this.titleService.setTitle(data.siteName);
           document.title = data.siteName;
+        } else {
+          this.titleService.setTitle('');
+          document.title = '';
         }
         if (data?.logoUrl) {
           this.updateFavicon(data.logoUrl);
+        } else {
+          this.updateFavicon('');
         }
       });
   }
 
   private updateFavicon(url: string): void {
-    let link: HTMLLinkElement | null = document.querySelector('link[rel="icon"]');
+    const existing = document.querySelector('link[rel="icon"]');
+    if (!url) {
+      if (existing) existing.remove();
+      return;
+    }
+    let link = existing as HTMLLinkElement;
     if (!link) {
       link = this.renderer.createElement('link') as HTMLLinkElement;
       this.renderer.setAttribute(link, 'rel', 'icon');

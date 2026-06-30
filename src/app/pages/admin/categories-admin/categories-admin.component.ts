@@ -5,6 +5,7 @@ import { ICategoriesService, CategoryCreate } from '../../../core/interfaces/cat
 import { CATEGORIES_SERVICE } from '../../../core/tokens/categories-service.token';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ToastService } from '../../../services/toast.service';
+import { I18nService } from '../../../services/i18n.service';
 
 @Component({
   selector: 'app-categories-admin',
@@ -16,6 +17,7 @@ export class CategoriesAdminComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly categoriesService = inject(CATEGORIES_SERVICE);
   private readonly toast = inject(ToastService);
+  readonly i18n = inject(I18nService);
 
   readonly categories = signal<CategoryDoc[]>([]);
   readonly loading = signal(true);

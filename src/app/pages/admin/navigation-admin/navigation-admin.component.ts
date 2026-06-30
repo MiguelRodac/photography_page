@@ -5,6 +5,7 @@ import { INavigationService, NavLinkCreate } from '../../../core/interfaces/navi
 import { NAVIGATION_SERVICE } from '../../../core/tokens/navigation-service.token';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ToastService } from '../../../services/toast.service';
+import { I18nService } from '../../../services/i18n.service';
 
 interface RouteOption {
   path: string;
@@ -30,6 +31,7 @@ export class NavigationAdminComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly navigationService = inject(NAVIGATION_SERVICE);
   private readonly toast = inject(ToastService);
+  readonly i18n = inject(I18nService);
 
   readonly links = signal<NavLinkDoc[]>([]);
   readonly loading = signal(true);

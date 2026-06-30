@@ -1,0 +1,103 @@
+{
+  "DASHBOARD": {
+    "TITLE": "Panel",
+    "WELCOME": "Bienvenido",
+    "LOGOUT": "Cerrar sesión",
+    "QUICK_ACCESS": "Acceso rápido",
+    "NAVIGATE": "Navegá a las secciones de gestión",
+    "OPEN": "Abrir",
+    "PORTFOLIO": "Portafolio",
+    "CONTENT": "Contenido",
+    "CATEGORIES": "Categorías",
+    "NAVIGATION": "Navegación",
+    "SETTINGS": "Configuración",
+    "DATA": "Datos",
+    "MANAGE": "Gestionar",
+    "EDIT": "Editar",
+    "CONFIGURE": "Configurar"
+  },
+  "NAV": {
+    "DASHBOARD": "Panel",
+    "PORTFOLIO": "Portafolio",
+    "CONTENT": "Contenido",
+    "CATEGORIES": "Categorías",
+    "NAVIGATION": "Navegación",
+    "SETTINGS": "Configuración",
+    "DATA": "Datos",
+    "LOGOUT": "Cerrar sesión",
+    "ADMIN_PANEL": "Panel de Administración"
+  },
+  "COMMON": {
+    "SAVE": "Guardar",
+    "CANCEL": "Cancelar",
+    "DELETE": "Eliminar",
+    "EDIT": "Editar",
+    "CREATE": "Crear",
+    "ADD": "Agregar",
+    "SAVING": "Guardando...",
+    "SAVED": "Guardado",
+    "LOADING": "Cargando...",
+    "CONFIRM": "Confirmar"
+  },
+  "LOGIN": {
+    "TITLE": "Iniciar Sesión",
+    "EMAIL": "Email",
+    "PASSWORD": "Contraseña",
+    "LOGIN": "Ingresar",
+    "LOGGING_IN": "Ingresando...",
+    "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+    "RESET_SENT": "Revisá tu email para el link de reseteo",
+    "BACK_TO_LOGIN": "Volver al login"
+  },
+  "SETTINGS": {
+    "SITE_BRANDING": "Marca del Sitio",
+    "SITE_NAME": "Nombre del Sitio",
+    "LOGO_URL": "URL del Logo",
+    "FOOTER_TEXT": "Texto del Footer",
+    "SAVED": "Configuración guardada",
+    "THEME": "Tema",
+    "PRIMARY_COLOR": "Color Principal",
+    "PRIMARY_HOVER": "Color Hover",
+    "DISPLAY_FONT": "Fuente de Títulos",
+    "BODY_FONT": "Fuente del Cuerpo",
+    "BORDER_RADIUS": "Radio de Borde",
+    "THEME_SAVED": "Tema guardado y aplicado"
+  },
+  "CONTENT": {
+    "TITLE": "Editor de Contenido",
+    "EDIT_SECTIONS": "Editá las secciones del sitio",
+    "SECTION_VISIBILITY": "Visibilidad y Orden",
+    "SAVE_SECTION_ORDER": "Guardar Orden",
+    "SOCIAL_LINKS": "Redes Sociales",
+    "ADD_LINK": "Agregar Link",
+    "ADD_CUSTOM": "Agregar Personalizada",
+    "PLATFORM": "Plataforma",
+    "URL": "URL"
+  },
+  "PORTFOLIO": {
+    "TITLE": "Gestor de Portafolio",
+    "ADD_ITEM": "Agregar Item",
+    "EDIT_ITEM": "Editar Item",
+    "IMAGE_URL": "URL de Imagen",
+    "TITLE_LABEL": "Título",
+    "DESCRIPTION": "Descripción",
+    "CATEGORY": "Categoría",
+    "EXTERNAL_LINK": "Link Externo",
+    "SHOW_LINK": "Mostrar botón de link"
+  },
+  "DATA": {
+    "TITLE": "Gestor de Datos",
+    "EXPORT_ALL": "Exportar Todos los Datos",
+    "IMPORT_DATA": "Importar Datos",
+    "TEMPLATES": "Plantillas y Datos de Ejemplo",
+    "GO_TO_SEED": "Ir al Seed Manager",
+    "SEED_DESC": "Cargá Firestore con contenido de ejemplo"
+  },
+  "SEED": {
+    "TITLE": "Seed Manager",
+    "SEED_ALL": "Cargar Todos los Datos",
+    "SECTION_SEEDS": "Cargar Secciones Individuales",
+    "CLEAR_ALL": "Eliminar Todos los Datos",
+    "DANGER_ZONE": "Zona de Peligro"
+  }
+}

@@ -1,6 +1,5 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { GlobalResourceService } from '../../services/global-resource.service';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
 import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
 import { PORTFOLIO_SERVICE } from '../../core/tokens/portfolio-service.token';
@@ -101,7 +100,6 @@ interface PortfolioItem {
   `,
 })
 export class PortfolioComponent implements OnInit {
-  private readonly resource = inject(GlobalResourceService);
   private readonly portfolioService = inject(PORTFOLIO_SERVICE, { optional: true });
   private readonly contentCache = inject(PublicContentCacheService);
   private readonly categoriesService = inject(CATEGORIES_SERVICE, { optional: true });
@@ -160,17 +158,9 @@ export class PortfolioComponent implements OnInit {
           }));
         if (mapped.length > 0) {
           this.portfolioItems.set(mapped);
-        } else {
-          this.loadStaticFallback();
         }
       });
-    } else {
-      this.loadStaticFallback();
     }
-  }
-
-  private loadStaticFallback(): void {
-    this.portfolioItems.set(this.resource.getPortfolioItems());
   }
 
   setFilter(key: string) {
