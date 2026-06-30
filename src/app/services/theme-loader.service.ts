@@ -46,10 +46,10 @@ export class ThemeLoaderService {
     this.renderer.setStyle(root, '--radius', t.borderRadius);
 
     // Generate dynamic <style> tag to override ALL primary color uses
-    this.injectStyleTag(primary, rgb);
+    this.injectStyleTag(primary, t.primaryHover, rgb);
   }
 
-  private injectStyleTag(primary: string, rgb: string): void {
+  private injectStyleTag(primary: string, hover: string, rgb: string): void {
     // Remove previous style tag if exists
     if (this.styleElement) {
       this.renderer.removeChild(document.head, this.styleElement);
@@ -57,26 +57,32 @@ export class ThemeLoaderService {
 
     const css = `
       /* Auto-generated theme overrides */
-      .bg-primary-400, .bg-primary-500, .bg-primary-600, .bg-primary-700,
-      .hover\\:bg-primary-400:hover, .hover\\:bg-primary-500:hover,
-      .hover\\:bg-primary-600:hover, .hover\\:bg-primary-700:hover {
+      .bg-primary-400, .bg-primary-500, .bg-primary-600, .bg-primary-700 {
         background-color: ${primary} !important;
       }
-      .text-primary-300, .text-primary-400, .text-primary-500, .text-primary-600, .text-primary-700,
-      .hover\\:text-primary-400:hover, .hover\\:text-primary-500:hover {
+      .hover\\:bg-primary-400:hover, .hover\\:bg-primary-500:hover,
+      .hover\\:bg-primary-600:hover, .hover\\:bg-primary-700:hover {
+        background-color: ${hover} !important;
+      }
+      .text-primary-300, .text-primary-400, .text-primary-500, .text-primary-600, .text-primary-700 {
         color: ${primary} !important;
       }
-      .border-primary-400, .border-primary-500, .border-primary-600,
-      .hover\\:border-primary-500\\/30:hover, .hover\\:border-primary-500\\/50:hover,
-      .focus\\:border-primary-500:focus {
+      .hover\\:text-primary-400:hover, .hover\\:text-primary-500:hover {
+        color: ${hover} !important;
+      }
+      .border-primary-400, .border-primary-500, .border-primary-600 {
         border-color: ${primary} !important;
       }
+      .hover\\:border-primary-500\\/30:hover, .hover\\:border-primary-500\\/50:hover,
+      .hover\\:border-primary-500\\/40:hover {
+        border-color: ${hover} !important;
+      }
+      .focus\\:border-primary-500:focus { border-color: ${primary} !important; }
       .bg-primary-500\\/5, .bg-primary-600\\/5 { background-color: rgba(${rgb}, 0.05) !important; }
       .bg-primary-500\\/10, .bg-primary-600\\/10 { background-color: rgba(${rgb}, 0.1) !important; }
       .bg-primary-500\\/15, .bg-primary-600\\/15 { background-color: rgba(${rgb}, 0.15) !important; }
       .bg-primary-500\\/20, .bg-primary-600\\/20 { background-color: rgba(${rgb}, 0.2) !important; }
       .bg-primary-500\\/30, .bg-primary-600\\/30 { background-color: rgba(${rgb}, 0.3) !important; }
-      .bg-primary-500\\/10 { background-color: rgba(${rgb}, 0.1) !important; }
       .ring-primary-500, .focus\\:ring-primary-500:focus { --tw-ring-color: ${primary} !important; }
       .ring-primary-500\\/50, .focus\\:ring-primary-500\\/50:focus { --tw-ring-color: rgba(${rgb}, 0.5) !important; }
       .shadow-primary-500\\/10 { --tw-shadow-color: rgba(${rgb}, 0.1) !important; }
@@ -87,6 +93,9 @@ export class ThemeLoaderService {
       .from-primary-500, .from-primary-600 { --tw-gradient-from: ${primary} !important; }
       .to-primary-400, .to-primary-500, .to-primary-600 { --tw-gradient-to: ${primary} !important; }
       .accent-primary-500 { accent-color: ${primary} !important; }
+      .hover\\:bg-primary-500\\/20:hover { background-color: rgba(${rgb}, 0.2) !important; }
+      .hover\\:bg-primary-500\\/10:hover { background-color: rgba(${rgb}, 0.1) !important; }
+      .hover\\:text-primary-300:hover { color: ${hover} !important; }
     `;
 
     this.styleElement = this.renderer.createElement('style');
