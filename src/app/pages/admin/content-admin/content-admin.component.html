@@ -7,20 +7,20 @@
     </div>
 
     <!-- Sidebar + Content Layout -->
-    <div class="flex gap-6 items-start">
+    <div class="flex flex-col md:flex-row gap-6 items-start">
       <!-- Sidebar -->
-      <nav class="w-60 shrink-0 sticky top-6">
+      <nav class="w-full md:w-60 shrink-0 md:sticky md:top-6">
         <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden">
           <div class="p-3 border-b border-surface-700">
             <span class="text-xs font-semibold text-surface-500 uppercase tracking-wider">{{ i18n.t('CONTENT.SECTIONS') }}</span>
           </div>
-          <div class="p-2 space-y-0.5">
+          <div class="p-2 space-y-0.5 md:space-y-0.5 flex md:block overflow-x-auto md:overflow-visible">
             @for (section of sections; track section.id) {
               <button
                 (click)="selectSection(section.id)"
-                class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all text-sm"
+                class="whitespace-nowrap md:w-full flex items-center gap-2 md:gap-3 px-3 py-2 md:py-2.5 rounded-lg text-left transition-all text-sm flex-shrink-0"
                 [ngClass]="{
-                  'bg-primary-600 text-white border-l-2 border-primary-400': isActiveSection(section.id),
+                  'bg-primary-600 text-white md:border-l-2 border-primary-400': isActiveSection(section.id),
                   'text-surface-300 hover:bg-surface-700/50': !isActiveSection(section.id)
                 }"
               >
@@ -95,7 +95,7 @@
             @if (isActiveSection(section.id)) {
               <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden">
                 <!-- Section Title Bar -->
-                <div class="px-6 py-4 border-b border-surface-700 flex items-center justify-between">
+                <div class="px-3 sm:px-6 py-4 border-b border-surface-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                   <h2 class="text-lg font-display font-semibold text-surface-100">{{ section.label() }}</h2>
                   @if (isLoading(section.id)) {
                     <div class="flex items-center gap-2 text-surface-400 text-sm">
@@ -107,7 +107,7 @@
 
                 <!-- Form -->
                 @if (!isLoading(section.id)) {
-                  <form [formGroup]="getForm(section.id)!" (ngSubmit)="$event.preventDefault()" class="p-6 space-y-4">
+                  <form [formGroup]="getForm(section.id)!" (ngSubmit)="$event.preventDefault()" class="p-3 sm:p-6 space-y-4">
                     @for (field of section.fields; track field) {
                       <div>
                         <label class="block text-sm font-medium text-surface-300 mb-1.5 capitalize">
@@ -163,32 +163,32 @@
 
                     <!-- Services Items Repeater -->
                     @if (section.id === 'services') {
-                      <div class="space-y-3">
-                        <label class="block text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.SERVICES') }}</label>
+                      <div class="space-y-3 mt-4">
+                        <label class="block text-sm font-medium text-surface-300 mb-2">{{ i18n.t('CONTENT.SERVICES') }}</label>
                         @for (item of servicesItems(); track $index) {
-                          <div class="p-4 bg-surface-900/50 border border-surface-600 rounded-lg space-y-3">
-                            <div class="flex gap-3">
+                          <div class="p-3 bg-surface-900/50 border border-surface-600 rounded-lg space-y-3">
+                            <div class="flex flex-col sm:flex-row gap-3">
                               <input type="url" [value]="item.icon" (input)="updateServiceItem($index, 'icon', $any($event.target).value)"
-                                placeholder="Icon URL (https://...)" class="flex-1 px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                                placeholder="Icon URL (https://...)" class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
                               <input type="text" [value]="item.id" (input)="updateServiceItem($index, 'id', $any($event.target).value)"
-                                placeholder="ID (e.g. weddings)" class="w-36 px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                                placeholder="ID (e.g. weddings)" class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
                               <button type="button" (click)="removeServiceItem($index)"
-                                class="px-2.5 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors">
+                                class="px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors self-start">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                               </button>
                             </div>
                             <input type="text" [value]="item.title" (input)="updateServiceItem($index, 'title', $any($event.target).value)"
-                              placeholder="Title" class="w-full px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                              placeholder="Title" class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
                             <textarea [value]="item.description" (input)="updateServiceItem($index, 'description', $any($event.target).value)"
                               placeholder="Description" rows="2"
-                              class="w-full px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm resize-none"></textarea>
+                              class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm resize-none"></textarea>
                           </div>
                         } @empty {
                           <p class="text-surface-500 text-sm">{{ i18n.t('CONTENT.NO_SERVICES') }}</p>
                         }
                         <button type="button" (click)="addServiceItem()"
-                          class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors">
-                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7. 5-7.5h-15" /></svg>
+                          class="inline-flex items-center gap-1 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 px-3 py-2 rounded-lg transition-colors">
+                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                           {{ i18n.t('CONTENT.ADD_SERVICE') }}
                         </button>
                       </div>
@@ -196,24 +196,26 @@
 
                     <!-- Stats Repeater (About Me) -->
                     @if (section.id === 'about') {
-                      <div class="space-y-3">
-                        <label class="block text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.STATS') }}</label>
+                      <div class="space-y-3 mt-4">
+                        <label class="block text-sm font-medium text-surface-300 mb-2">{{ i18n.t('CONTENT.STATS') }}</label>
                         @for (stat of aboutStats(); track $index) {
-                          <div class="flex items-start gap-3">
-                            <input type="text" [value]="stat.value" (input)="updateStatItem($index, 'value', $any($event.target).value)"
-                              placeholder="Value (e.g. 500+)" class="w-28 px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
-                            <input type="text" [value]="stat.label" (input)="updateStatItem($index, 'label', $any($event.target).value)"
-                              placeholder="Label (e.g. Sessions)" class="flex-1 px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
-                            <button type="button" (click)="removeStatItem($index)"
-                              class="px-2.5 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors">
-                              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                            </button>
+                          <div class="p-3 bg-surface-900/50 border border-surface-600 rounded-lg">
+                            <div class="flex flex-col sm:flex-row gap-3">
+                              <input type="text" [value]="stat.value" (input)="updateStatItem($index, 'value', $any($event.target).value)"
+                                placeholder="Value (e.g. 500+)" class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                              <input type="text" [value]="stat.label" (input)="updateStatItem($index, 'label', $any($event.target).value)"
+                                placeholder="Label (e.g. Sessions)" class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                              <button type="button" (click)="removeStatItem($index)"
+                                class="px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors self-start">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                              </button>
+                            </div>
                           </div>
                         } @empty {
                           <p class="text-surface-500 text-sm">{{ i18n.t('CONTENT.NO_STATS') }}</p>
                         }
                         <button type="button" (click)="addStatItem()"
-                          class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors">
+                          class="inline-flex items-center gap-1 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 px-3 py-2 rounded-lg transition-colors">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                           {{ i18n.t('CONTENT.ADD_STAT') }}
                         </button>
@@ -222,29 +224,29 @@
 
                     <!-- Testimonials Repeater -->
                     @if (section.id === 'testimonials') {
-                      <div class="space-y-3">
-                        <label class="block text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.TESTIMONIALS') }}</label>
+                      <div class="space-y-3 mt-4">
+                        <label class="block text-sm font-medium text-surface-300 mb-2">{{ i18n.t('CONTENT.TESTIMONIALS') }}</label>
                         @for (item of testimonialsItems(); track $index) {
-                          <div class="p-4 bg-surface-900/50 border border-surface-600 rounded-lg space-y-3">
-                            <div class="flex gap-3">
+                          <div class="p-3 bg-surface-900/50 border border-surface-600 rounded-lg space-y-3">
+                            <div class="flex flex-col sm:flex-row gap-3">
                               <input type="text" [value]="item.name" (input)="updateTestimonialItem($index, 'name', $any($event.target).value)"
-                                placeholder="Name" class="flex-1 px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                                placeholder="Name" class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
                               <input type="text" [value]="item.role" (input)="updateTestimonialItem($index, 'role', $any($event.target).value)"
-                                placeholder="Role (e.g. Bride)" class="flex-1 px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                                placeholder="Role (e.g. Bride)" class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
                               <button type="button" (click)="removeTestimonialItem($index)"
-                                class="px-2.5 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors">
+                                class="px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors self-start">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                               </button>
                             </div>
                             <textarea [value]="item.text" (input)="updateTestimonialItem($index, 'text', $any($event.target).value)"
                               placeholder="Testimonial text" rows="3"
-                              class="w-full px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm resize-none"></textarea>
+                              class="w-full px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm resize-none"></textarea>
                           </div>
                         } @empty {
                           <p class="text-surface-500 text-sm">{{ i18n.t('CONTENT.NO_TESTIMONIALS') }}</p>
                         }
                         <button type="button" (click)="addTestimonialItem()"
-                          class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors">
+                          class="inline-flex items-center gap-1 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 px-3 py-2 rounded-lg transition-colors">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                           {{ i18n.t('CONTENT.ADD_TESTIMONIAL') }}
                         </button>
@@ -253,43 +255,47 @@
 
                     <!-- Contact Form Fields Repeater -->
                     @if (section.id === 'contact') {
-                      <div class="space-y-3">
-                        <label class="block text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.FORM_FIELDS') }}</label>
+                      <div class="space-y-3 mt-4">
+                        <label class="block text-sm font-medium text-surface-300 mb-2">{{ i18n.t('CONTENT.FORM_FIELDS') }}</label>
                         @for (field of contactFormFields(); track $index; let fieldIdx = $index) {
-                          <div class="p-4 bg-surface-900/50 border border-surface-600 rounded-lg space-y-3">
-                            <div class="flex items-center gap-2">
-                              <button type="button" (click)="moveFormField($index, 'up')" [disabled]="$index === 0"
-                                class="p-1 text-surface-400 hover:text-surface-200 disabled:text-surface-600 disabled:cursor-not-allowed transition-colors">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
-                              </button>
-                              <button type="button" (click)="moveFormField($index, 'down')" [disabled]="$index === contactFormFields().length - 1"
-                                class="p-1 text-surface-400 hover:text-surface-200 disabled:text-surface-600 disabled:cursor-not-allowed transition-colors">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
-                              </button>
+                          <div class="p-3 bg-surface-900/50 border border-surface-600 rounded-lg space-y-3">
+                            <!-- Top row: reorder + name + type + required + remove -->
+                            <div class="flex flex-col sm:flex-row gap-3">
+                              <div class="flex items-center gap-1 self-start">
+                                <button type="button" (click)="moveFormField($index, 'up')" [disabled]="$index === 0"
+                                  class="p-1 text-surface-400 hover:text-surface-200 disabled:text-surface-600 disabled:cursor-not-allowed transition-colors">
+                                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
+                                </button>
+                                <button type="button" (click)="moveFormField($index, 'down')" [disabled]="$index === contactFormFields().length - 1"
+                                  class="p-1 text-surface-400 hover:text-surface-200 disabled:text-surface-600 disabled:cursor-not-allowed transition-colors">
+                                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                                </button>
+                              </div>
                               <input type="text" [value]="field.name" (input)="updateFormField($index, 'name', $any($event.target).value)"
-                                placeholder="Name (e.g. email)" class="flex-1 px-3 py-2 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                                placeholder="Name (e.g. email)" class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
                               <select [value]="field.type" (change)="updateFormField($index, 'type', $any($event.target).value)"
-                                class="px-3 py-2 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm">
+                                class="px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm">
                                 <option value="text">Text</option>
                                 <option value="email">Email</option>
                                 <option value="tel">Tel</option>
                                 <option value="textarea">Textarea</option>
                               </select>
-                              <label class="flex items-center gap-1.5 text-xs text-surface-400 cursor-pointer whitespace-nowrap">
+                              <label class="flex items-center gap-1.5 text-xs text-surface-400 cursor-pointer whitespace-nowrap self-center">
                                 <input type="checkbox" [checked]="field.required" (change)="toggleFormFieldRequired($index)"
                                   class="w-4 h-4 rounded border-surface-600 bg-surface-900 text-primary-500 focus:ring-primary-500/50" />
                                 Req
                               </label>
                               <button type="button" (click)="removeFormField($index)"
-                                class="px-2 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors">
+                                class="px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors self-start">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                               </button>
                             </div>
-                            <div class="grid grid-cols-2 gap-3">
+                            <!-- Label + Placeholder row -->
+                            <div class="flex flex-col sm:flex-row gap-3">
                               <input type="text" [value]="field.label" (input)="updateFormField($index, 'label', $any($event.target).value)"
-                                placeholder="Label" class="px-3 py-2 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                                placeholder="Label" class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
                               <input type="text" [value]="field.placeholder" (input)="updateFormField($index, 'placeholder', $any($event.target).value)"
-                                placeholder="Placeholder" class="px-3 py-2 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
+                                placeholder="Placeholder" class="flex-1 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
                             </div>
                             <!-- Validators -->
                             <div class="space-y-2">
@@ -299,9 +305,9 @@
                                   class="text-xs text-primary-400 hover:text-primary-300 transition-colors">{{ i18n.t('CONTENT.ADD_VALIDATOR') }}</button>
                               </div>
                               @for (v of field.validators; track $index) {
-                                <div class="flex items-center gap-2 pl-2">
+                                <div class="flex flex-col sm:flex-row items-start gap-2 pl-2">
                                   <select [value]="v.type" (change)="updateFormFieldValidator(fieldIdx, $index, 'type', $any($event.target).value)"
-                                    class="px-2 py-1.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500/50">
+                                    class="px-3 py-2 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500/50">
                                     <option value="required">Required</option>
                                     <option value="email">Email</option>
                                     <option value="minLength">Min Length</option>
@@ -310,10 +316,10 @@
                                   </select>
                                   @if (v.type === 'minLength' || v.type === 'maxLength' || v.type === 'pattern') {
                                     <input type="text" [value]="v.value ?? ''" (input)="updateFormFieldValidator(fieldIdx, $index, 'value', $any($event.target).value)"
-                                      placeholder="Value" class="w-24 px-2 py-1.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 text-xs placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
+                                      placeholder="Value" class="flex-1 px-3 py-2 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 text-xs placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
                                   }
                                   <input type="text" [value]="v.message" (input)="updateFormFieldValidator(fieldIdx, $index, 'message', $any($event.target).value)"
-                                    placeholder="Error message" class="flex-1 px-2 py-1.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 text-xs placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
+                                    placeholder="Error message" class="flex-1 px-3 py-2 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 text-xs placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50" />
                                   <button type="button" (click)="removeFormFieldValidator(fieldIdx, $index)"
                                     class="p-1 text-red-400 hover:text-red-300 transition-colors">
                                     <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -326,7 +332,7 @@
                           <p class="text-surface-500 text-sm">{{ i18n.t('CONTENT.NO_FORM_FIELDS') }}</p>
                         }
                         <button type="button" (click)="addFormField()"
-                          class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors">
+                          class="inline-flex items-center gap-1 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 px-3 py-2 rounded-lg transition-colors">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                           {{ i18n.t('CONTENT.ADD_FIELD') }}
                         </button>
@@ -335,8 +341,8 @@
 
                     <!-- Social Links — Predefined Platforms (Footer only) -->
                     @if (section.id === 'footer') {
-                      <div class="space-y-3">
-                        <label class="block text-sm font-medium text-surface-300">{{ i18n.t('CONTENT.SOCIAL_LINKS') }}</label>
+                      <div class="space-y-3 mt-4">
+                        <label class="block text-sm font-medium text-surface-300 mb-2">{{ i18n.t('CONTENT.SOCIAL_LINKS') }}</label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           @for (platform of getSocialPlatforms(); track platform.id) {
                             <div class="p-3 bg-surface-900/50 border border-surface-600 rounded-lg">
@@ -355,7 +361,7 @@
                                   [value]="getPlatformUrl(platform.id)"
                                   (input)="updatePlatformUrl(platform.id, $any($event.target).value)"
                                   [placeholder]="getPlatformPlaceholder(platform.id)"
-                                  class="w-full mt-2 px-3 py-2 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm"
+                                  class="w-full mt-2 px-3 py-2.5 bg-surface-900/50 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm"
                                 />
                               }
                             </div>
@@ -369,7 +375,7 @@
                               <span class="flex-1 text-sm text-surface-200">{{ link.platform }}</span>
                               <span class="text-xs text-surface-500">{{ link.url }}</span>
                               <button type="button" (click)="removeFooterLink($index)"
-                                class="px-2 py-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors">
+                                class="px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                               </button>
                             </div>
@@ -377,7 +383,7 @@
                         }
 
                         <button type="button" (click)="openCustomSocialModal()"
-                          class="inline-flex items-center gap-1 px-3 py-2 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 rounded-lg transition-colors">
+                          class="inline-flex items-center gap-1 text-sm bg-surface-700 hover:bg-surface-600 text-primary-400 px-3 py-2 rounded-lg transition-colors">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                           {{ i18n.t('CONTENT.ADD_CUSTOM') }}
                         </button>
@@ -385,8 +391,8 @@
 
                       <!-- Custom Social Modal -->
                       @if (showCustomSocialModal()) {
-                        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60" (click)="closeCustomSocialModal()">
-                          <div class="bg-surface-800 border border-surface-700 rounded-xl p-6 w-full max-w-sm space-y-4" (click)="$event.stopPropagation()">
+                        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" (click)="closeCustomSocialModal()">
+                          <div class="bg-surface-800 border border-surface-700 rounded-xl p-4 sm:p-6 w-[95vw] sm:max-w-sm space-y-4" (click)="$event.stopPropagation()">
                             <h3 class="text-lg font-display font-semibold text-surface-100">{{ i18n.t('CONTENT.ADD_CUSTOM_SOCIAL') }}</h3>
                             <div>
                               <label class="block text-sm font-medium text-surface-300 mb-1">{{ i18n.t('CONTENT.PLATFORM_NAME') }}</label>
@@ -398,11 +404,11 @@
                               <input type="url" [value]="customSocialUrl()" (input)="updateCustomSocialUrl($any($event.target).value)"
                                 placeholder="https://..." class="w-full px-3 py-2.5 bg-surface-900 border border-surface-600 rounded-lg text-surface-100 placeholder-surface-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-sm" />
                             </div>
-                            <div class="flex justify-end gap-2 pt-2">
+                            <div class="flex flex-col sm:flex-row justify-end gap-2 pt-2">
                               <button type="button" (click)="closeCustomSocialModal()"
-                                class="px-3 py-2 text-sm text-surface-400 hover:text-surface-200 transition-colors">{{ i18n.t('COMMON.CANCEL') }}</button>
+                                class="w-full sm:w-auto px-3 py-2 text-sm text-surface-400 hover:text-surface-200 transition-colors">{{ i18n.t('COMMON.CANCEL') }}</button>
                               <button type="button" (click)="addCustomSocial()"
-                                class="px-4 py-2 text-sm bg-primary-600 hover:bg-primary-500 text-white rounded-lg transition-colors">{{ i18n.t('COMMON.ADD') }}</button>
+                                class="w-full sm:w-auto px-4 py-2 text-sm bg-primary-600 hover:bg-primary-500 text-white rounded-lg transition-colors">{{ i18n.t('COMMON.ADD') }}</button>
                             </div>
                           </div>
                         </div>
@@ -428,12 +434,12 @@
                     }
 
                     <!-- Save Button -->
-                    <div class="flex justify-end pt-2">
+                    <div class="flex justify-end pt-4 mt-4 border-t border-surface-700">
                       <button
                         type="button"
                         (click)="saveSection(section.id)"
                         [disabled]="savingSection() === section.id"
-                        class="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-primary-600 hover:bg-primary-500 disabled:bg-surface-600 text-white rounded-lg transition-all font-medium"
+                        class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-sm bg-primary-600 hover:bg-primary-500 disabled:bg-surface-600 text-white rounded-lg transition-all font-medium"
                       >
                         @if (savingSection() === section.id) {
                           <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
@@ -454,12 +460,12 @@
         <!-- Page Sections Manager View -->
         @if (activeView() === 'page-sections') {
           <div class="bg-surface-800 border border-surface-700 rounded-xl overflow-hidden">
-            <div class="px-6 py-4 border-b border-surface-700">
+            <div class="px-3 sm:px-6 py-4 border-b border-surface-700">
               <h2 class="text-lg font-display font-semibold text-surface-100">{{ i18n.t('CONTENT.PAGE_SECTIONS') }}</h2>
               <p class="text-surface-500 text-xs mt-1">{{ i18n.t('CONTENT.PAGE_SECTIONS_DESC') }}</p>
             </div>
 
-            <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
               <!-- Home Page Sections -->
               <div>
                 <div class="flex items-center justify-between mb-3">
