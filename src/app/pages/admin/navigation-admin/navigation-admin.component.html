@@ -68,11 +68,11 @@
             </div>
             <div class="flex gap-3 pt-2">
               <button type="submit"
-                class="flex-1 px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all">
+                class="w-full px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all">
                 {{ editingId() ? i18n.t('COMMON.UPDATE') : i18n.t('COMMON.CREATE') }}
               </button>
               <button type="button" (click)="cancelForm()"
-                class="flex-1 px-4 py-2.5 bg-surface-700 hover:bg-surface-600 text-surface-200 font-medium rounded-lg border border-surface-600 transition-colors">
+                class="w-full px-4 py-2.5 bg-surface-700 hover:bg-surface-600 text-surface-200 font-medium rounded-lg border border-surface-600 transition-colors">
                 {{ i18n.t('COMMON.CANCEL') }}
               </button>
             </div>
@@ -163,7 +163,7 @@
         @for (link of links(); track link.id) {
           <div class="bg-surface-800 border border-surface-700 rounded-xl p-4">
             <div class="flex items-start justify-between gap-3">
-              <div class="min-w-0 flex-1">
+              <div class="min-w-0 w-full">
                 <h3 class="text-sm font-medium text-surface-100 truncate">{{ link.label }}</h3>
                 <p class="text-xs text-surface-400 font-mono mt-0.5 truncate">{{ link.path }}</p>
                 <div class="flex items-center gap-3 mt-1.5">

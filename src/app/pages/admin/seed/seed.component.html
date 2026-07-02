@@ -28,7 +28,7 @@
               <div class="w-9 h-5 bg-surface-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-500/50 rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white"
                 [class.bg-primary-600]="isSelected(section.id)"></div>
             </label>
-            <span class="flex-1 text-sm text-surface-200">{{ section.label }}</span>
+            <span class="w-full text-sm text-surface-200">{{ section.label }}</span>
             @if (sectionStatus()[section.id] === 'success') {
               <span class="text-green-400 text-xs">✓</span>
             } @else if (sectionStatus()[section.id] === 'error') {
@@ -41,7 +41,7 @@
       <!-- Action Buttons -->
       <div class="flex flex-col sm:flex-row gap-3 mt-6 pt-6 border-t border-surface-700">
         <button (click)="requestSeedSelected()" [disabled]="seeding() || selectedCount === 0"
-          class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm bg-amber-600 hover:bg-amber-500 disabled:bg-surface-600 disabled:text-surface-400 text-white rounded-lg font-medium transition-colors">
+          class="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm bg-amber-600 hover:bg-amber-500 disabled:bg-surface-600 disabled:text-surface-400 text-white rounded-lg font-medium transition-colors">
           @if (seeding()) {
             <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
             {{ i18n.t('SEED.SEEDING') }}
@@ -50,7 +50,7 @@
           }
         </button>
         <button (click)="requestDeleteSelected()" [disabled]="clearing() || selectedCount === 0"
-          class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm bg-red-600 hover:bg-red-500 disabled:bg-surface-600 disabled:text-surface-400 text-white rounded-lg font-medium transition-colors">
+          class="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm bg-red-600 hover:bg-red-500 disabled:bg-surface-600 disabled:text-surface-400 text-white rounded-lg font-medium transition-colors">
           @if (clearing()) {
             <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
             {{ i18n.t('SEED.DELETING') }}

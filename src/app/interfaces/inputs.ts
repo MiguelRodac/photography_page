@@ -14,6 +14,7 @@ export interface IInput {
   minlength?: number;
   maxlength?: number;
   required?: boolean;
+  hidden?: boolean;
   class?: string;
   validators?: IValidator[];
 }

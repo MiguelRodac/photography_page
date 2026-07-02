@@ -8,6 +8,7 @@ import { IInput } from '../../../interfaces/inputs';
   imports: [ReactiveFormsModule, NgClass],
   template: `
     @for (input of inputForm; track input.formControl) {
+      <div [hidden]="input.hidden">
       <div [formGroup]="formGroup" class="w-full space-y-1.5" [class.md-col-span-2]="input.type === 'textarea'">
         <label
           [for]="input.name"
@@ -84,6 +85,7 @@ import { IInput } from '../../../interfaces/inputs';
             }
           </div>
         }
+      </div>
       </div>
     }
   `,

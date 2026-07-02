@@ -1,58 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { CONTENT_SERVICE } from '../core/tokens/content-service.token';
 import { IContentService } from '../core/interfaces/content-service.interface';
-import { Observable, of, from } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-
-interface CacheEntry<T> {
-  data: T;
-  timestamp: number;
-}
 
 @Injectable({ providedIn: 'root' })
 export class PublicContentCacheService {
   private readonly contentService = inject(CONTENT_SERVICE);
-  private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
   getSection<T>(sectionId: string): Observable<T | null> {
-    console.log(`[ContentCache] 🔍 Fetching "${sectionId}" from Firestore...`);
     return this.contentService.getSection<T>(sectionId).pipe(
-      map((data) => {
-        if (data) {
-          console.log(`[ContentCache] ✅ "${sectionId}" from Firestore`, data);
-          return data;
-        }
-        console.warn(`[ContentCache] ⚠️ "${sectionId}" returned empty`);
-        return null;
-      }),
-      catchError((err) => {
-        console.error(`[ContentCache] ❌ "${sectionId}" FAILED:`, err);
-        return of(null);
-      }),
+      map((data) => data || null),
+      catchError(() => of(null)),
     );
-  }
-
-  private getFromCache<T>(key: string): T | null {
-    try {
-      const raw = localStorage.getItem(key);
-      if (!raw) return null;
-      const entry: CacheEntry<T> = JSON.parse(raw);
-      if (Date.now() - entry.timestamp > this.CACHE_TTL) {
-        localStorage.removeItem(key);
-        return null;
-      }
-      return entry.data;
-    } catch {
-      return null;
-    }
-  }
-
-  private saveToCache<T>(key: string, data: T): void {
-    try {
-      const entry: CacheEntry<T> = { data, timestamp: Date.now() };
-      localStorage.setItem(key, JSON.stringify(entry));
-    } catch (e) {
-      console.warn('[ContentCache] Failed to save to cache:', e);
-    }
   }
 }

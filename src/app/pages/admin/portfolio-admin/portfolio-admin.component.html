@@ -8,7 +8,7 @@
       </div>
       <button
         (click)="showAddForm()"
-        class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-primary-600/20 hover:shadow-primary-500/30 text-sm"
+        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-primary-600/20 hover:shadow-primary-500/30 text-sm"
       >
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -21,13 +21,13 @@
     @if (showForm()) {
       <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="cancelForm()"></div>
-        <div class="relative bg-surface-800 border border-surface-700 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-          <div class="sticky top-0 bg-surface-800 border-b border-surface-700 px-6 py-4 rounded-t-2xl">
+        <div class="relative bg-surface-800 border border-surface-700 rounded-2xl shadow-2xl w-[95vw] sm:max-w-lg max-h-[90vh] overflow-y-auto">
+          <div class="sticky top-0 bg-surface-800 border-b border-surface-700 px-4 sm:px-6 py-4 rounded-t-2xl">
             <h2 class="text-xl font-display font-semibold text-surface-100">
               {{ editingId() ? i18n.t('PORTFOLIO.EDIT_ITEM') : i18n.t('PORTFOLIO.NEW_ITEM') }}
             </h2>
           </div>
-          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-6 space-y-4">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-4 sm:p-6 space-y-4">
             <div>
               <label for="title" class="block text-sm font-medium text-surface-300 mb-1.5">{{ i18n.t('COMMON.TITLE_FIELD') }}</label>
               <input
@@ -108,14 +108,14 @@
             <div class="flex gap-3 pt-2">
               <button
                 type="submit"
-                class="flex-1 px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-primary-600/20"
+                class="w-full px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-white font-medium rounded-lg transition-all duration-200 shadow-lg shadow-primary-600/20"
               >
                 {{ editingId() ? i18n.t('COMMON.UPDATE') : i18n.t('COMMON.CREATE') }}
               </button>
               <button
                 type="button"
                 (click)="cancelForm()"
-                class="flex-1 px-4 py-2.5 bg-surface-700 hover:bg-surface-600 text-surface-200 font-medium rounded-lg transition-colors border border-surface-600"
+                class="w-full px-4 py-2.5 bg-surface-700 hover:bg-surface-600 text-surface-200 font-medium rounded-lg transition-colors border border-surface-600"
               >
                 {{ i18n.t('COMMON.CANCEL') }}
               </button>

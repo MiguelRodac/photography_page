@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { InputsComponent } from '../inputs/inputs.component';
@@ -78,7 +78,7 @@ import { IFormGroup, IValidator } from '../../../interfaces/inputs';
     </form>
   `,
 })
-export class FormsComponent {
+export class FormsComponent implements OnInit, OnChanges {
   @Input() formInput!: IFormGroup;
   @Input() canSubmit = true;
   @Output() formOutput: EventEmitter<IFormData> = new EventEmitter();
@@ -90,6 +90,12 @@ export class FormsComponent {
     this.createForm();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['formInput'] && !changes['formInput'].firstChange && this.dynamicForm) {
+      this.updateValidators();
+    }
+  }
+
   private createForm() {
     const formControls: { [key: string]: FormControl } = {};
     this.formInput.inputs.forEach(input => {
@@ -99,6 +105,16 @@ export class FormsComponent {
       );
     });
     this.dynamicForm = new FormGroup(formControls);
+  }
+
+  private updateValidators() {
+    this.formInput.inputs.forEach(input => {
+      const control = this.dynamicForm.get(input.formControl);
+      if (control) {
+        control.setValidators(this.getValidators(input.validators || []));
+        control.updateValueAndValidity();
+      }
+    });
   }
 
   private getValidators(validators: IValidator[]): ValidatorFn[] {

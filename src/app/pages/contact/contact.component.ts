@@ -5,7 +5,7 @@ import { GlobalResourceService } from '../../services/global-resource.service';
 import { PublicContentCacheService } from '../../services/public-content-cache.service';
 import { EmailService } from '../../services/email.service';
 import { take } from 'rxjs';
-import { IFormGroup, IInput } from '../../interfaces/inputs';
+import { IFormGroup } from '../../interfaces/inputs';
 
 interface ContactInfoItem {
   label: string;
@@ -72,7 +72,12 @@ export class ContactComponent implements OnInit {
   readonly formConfig = signal<IFormGroup>({
     formId: 'contactForm',
     submitText: '',
-    inputs: [],
+    inputs: [
+      { formControl: 'name', type: 'text', label: '', name: 'name', placeholder: '', required: true, hidden: false, validators: [{ type: 'required', message: 'Requerido' }] },
+      { formControl: 'email', type: 'email', label: '', name: 'email', placeholder: '', required: true, hidden: false, validators: [{ type: 'required', message: 'Requerido' }, { type: 'email', message: 'Email inválido' }] },
+      { formControl: 'phone', type: 'tel', label: '', name: 'phone', placeholder: '', required: false, hidden: true, validators: [] },
+      { formControl: 'message', type: 'textarea', label: '', name: 'message', placeholder: '', required: true, hidden: false, validators: [{ type: 'required', message: 'Requerido' }] },
+    ],
   });
 
   ngOnInit(): void {
@@ -104,22 +109,29 @@ export class ContactComponent implements OnInit {
           this.formConfig.update(cfg => ({ ...cfg, submitText: data['submitText'] }));
         }
         if (Array.isArray(data['formFields']) && data['formFields'].length > 0) {
-          const inputs: IInput[] = data['formFields'].map((f: any) => ({
-            formControl: f.name,
-            name: f.name,
-            type: f.type || 'text',
-            label: f.label || '',
-            placeholder: f.placeholder || '',
-            required: !!f.required,
-            validators: Array.isArray(f.validators)
-              ? f.validators.map((v: any) => ({
-                  type: v.type,
-                  value: v.value,
-                  message: v.message || '',
-                }))
-              : [],
-          }));
-          this.formConfig.update(cfg => ({ ...cfg, inputs }));
+          this.formConfig.update(cfg => {
+            const updatedInputs = cfg.inputs.map(defaultInput => {
+              const firebaseField = data['formFields'].find((f: any) => f.name === defaultInput.formControl);
+              if (firebaseField) {
+                return {
+                  ...defaultInput,
+                  label: firebaseField.label || '',
+                  placeholder: firebaseField.placeholder || '',
+                  required: !!firebaseField.required,
+                  hidden: false,
+                  validators: Array.isArray(firebaseField.validators)
+                    ? firebaseField.validators.map((v: any) => ({
+                        type: v.type,
+                        value: v.value,
+                        message: v.message || '',
+                      }))
+                    : [],
+                };
+              }
+              return { ...defaultInput, hidden: true, required: false, validators: [] };
+            });
+            return { ...cfg, inputs: updatedInputs };
+          });
         }
       }
     });
