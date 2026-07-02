@@ -67,7 +67,7 @@
         <h2 class="text-lg font-semibold text-surface-100 mb-2">{{ i18n.t('SEED.SEED_ALL') }}</h2>
         <p class="text-sm text-surface-400 mb-4">{{ i18n.t('SEED.SEED_ALL_DESC') }}</p>
         <button (click)="runSeedAll()" [disabled]="seeding()"
-          class="inline-flex items-center gap-2 px-5 py-2.5 text-sm bg-primary-600 hover:bg-primary-500 disabled:bg-surface-600 text-white rounded-lg font-medium">
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm bg-primary-600 hover:bg-primary-500 disabled:bg-surface-600 text-white rounded-lg font-medium">
           @if (seeding()) {
             <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
             {{ i18n.t('SEED.SEEDING') }}
@@ -80,7 +80,7 @@
         <h2 class="text-lg font-semibold text-red-400 mb-2">{{ i18n.t('SEED.DANGER_ZONE') }}</h2>
         <p class="text-sm text-surface-400 mb-4">{{ i18n.t('SEED.DANGER_DESC') }}</p>
         <button (click)="requestClearAll()" [disabled]="clearing()"
-          class="inline-flex items-center gap-2 px-5 py-2.5 text-sm bg-red-600 hover:bg-red-500 disabled:bg-surface-600 text-white rounded-lg font-medium">
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm bg-red-600 hover:bg-red-500 disabled:bg-surface-600 text-white rounded-lg font-medium">
           @if (clearing()) { {{ i18n.t('SEED.CLEARING') }} } @else { {{ i18n.t('SEED.CLEAR_ALL') }} }
         </button>
       </div>
