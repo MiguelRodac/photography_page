@@ -322,7 +322,9 @@ export class ContentAdminComponent implements OnInit {
                 continue;
               }
               if (key === 'serviceTypes' && sectionId === 'contact') {
-                this.contactServiceTypes.set(Array.isArray(data[key]) ? data[key] : []);
+                const raw = data[key];
+                const parsed = typeof raw === 'string' ? JSON.parse(raw) : (Array.isArray(raw) ? raw : []);
+                this.contactServiceTypes.set(parsed);
                 continue;
               }
               if (key === 'formFields' && sectionId === 'contact') {
