@@ -92,7 +92,11 @@ export class ContactComponent implements OnInit {
         if (data['formSubtitle']) this.formSubtitle.set(data['formSubtitle']);
         if (data['serviceTypeLabel']) this.serviceTypeLabel.set(data['serviceTypeLabel']);
         if (data['serviceTypeError']) this.serviceTypeError.set(data['serviceTypeError']);
-        if (data['serviceTypes']) this.contactServices.set(data['serviceTypes']);
+        if (data['serviceTypes']) {
+          const st = data['serviceTypes'];
+          const parsed = typeof st === 'string' ? JSON.parse(st) : st;
+          this.contactServices.set(parsed);
+        }
         if (data['email']) this.infoEmail.set(data['email']);
         if (data['address']) this.infoAddress.set(data['address']);
         if (data['infoEmailLabel']) this.infoEmailLabel.set(data['infoEmailLabel']);

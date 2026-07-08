@@ -67,7 +67,7 @@ export class ThemeLoaderService {
     this.renderer.appendChild(document.head, link);
   }
 
-  private getContrastColor(hex: string): string {
+  getContrastColor(hex: string): string {
     const cleaned = hex.replace('#', '');
     const r = parseInt(cleaned.substring(0, 2), 16);
     const g = parseInt(cleaned.substring(2, 4), 16);
@@ -94,7 +94,7 @@ export class ThemeLoaderService {
         color: ${textColor} !important;
       }
       .text-primary-300, .text-primary-400, .text-primary-500, .text-primary-600, .text-primary-700 {
-        color: ${primary} !important;
+        color: ${primary};
       }
       .hover\\:text-primary-400:hover, .hover\\:text-primary-500:hover {
         color: ${hover} !important;

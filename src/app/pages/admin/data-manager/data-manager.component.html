@@ -7,83 +7,77 @@
 
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <!-- 1. Export -->
-      <div class="bg-surface-800 border border-surface-700 rounded-xl p-6">
-        <div class="flex items-start gap-4">
-          <div class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
-            <svg class="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-            </svg>
-          </div>
-          <div class="w-full min-w-0">
-            <h2 class="text-lg font-semibold text-surface-100">{{ i18n.t('DATA.EXPORT') }}</h2>
-            <p class="text-sm text-surface-400 mt-1">{{ i18n.t('DATA.EXPORT_DESC') }}</p>
-            <button (click)="exportAllData()" [disabled]="exporting()"
-              class="mt-4 w-full px-4 py-2.5 text-sm bg-blue-600 hover:bg-blue-500 disabled:bg-surface-600 text-white rounded-lg font-medium">
-              {{ exporting() ? i18n.t('DATA.EXPORTING') : i18n.t('DATA.EXPORT_ALL') }}
-            </button>
-          </div>
-        </div>
-      </div>
+      <app-data-card
+        [iconColor]="'blue'"
+        [iconPath]="'M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3'"
+        [title]="i18n.t('DATA.EXPORT')"
+        [description]="i18n.t('DATA.EXPORT_DESC')">
+        <button (click)="exportAllData()" [disabled]="exporting()"
+          class="mt-4 w-full px-4 py-2.5 text-sm bg-blue-600 hover:bg-blue-500 disabled:bg-surface-600 text-white rounded-lg font-medium">
+          {{ exporting() ? i18n.t('DATA.EXPORTING') : i18n.t('DATA.EXPORT_ALL') }}
+        </button>
+      </app-data-card>
 
       <!-- 2. Import -->
-      <div class="bg-surface-800 border border-surface-700 rounded-xl p-6">
-        <div class="flex items-start gap-4">
-          <div class="w-10 h-10 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center shrink-0">
-            <svg class="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-            </svg>
-          </div>
-          <div class="w-full min-w-0">
-            <h2 class="text-lg font-semibold text-surface-100">{{ i18n.t('DATA.IMPORT') }}</h2>
-            <p class="text-sm text-surface-400 mt-1">{{ i18n.t('DATA.IMPORT_DESC') }}</p>
-            <input type="file" accept=".json" (change)="onFileSelected($event)" class="mt-4 w-full text-sm text-surface-300 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-surface-700 file:text-surface-200 hover:file:bg-surface-600" />
-            @if (importPreview()) {
-              <button (click)="confirmImport()" [disabled]="importing()"
-                class="mt-3 w-full px-4 py-2.5 text-sm bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium">
-                Import {{ importPreview()?.content || 0 }} docs
-              </button>
-            }
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. Download Template -->
-      <div class="bg-surface-800 border border-surface-700 rounded-xl p-6">
-        <div class="flex items-start gap-4">
-          <div class="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
-            <svg class="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-            </svg>
-          </div>
-          <div class="w-full min-w-0">
-            <h2 class="text-lg font-semibold text-surface-100">{{ i18n.t('DATA.TEMPLATE') }}</h2>
-            <p class="text-sm text-surface-400 mt-1">{{ i18n.t('DATA.TEMPLATE_DESC') }}</p>
-            <button (click)="downloadTemplate()"
-              class="mt-4 w-full px-4 py-2.5 text-sm bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-medium">
-              {{ i18n.t('DATA.DOWNLOAD_TEMPLATE') }}
+      <app-data-card
+        [iconColor]="'green'"
+        [iconPath]="'M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5'"
+        [title]="i18n.t('DATA.IMPORT')"
+        [description]="i18n.t('DATA.IMPORT_DESC')">
+        @if (!importPreview()) {
+          <label class="flex justify-center items-center w-full px-4 py-2.5 text-sm bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium cursor-pointer">
+            {{ i18n.t('DATA.SELECT_FILE') }}
+            <input type="file" accept=".json" (change)="onFileSelected($event)" class="hidden" />
+          </label>
+        } @else {
+          <div class="mt-4 flex items-center gap-2">
+            <p class="text-sm text-green-400">{{ importPreview()?.content || 0 }} docs ready</p>
+            <button (click)="clearImport()" class="text-surface-400 hover:text-surface-200 transition-colors" title="Cambiar archivo">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
-        </div>
-      </div>
+          <button (click)="confirmImport()" [disabled]="importing()"
+            class="mt-4 w-full px-4 py-2.5 text-sm bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium">
+            Importar
+          </button>
+        }
+      </app-data-card>
 
-      <!-- 4. Seed (always last) -->
-      <div class="bg-surface-800 border border-amber-500/30 rounded-xl p-6">
-        <div class="flex items-start gap-4">
-          <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-            <svg class="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-            </svg>
-          </div>
-          <div class="w-full min-w-0">
-            <h2 class="text-lg font-semibold text-surface-100">{{ i18n.t('DATA.TEMPLATES') }}</h2>
-            <p class="text-sm text-surface-400 mt-1">{{ i18n.t('DATA.TEMPLATES_DESC') }}</p>
-            <a routerLink="/admin-page/seed"
-              class="mt-4 w-full block text-center px-4 py-2.5 text-sm bg-amber-600 hover:bg-amber-500 text-white rounded-lg font-bold">
-              ⚡ {{ i18n.t('DATA.SEED_MANAGER') }}
-            </a>
-          </div>
-        </div>
-      </div>
+      <!-- 3. Download Template -->
+      <app-data-card
+        [iconColor]="'purple'"
+        [iconPath]="'M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z'"
+        [title]="i18n.t('DATA.TEMPLATE')"
+        [description]="i18n.t('DATA.TEMPLATE_DESC')">
+        <button (click)="downloadTemplate()"
+          class="mt-4 w-full px-4 py-2.5 text-sm bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-medium">
+          {{ i18n.t('DATA.DOWNLOAD_TEMPLATE') }}
+        </button>
+      </app-data-card>
+
+      <!-- 4. Seed -->
+      <app-data-card
+        [iconColor]="'amber'"
+        [iconPath]="'M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25'"
+        [title]="i18n.t('DATA.TEMPLATES')"
+        [description]="i18n.t('DATA.TEMPLATES_DESC')">
+        <a routerLink="/admin-page/seed"
+          class="mt-4 w-full block text-center px-4 py-2.5 text-sm bg-amber-600 hover:bg-amber-500 text-white rounded-lg font-medium font-bold">
+          {{ i18n.t('DATA.SEED_MANAGER') }}
+        </a>
+      </app-data-card>
     </div>
   </div>
+
+  <!-- Loading overlay -->
+  @if (importing()) {
+    <div class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
+      <div class="bg-surface-800 rounded-xl p-6 text-center">
+        <div class="w-10 h-10 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-4"></div>
+        <p class="text-surface-200 text-sm">{{ statusMessage() }}</p>
+      </div>
+    </div>
+  }
 </div>

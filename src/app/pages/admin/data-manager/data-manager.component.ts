@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   Firestore,
@@ -9,6 +9,7 @@ import {
 } from '@angular/fire/firestore';
 import { ToastService } from '../../../services/toast.service';
 import { I18nService } from '../../../services/i18n.service';
+import { DataCardComponent } from './data-card.component';
 
 interface ExportData {
   content: Record<string, any>;
@@ -28,7 +29,7 @@ interface ImportPreview {
 @Component({
   selector: 'app-data-manager',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DataCardComponent],
   templateUrl: './data-manager.component.html',
 })
 export class DataManagerComponent {
@@ -39,6 +40,7 @@ export class DataManagerComponent {
   readonly exporting = signal(false);
   readonly importing = signal(false);
   readonly importProgress = signal(0);
+  readonly statusMessage = computed(() => `Importing data... ${this.importProgress()}%`);
   readonly importPreview = signal<ImportPreview | null>(null);
   readonly parsedData = signal<ExportData | null>(null);
   readonly showConfirmDialog = signal(false);

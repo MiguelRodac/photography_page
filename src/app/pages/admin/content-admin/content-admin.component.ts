@@ -6,6 +6,7 @@ import { CONTENT_SERVICE } from '../../../core/tokens/content-service.token';
 import { PageSectionItem, PageSectionsConfig } from '../../../core/interfaces/firestore-models';
 import { ToastService } from '../../../services/toast.service';
 import { I18nService } from '../../../services/i18n.service';
+import { ThemeLoaderService } from '../../../services/theme-loader.service';
 
 interface SectionConfig {
   id: string;
@@ -53,6 +54,7 @@ export class ContentAdminComponent implements OnInit {
   private readonly contentService = inject(CONTENT_SERVICE);
   private readonly toast = inject(ToastService);
   readonly i18n = inject(I18nService);
+  readonly themeLoader = inject(ThemeLoaderService);
 
   readonly sections: SectionConfig[] = [
     { id: 'hero', label: () => this.i18n.t('CONTENT.HERO'), icon: 'bolt', fields: ['title', 'subtitle', 'cta', 'ctaRoute', 'bgImage'] },
@@ -61,7 +63,7 @@ export class ContentAdminComponent implements OnInit {
     { id: 'portfolio-preview', label: () => this.i18n.t('CONTENT.PORTFOLIO_PREVIEW'), icon: 'image', fields: ['sectionTitle', 'sectionDescription', 'ctaText', 'ctaRoute'] },
     { id: 'cta', label: () => this.i18n.t('CONTENT.CTA'), icon: 'megaphone', fields: ['title', 'description', 'buttonText', 'ctaRoute'] },
     { id: 'about', label: () => this.i18n.t('CONTENT.ABOUT'), icon: 'user', fields: ['heroLabel', 'title', 'subtitle', 'description', 'extra', 'profileImageAlt', 'overlayImage', 'overlayImageAlt', 'philosophyLabel', 'quote', 'philosophy', 'servicesLabel', 'servicesTitle', 'image', 'ctaRoute'] },
-    { id: 'contact', label: () => this.i18n.t('CONTENT.CONTACT'), icon: 'envelope', fields: ['heroLabel', 'heroTitle', 'heroTitleAccent', 'heroSubtitle', 'bgImage', 'formTitle', 'formSubtitle', 'serviceTypeLabel', 'serviceTypeError', 'serviceTypes', 'email', 'phone', 'address', 'mapEmbed', 'infoEmailLabel', 'infoLocationLabel', 'infoResponseLabel', 'infoResponseValue', 'whatsappTitle', 'whatsappSubtitle', 'statsValue', 'statsLabel'] },
+    { id: 'contact', label: () => this.i18n.t('CONTENT.CONTACT'), icon: 'envelope', fields: ['heroLabel', 'heroTitle', 'heroTitleAccent', 'heroSubtitle', 'bgImage', 'formTitle', 'formSubtitle', 'serviceTypeLabel', 'serviceTypeError', 'email', 'phone', 'address', 'mapEmbed', 'infoEmailLabel', 'infoLocationLabel', 'infoResponseLabel', 'infoResponseValue', 'whatsappTitle', 'whatsappSubtitle', 'statsValue', 'statsLabel'] },
     { id: 'header', label: () => this.i18n.t('CONTENT.HEADER'), icon: 'bars', fields: ['siteName', 'logoUrl'] },
     { id: 'footer', label: () => this.i18n.t('CONTENT.FOOTER'), icon: 'document', fields: ['copyrightText', 'tagline', 'showLinks', 'socialTitle', 'showSocialLinks'] },
     { id: 'portfolio', label: () => this.i18n.t('CONTENT.PORTFOLIO_PAGE'), icon: 'image', fields: ['pageTitle', 'pageSubtitle', 'emptyMessage'] },
@@ -106,6 +108,7 @@ export class ContentAdminComponent implements OnInit {
 
   readonly aboutStats = signal<{ value: string; label: string }[]>([]);
   readonly testimonialsItems = signal<{ name: string; role: string; text: string }[]>([]);
+  readonly contactServiceTypes = signal<{ label: string; value: string }[]>([]);
   readonly contactFormFields = signal<{
     name: string;
     type: string;
@@ -318,6 +321,10 @@ export class ContentAdminComponent implements OnInit {
                 this.testimonialsItems.set(Array.isArray(data[key]) ? data[key] : []);
                 continue;
               }
+              if (key === 'serviceTypes' && sectionId === 'contact') {
+                this.contactServiceTypes.set(Array.isArray(data[key]) ? data[key] : []);
+                continue;
+              }
               if (key === 'formFields' && sectionId === 'contact') {
                 this.contactFormFields.set(Array.isArray(data[key]) ? data[key] : []);
                 continue;
@@ -415,6 +422,7 @@ export class ContentAdminComponent implements OnInit {
     // Add contact form fields
     if (sectionId === 'contact') {
       data['formFields'] = this.contactFormFields().filter((f) => f.name);
+      data['serviceTypes'] = this.contactServiceTypes().filter((st) => st.label);
     }
 
     // Sanitize WhatsApp phone number — digits only
@@ -707,6 +715,23 @@ export class ContentAdminComponent implements OnInit {
       items.map((item, i) => (i === index ? { ...item, [key]: value } : item)),
     );
     this.clearSuccessOnEdit('testimonials');
+  }
+
+  // --- Contact Service Types repeater ---
+
+  addServiceType(): void {
+    this.contactServiceTypes.update((items) => [...items, { label: '', value: '' }]);
+  }
+
+  removeServiceType(index: number): void {
+    this.contactServiceTypes.update((items) => items.filter((_, i) => i !== index));
+  }
+
+  updateServiceType(index: number, key: 'label' | 'value', value: string): void {
+    this.contactServiceTypes.update((items) =>
+      items.map((item, i) => (i === index ? { ...item, [key]: value } : item)),
+    );
+    this.clearSuccessOnEdit('contact');
   }
 
   // --- Contact Form Fields repeater ---

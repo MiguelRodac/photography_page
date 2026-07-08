@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Firestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -21,11 +21,13 @@ export class SeedComponent {
   readonly clearing = signal(false);
   readonly showClearConfirm = signal(false);
   readonly showSeedConfirm = signal(false);
+  readonly showSeedAllConfirm = signal(false);
   readonly showDeleteConfirm = signal(false);
   readonly done = signal(false);
   readonly logs = signal<SeedLog[]>([]);
   readonly sectionStatus = signal<Record<string, 'idle' | 'success' | 'error'>>({});
   readonly selectedSections = signal<Set<string>>(new Set());
+  readonly statusMessage = signal('');
 
   readonly sections = [
     { id: 'hero', label: 'Hero' },
@@ -102,8 +104,13 @@ export class SeedComponent {
 
   /* ── Seed All ── */
 
-  async runSeedAll(): Promise<void> {
+  requestSeedAll(): void { this.showSeedAllConfirm.set(true); }
+  cancelSeedAll(): void { this.showSeedAllConfirm.set(false); }
+  confirmSeedAll(): void { this.showSeedAllConfirm.set(false); this.executeSeedAll(); }
+
+  async executeSeedAll(): Promise<void> {
     this.seeding.set(true); this.logs.set([]);
+    this.statusMessage.set(`Loading ${this.sections.length} sections...`);
     try {
       await this.seedHero(); await this.seedServices();
       await this.seedAbout(); await this.seedContact();
@@ -132,6 +139,7 @@ export class SeedComponent {
   async seedSelected(): Promise<void> {
     this.showSeedConfirm.set(false);
     this.seeding.set(true); this.logs.set([]);
+    this.statusMessage.set(`Loading ${this.selectedCount} sections...`);
     const selected = this.selectedSections();
     const seedMap: Record<string, () => Promise<void>> = {
       'hero': () => this.seedHero(),
@@ -175,6 +183,7 @@ export class SeedComponent {
   async deleteSelected(): Promise<void> {
     this.showDeleteConfirm.set(false);
     this.clearing.set(true); this.logs.set([]);
+    this.statusMessage.set(`Deleting ${this.selectedCount} sections...`);
     const selected = this.selectedSections();
     try {
       for (const id of selected) {
@@ -246,6 +255,7 @@ export class SeedComponent {
   async clearAll(): Promise<void> {
     this.showClearConfirm.set(false);
     this.clearing.set(true); this.logs.set([]);
+    this.statusMessage.set('Deleting all data...');
     try {
       const collections = ['content', 'portfolio', 'navigation', 'categories', 'users'];
       for (const col of collections) {

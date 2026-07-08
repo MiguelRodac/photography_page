@@ -66,7 +66,7 @@
       <div class="bg-surface-800 border border-surface-700 rounded-xl p-6">
         <h2 class="text-lg font-semibold text-surface-100 mb-2">{{ i18n.t('SEED.SEED_ALL') }}</h2>
         <p class="text-sm text-surface-400 mb-4">{{ i18n.t('SEED.SEED_ALL_DESC') }}</p>
-        <button (click)="runSeedAll()" [disabled]="seeding()"
+        <button (click)="requestSeedAll()" [disabled]="seeding()"
           class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm bg-primary-600 hover:bg-primary-500 disabled:bg-surface-600 text-white rounded-lg font-medium">
           @if (seeding()) {
             <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
@@ -109,12 +109,23 @@
     }
   </div>
 
+  <!-- Loading overlay -->
+  @if (seeding() || clearing()) {
+    <div class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
+      <div class="bg-surface-800 rounded-xl p-6 text-center">
+        <div class="w-10 h-10 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin mx-auto mb-4"></div>
+        <p class="text-surface-200 text-sm">{{ statusMessage() }}</p>
+      </div>
+    </div>
+  }
+
   @if (showClearConfirm()) {
     <app-confirm-dialog
       [title]="i18n.t('SEED.CONFIRM_TITLE')"
       [message]="i18n.t('SEED.CONFIRM_MSG')"
       [confirmText]="i18n.t('SEED.CONFIRM_BTN')"
       [cancelText]="i18n.t('COMMON.CANCEL')"
+      variant="danger"
       (confirm)="clearAll()"
       (cancel)="cancelClear()"
     />
@@ -126,8 +137,21 @@
       [message]="getSeedConfirmMessage()"
       [confirmText]="i18n.t('COMMON.CONFIRM')"
       [cancelText]="i18n.t('COMMON.CANCEL')"
+      variant="success"
       (confirm)="seedSelected()"
       (cancel)="cancelSeed()"
+    />
+  }
+
+  @if (showSeedAllConfirm()) {
+    <app-confirm-dialog
+      [title]="i18n.t('SEED.CONFIRM_SEED_TITLE')"
+      [message]="i18n.t('SEED.CONFIRM_SEED_ALL_MSG')"
+      [confirmText]="i18n.t('COMMON.CONFIRM')"
+      [cancelText]="i18n.t('COMMON.CANCEL')"
+      variant="success"
+      (confirm)="confirmSeedAll()"
+      (cancel)="cancelSeedAll()"
     />
   }
 
@@ -137,6 +161,7 @@
       [message]="getDeleteConfirmMessage()"
       [confirmText]="i18n.t('COMMON.CONFIRM')"
       [cancelText]="i18n.t('COMMON.CANCEL')"
+      variant="danger"
       (confirm)="deleteSelected()"
       (cancel)="cancelDeleteSelected()"
     />
